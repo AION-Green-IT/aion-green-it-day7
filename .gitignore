@@ -5,6 +5,7 @@
 next-env.d.ts
 node_modules
 out
+.claude/*.lock
 
 # macOS
 .DS_Store

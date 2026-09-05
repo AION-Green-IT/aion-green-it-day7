@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import { CASE } from "@/lib/module3";
+import { CASE } from "@/lib/routes";
 import { TopBar } from "@/components/chrome/TopBar";
 import { Footer } from "@/components/chrome/Footer";
 
 export const metadata: Metadata = {
   title: `AION Green IT — ${CASE.module}`,
   description:
-    "Green IT in IT strategy and procurement — the learner working companion for Module 3, Day 4. Case: Solenne Industrial Technik AG.",
+    "Sustainable IT lifecycle and procurement — the learner working companion for Day 5. Three routes: lifecycle foundations, decision trade-offs, and management governance.",
 };
 
 export default function RootLayout({
