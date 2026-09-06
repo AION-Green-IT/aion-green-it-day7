@@ -4,7 +4,7 @@ import { LeafMark } from "@/components/chrome/Icons";
 import { RouteGate } from "@/components/chrome/RouteGate";
 import { Material } from "@/components/route3/Material";
 import { TaskFlow } from "@/components/route3/TaskFlow";
-import { ExecutiveReportPrint } from "@/components/route3/ExecutiveReportPrint";
+import { BoardProposalReportPrint } from "@/components/route3/BoardProposalReportPrint";
 import { MentorTools } from "@/components/route3/MentorTools";
 
 const ROUTE = ROUTES[2];
@@ -26,8 +26,8 @@ export default function Route3Page() {
               </p>
               <h1 className="text-display text-ink">{ROUTE.title}</h1>
               <p className="mt-4 text-body text-ash">
-                The final route. You diagnose one company&apos;s governance tensions, then become the CIO
-                proposing a second company&apos;s decision to its board — and defending it when challenged.
+                The capstone. You're strategic advisor to NovaCore Infrastructure Group, turning three routes'
+                worth of analysis into a decision-ready proposal a board can actually act on.
               </p>
             </div>
 
@@ -42,7 +42,7 @@ export default function Route3Page() {
         </RouteGate>
       </div>
 
-      <ExecutiveReportPrint />
+      <BoardProposalReportPrint />
     </>
   );
 }

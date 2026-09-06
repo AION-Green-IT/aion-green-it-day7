@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import clsx from "clsx";
 
 const INK = "#16191D";
@@ -8,6 +9,15 @@ const ACCENT = "#0E7A5A";
 const LINE = "#E2E5E9";
 const PAPER = "#FFFFFF";
 const WARN = "#B87514";
+
+/** Fixed anchor points for the "Board Decision Points" overlay (Route 3+). */
+const BOARD_FLAG_POS = {
+  redundancy: { x: 620, y: 76 },
+  utilization: { x: 250, y: 132 },
+  monitoring: { x: 475, y: 108 },
+} as const;
+export type BoardFlagZone = keyof typeof BOARD_FLAG_POS;
+export type BoardFlag = { zone: BoardFlagZone; tooltip: string };
 
 export const FACILITY_ZONE_IDS = ["utilization", "cooling", "power", "monitoring", "redundancy", "operations"] as const;
 export type FacilityZoneId = (typeof FACILITY_ZONE_IDS)[number];
@@ -42,6 +52,7 @@ export function FacilitySvg({
   utilizationPct = 18,
   rackGenerations,
   showCostOfRisk = false,
+  boardFlags,
 }: {
   title?: string;
   flaggedZones?: FacilityZoneId[];
@@ -53,8 +64,11 @@ export function FacilitySvg({
   rackGenerations?: (1 | 2 | 3 | undefined)[];
   /** Small shield/€ overlay near the redundancy zone, foreshadowing "Cost of Risk". Route 2+ only. */
   showCostOfRisk?: boolean;
+  /** "Board Decision Points" overlay — illustrative flag/pin icons with a click-to-toggle tooltip. Route 3+ only. */
+  boardFlags?: BoardFlag[];
 }) {
   const isFlagged = (id: FacilityZoneId) => flaggedZones.includes(id);
+  const [openFlag, setOpenFlag] = useState<number | null>(null);
 
   const zoneGroupProps = (id: FacilityZoneId) => ({
     "data-zone": id,
@@ -236,6 +250,43 @@ export function FacilitySvg({
         </text>
         {badge("operations", 452, 340)}
       </g>
+
+      {/* --- Board Decision Points overlay ------------------------------------ */}
+      {boardFlags?.map((f, i) => {
+        const pos = BOARD_FLAG_POS[f.zone];
+        const open = openFlag === i;
+        return (
+          <g key={i}>
+            <g
+              transform={`translate(${pos.x}, ${pos.y})`}
+              role="button"
+              tabIndex={0}
+              className="cursor-pointer"
+              onClick={() => setOpenFlag((cur) => (cur === i ? null : i))}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setOpenFlag((cur) => (cur === i ? null : i));
+                }
+              }}
+            >
+              <line x1={0} y1={0} x2={0} y2={22} stroke={ACCENT} strokeWidth={1.6} />
+              <path d="M0,0 L16,4 L0,9 Z" fill={ACCENT} />
+              <circle cx={0} cy={22} r={2} fill={ACCENT} />
+            </g>
+            {open && (
+              <foreignObject x={Math.min(pos.x - 60, 800 - 260)} y={pos.y + 26} width={260} height={90}>
+                <div
+                  className="rounded-lg border p-2.5 text-[10.5px] leading-snug shadow-md"
+                  style={{ borderColor: ACCENT, background: PAPER, color: INK }}
+                >
+                  {f.tooltip}
+                </div>
+              </foreignObject>
+            )}
+          </g>
+        );
+      })}
 
       <defs>
         <marker id="coolArrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">

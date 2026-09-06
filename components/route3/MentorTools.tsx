@@ -1,59 +1,60 @@
 "use client";
 
 import { useProgress } from "@/lib/store";
-import { R3, TENSION_NODES, TENSION_EDGES, LEVERAGE_CANDIDATES, CONFLICT_STATEMENTS, RACI_DECISIONS } from "@/lib/route3";
-import { LEARNER_NAME_KEY } from "@/lib/route1";
+import { R3, LEARNER_NAME_KEY } from "@/lib/route3";
 import { MentorFillButton } from "@/components/ui/MentorFillButton";
 
-/** Mentor-only: fills every field on Route 3 (both phases) with plausible demo answers. */
+/** Mentor-only: fills every field on Route 3 with plausible demo answers. */
 export function MentorTools() {
-  const choose = useProgress((s) => s.choose);
   const setNote = useProgress((s) => s.setNote);
-  const markSeen = useProgress((s) => s.markSeen);
+  const toggleCheck = useProgress((s) => s.toggleCheck);
+  const choose = useProgress((s) => s.choose);
 
   const fillDemoAnswers = () => {
-    (["iso20400", "bindingCriteria", "raci", "horizon"] as const).forEach((id) => markSeen(R3.material, id));
-
-    TENSION_NODES.forEach((n) => markSeen(R3.tensionNodesSeen, n.id));
-    TENSION_EDGES.forEach((e) => markSeen(R3.tensionEdgesSeen, e.id));
-
-    LEVERAGE_CANDIDATES.slice(0, 4).forEach((c, i) => choose(R3.leverageRank(c.id), String(i + 1)));
-    setNote(R3.leverageJustify, "Binding criteria is the root cause; everything else is downstream of it.");
-
-    setNote(R3.strategicLadderPosition, "managed");
     setNote(
       R3.strategicRelevance,
-      "Helion sits at Managed today; moving to Strategic ties lifecycle procurement directly to capital allocation decisions.",
+      "Energy cost trend and operational risk exposure both point the same direction: NovaCore's growth plans make an unmanaged facility increasingly expensive to run and increasingly risky to scale. ESRS environmental disclosure is not yet mandatory at our size, but it is a plausible near-term driver worth tracking.",
     );
-
-    setNote(R3.coreDecision(1), "Decide the scored weight for repairability in the next tender.");
-    choose(R3.coreDecisionRaci(1), "it");
-    setNote(R3.coreDecision(2), "Decide whether to pilot circular procurement on laptops first.");
-    choose(R3.coreDecisionRaci(2), "sustainability");
-    setNote(R3.coreDecision(3), "Decide who signs off on the new award criteria.");
-    choose(R3.coreDecisionRaci(3), "management");
-
-    CONFLICT_STATEMENTS.forEach((c, i) => setNote(R3.conflictPos(c.id), `${20 + i * 15},${30 + i * 10}`));
-
-    choose(R3.firstStep, "pilot");
+    setNote(R3.keyDecision(1), "Approve baseline monitoring investment by Q2.");
+    setNote(R3.keyDecision(2), "Commission a consolidation business case once 90 days of monitoring data exist.");
+    setNote(R3.keyDecision(3), "Hold redundancy levels under review, with no reduction until risk exposure is quantified.");
     setNote(
-      R3.firstStepJustify,
-      "This matches my #1 leverage point from Phase 1: binding criteria first, piloted before full rollout.",
+      R3.prioritizationLogic,
+      "Future steps are ordered by TCO impact weighed against Cost of Risk, per Route 2's framework — no step gets funded ahead of the data needed to size it.",
     );
 
-    RACI_DECISIONS.forEach((d) => choose(R3.raciBuild(d.id, "purchasing"), "A"));
+    const conflictIds = ["efficiency-availability", "growth-risk", "redundancy-cost"];
+    conflictIds.forEach((id) => toggleCheck(R3.conflictSelected(id), true));
+    setNote(R3.conflictJustify("efficiency-availability"), "NovaCore's non-negotiable availability requirement directly limits how aggressively we can cut facility overhead.");
+    setNote(R3.conflictJustify("growth-risk"), "Planned growth argues for keeping headroom; risk tolerance argues for consolidating it — this can't be resolved by data alone.");
+    setNote(R3.conflictJustify("redundancy-cost"), "Current 2N-everywhere posture is a cost/efficiency mismatch, but changing it changes NovaCore's risk profile.");
 
     setNote(
-      R3.incompleteInfo,
-      "We must commit to a pilot category now even though full lifecycle cost data for peripherals is still incomplete.",
+      R3.firstPriorityPath,
+      "Fund monitoring first — it's a no-regret move that de-risks every subsequent decision regardless of which future NovaCore turns out to be in.",
     );
 
-    choose(R3.boardChoice, "risk");
+    choose(R3.raci("major-investment", "board"), "A");
+    choose(R3.raci("major-investment", "cto"), "R");
+    choose(R3.raci("major-investment", "infra-lead"), "C");
+    choose(R3.raci("major-investment", "ops-team"), "I");
+    choose(R3.raci("efficiency-rollout", "cto"), "A");
+    choose(R3.raci("efficiency-rollout", "infra-lead"), "R");
+    choose(R3.raci("efficiency-rollout", "board"), "I");
+    choose(R3.raci("efficiency-rollout", "ops-team"), "C");
+    choose(R3.raci("redundancy-risk", "board"), "A");
+    choose(R3.raci("redundancy-risk", "cto"), "C");
+    choose(R3.raci("redundancy-risk", "infra-lead"), "R");
+    choose(R3.raci("redundancy-risk", "ops-team"), "I");
+    choose(R3.raci("ongoing-review", "infra-lead"), "A");
+    choose(R3.raci("ongoing-review", "ops-team"), "R");
+    choose(R3.raci("ongoing-review", "cto"), "I");
+    choose(R3.raci("ongoing-review", "board"), "I");
+
     setNote(
-      R3.execSummary,
-      "Helion should bind repairability into its next tender, piloted on one device category to de-risk commitment. This closes the gap between stated sustainability intent and actual procurement practice. The board is asked to approve a scoped pilot, not an open-ended policy change.",
+      R3.incompleteData,
+      "We can commit now to (1) funding monitoring and (2) holding redundancy under review — neither depends on data we don't have, and both remain correct regardless of what the consolidation business case eventually shows.",
     );
-
     setNote(LEARNER_NAME_KEY, "Mentor Demo");
   };
 

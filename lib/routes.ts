@@ -3,10 +3,6 @@
  * single-case module, there is no shared "CASE" business name here — only
  * the day-level program identity. Route-specific content (e.g. Route 1's
  * CoreAxis Data Services case) lives in that route's own lib/routeN.ts.
- *
- * moduleTitle covers Route 1's confirmed scope (data center technical
- * efficiency); revise it once Route 2/3's own subjects are set, since this
- * label is meant to span the whole day, not just Route 1.
  */
 
 export const CASE = {
@@ -67,14 +63,14 @@ export const ROUTES: Route[] = [
   },
   {
     n: 3,
-    slug: "route-3-management-governance",
-    href: "/route-3-management-governance",
-    tag: "Route 3 — Management & Governance",
-    title: "Route 3 — Management & Governance",
-    cardTitle: "Management & Governance",
+    slug: "route-3-the-boardroom",
+    href: "/route-3-the-boardroom",
+    tag: "Route 3 — The Boardroom",
+    title: "Route 3 — The Boardroom",
+    cardTitle: "The Boardroom",
     cardBlurb:
-      "ISO 20400, binding award criteria, RACI accountability, and an executive proposal that survives a board challenge.",
-    deliverable: "Governance Diagnostic & Executive Proposal",
+      "No-regret decisions, RACI accountability, and CSRD's 2026 scope — then build a decision-ready proposal a board can actually act on.",
+    deliverable: "Board Proposal",
     available: true,
   },
 ];
