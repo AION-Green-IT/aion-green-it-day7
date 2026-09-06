@@ -60,7 +60,7 @@ export const ROUTES: Route[] = [
     cardBlurb:
       "Kraljic positioning, CapEx vs. DaaS, vendor lock-in risk, and weighted scoring across three procurement models.",
     deliverable: "Procurement Decision Matrix",
-    available: false,
+    available: true,
   },
   {
     n: 3,

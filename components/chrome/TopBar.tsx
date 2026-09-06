@@ -5,16 +5,23 @@ import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { AionLogo } from "./Icons";
 import { CASE, ROUTES } from "@/lib/routes";
+import { useRouteUnlocked } from "@/lib/routeGating";
 import { Lock } from "@/components/icons/LineIcons";
 
 /**
  * Persistent top bar across every page. Shows the day and a compact rail of
- * the three routes: the active one is highlighted, unavailable ones show a
- * lock. The rail is the day's spine — the three routes live on separate
- * pages and this is how the learner moves between the ones that are open.
+ * the three routes: the active one is highlighted, routes not yet built or
+ * still locked behind a prior route's export show a lock. The rail is the
+ * day's spine — the three routes live on separate pages and this is how the
+ * learner moves between the ones that are open.
  */
 export function TopBar() {
   const pathname = usePathname() ?? "";
+  const unlockedByN: Record<number, boolean> = {
+    1: useRouteUnlocked(1),
+    2: useRouteUnlocked(2),
+    3: useRouteUnlocked(3),
+  };
 
   return (
     <header className="sticky top-0 z-30 bg-slate text-paper print:hidden">
@@ -31,11 +38,12 @@ export function TopBar() {
             <ol className="flex items-center gap-1.5">
               {ROUTES.map((rt) => {
                 const active = pathname.includes(`/${rt.slug}`);
+                const reachable = rt.available && unlockedByN[rt.n];
                 const cls = clsx(
                   "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-caption font-semibold transition-colors duration-200",
                   active
                     ? "bg-accent text-paper"
-                    : rt.available
+                    : reachable
                       ? "text-paper/80 hover:bg-paper/10 hover:text-paper"
                       : "cursor-not-allowed text-paper/35",
                 );
@@ -45,17 +53,22 @@ export function TopBar() {
                     <span className="hidden md:inline">
                       {rt.tag.replace(/^Route \d+ — /, "")}
                     </span>
-                    {!rt.available && <Lock className="h-3.5 w-3.5" />}
+                    {!reachable && <Lock className="h-3.5 w-3.5" />}
                   </>
                 );
+                const title = !rt.available
+                  ? "Not available yet"
+                  : !unlockedByN[rt.n]
+                    ? "Locked — submit the previous route's export first"
+                    : undefined;
                 return (
                   <li key={rt.slug}>
-                    {rt.available ? (
+                    {reachable ? (
                       <Link href={rt.href} className={cls} aria-current={active ? "page" : undefined}>
                         {inner}
                       </Link>
                     ) : (
-                      <span className={cls} aria-disabled="true" title="Not available yet">
+                      <span className={cls} aria-disabled="true" title={title}>
                         {inner}
                       </span>
                     )}

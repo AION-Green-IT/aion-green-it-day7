@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { useProgress } from "@/lib/store";
 import { R1, CARBON_SEGMENTS, annualizedFootprintKg } from "@/lib/route1";
-import { useAnimatedNumber } from "./useAnimatedNumber";
+import { useAnimatedNumber } from "@/lib/useAnimatedNumber";
 
 const SEGMENT_FILL: Record<string, string> = {
   manufacturing: "bg-ink",

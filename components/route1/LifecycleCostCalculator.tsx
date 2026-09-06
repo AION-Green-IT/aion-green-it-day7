@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { useProgress } from "@/lib/store";
 import { R1, CASE_BRIEF, BASELINE_KG, purchasesNeeded } from "@/lib/route1";
 import { useRoute1 } from "./useRoute1";
-import { useAnimatedNumber } from "./useAnimatedNumber";
+import { useAnimatedNumber } from "@/lib/useAnimatedNumber";
 import { Check } from "@/components/icons/LineIcons";
 
 const fmtT = (n: number) => `${(n / 1000).toFixed(1)} t CO2e`;

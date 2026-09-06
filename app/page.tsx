@@ -1,9 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import { CASE, ROUTES } from "@/lib/routes";
+import { useRouteUnlocked } from "@/lib/routeGating";
 import { LeafMark } from "@/components/chrome/Icons";
 import { ArrowRight, Lock } from "@/components/icons/LineIcons";
 
 export default function DayLanding() {
+  const unlockedByN: Record<number, boolean> = {
+    1: useRouteUnlocked(1),
+    2: useRouteUnlocked(2),
+    3: useRouteUnlocked(3),
+  };
+
   return (
     <div className="py-12">
       {/* Hero */}
@@ -25,19 +34,22 @@ export default function DayLanding() {
       {/* Route cards */}
       <div className="mt-10 grid gap-5 lg:grid-cols-3">
         {ROUTES.map((rt) => {
+          const reachable = rt.available && unlockedByN[rt.n];
+          const statusLabel = !rt.available ? "Not built" : reachable ? "Available" : "Locked";
+
           const inner = (
             <>
               <div className="flex items-center justify-between">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-ink text-readout font-semibold text-paper">
                   {rt.n}
                 </span>
-                {rt.available ? (
+                {reachable ? (
                   <span className="rounded-full bg-accentSoft px-2.5 py-1 text-micro font-semibold uppercase tracking-wide text-accent">
                     Available
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 rounded-full border border-line px-2.5 py-1 text-micro font-semibold uppercase tracking-wide text-ash">
-                    <Lock className="h-3.5 w-3.5" /> Locked
+                    <Lock className="h-3.5 w-3.5" /> {statusLabel}
                   </span>
                 )}
               </div>
@@ -53,10 +65,12 @@ export default function DayLanding() {
                   Deliverable:{" "}
                   <span className="font-semibold text-ink">{rt.deliverable}</span>
                 </span>
-                {rt.available ? (
+                {reachable ? (
                   <span className="inline-flex items-center gap-1.5 text-caption font-semibold text-accent">
                     Open <ArrowRight className="h-4 w-4" />
                   </span>
+                ) : rt.available ? (
+                  <span className="text-caption text-ash">Complete the previous route</span>
                 ) : (
                   <span className="text-caption text-ash">Not yet</span>
                 )}
@@ -64,10 +78,9 @@ export default function DayLanding() {
             </>
           );
 
-          const cls =
-            "flex h-full flex-col rounded-2xl border bg-paper p-6 shadow-sm";
+          const cls = "flex h-full flex-col rounded-2xl border bg-paper p-6 shadow-sm";
 
-          return rt.available ? (
+          return reachable ? (
             <Link
               key={rt.slug}
               href={rt.href}

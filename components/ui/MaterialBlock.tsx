@@ -1,14 +1,24 @@
 import { Icon } from "@/components/icons/LineIcons";
 import { Reveal } from "@/components/ui/Reveal";
 import { IndustryCallout } from "./IndustryCallout";
-import type { MaterialBlock as MaterialBlockData } from "@/lib/route1";
+import type { IconKey } from "@/lib/routes";
+
+export type MaterialBlockContent = {
+  icon: IconKey;
+  kicker: string;
+  title: string;
+  definition: string;
+  insight: string;
+  takeaway: string;
+  callout: { label: string; text: string };
+};
 
 /** One material block: header, deep prose (definition/insight/takeaway), a visualizer slot, and a callout. */
 export function MaterialBlock({
   block,
   children,
 }: {
-  block: MaterialBlockData;
+  block: MaterialBlockContent;
   children: React.ReactNode;
 }) {
   return (

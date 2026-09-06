@@ -16,12 +16,15 @@ shared chrome, state, and export conventions.
 |---|---|---|
 | `/` | Day overview | — | built |
 | `/route-1-lifecycle-foundations` | Lifecycle Impact Mapper | **built** |
-| `/route-2-decision-tradeoffs` | Procurement Decision Matrix | planned |
+| `/route-2-decision-tradeoffs` | Procurement Decision Matrix | **built** |
 | `/route-3-management-governance` | Governance Diagnostic & Executive Proposal | planned |
 
-Each route is a separate page and (once built) its own independent case study —
-see `lib/routes.ts` for the shared route registry (`CASE`, `Route`, `ROUTES`) consumed
-by the home page and the top-bar nav rail.
+Each route is a separate page and its own independent case study — see `lib/routes.ts`
+for the shared route registry (`CASE`, `Route`, `ROUTES`) consumed by the home page and
+the top-bar nav rail. Routes 2 and 3 are additionally gated at runtime by
+`lib/routeGating.ts` / `components/chrome/RouteGate.tsx`: a route stays locked until the
+previous route's export has actually been downloaded (tracked via a `checks["rN:exported"]`
+flag set the moment the export button's "Download as PDF" fires).
 
 **Export filenames** follow `<day>-<name>-day<day>-task<n>` — e.g.
 `5-muchson-day5-task1`. Built in `lib/exportFilename.ts`; export itself is the browser's
@@ -56,6 +59,28 @@ fleet — one cheaper with a 3-year replacement cycle, one 18% more expensive wi
      response.
    - Export unlocks only once all five steps are complete.
 
+## Route 2 — Decision Trade-offs (built)
+
+Case: **Ferrotech Dynamics**, choosing between three procurement models — cheapest/
+CapEx/3-year, repairable/CapEx/6-year, and a DaaS lease with return + refurbishment.
+Locked until Route 1's export is downloaded.
+
+1. **Material** — four blocks (Kraljic Portfolio Matrix, CapEx vs. DaaS hidden costs,
+   vendor lock-in risk, the weighted decision matrix), with a Kraljic quadrant-shift
+   dot animation, a two-model Hidden Cost Iceberg (extends Route 1's TCO Reveal Bar),
+   a dependency-risk gauge with overshoot easing, and a 7-axis radar weighting demo.
+2. **Task 2 — Procurement Decision Matrix**, four steps:
+   - Step 1 — the learner answers 6 branching questions; the system (not a manual
+     drag) computes the Kraljic quadrant and explains it from their own answers.
+   - Step 2 — set 7 criteria weights (auto-rebalancing to stay at 100%), score
+     Models A/B/C 1–5 each, watch a 3-shape radar and weighted totals update live.
+   - Step 3 — a 3-way Hidden Cost Iceberg (fleet-size slider) plus the dependency
+     gauge fixed to Model C's lock-in risk.
+   - Step 4 — split-screen: drag all three models into a priority ranking, justify
+     with a Step 2 number and a Step 3 number/risk level, stakeholder next-steps,
+     and two risk statements — with the report assembling live on the right.
+   - Export unlocks only once all four steps are complete.
+
 ## Run it
 
 ```bash
@@ -72,13 +97,14 @@ npm run typecheck  # tsc --noEmit
 
 - `lib/routes.ts` — the day-level `CASE`, the `Route` type, and `ROUTES` (the actual
   route registry consumed by the home page and `TopBar`).
-- `lib/route1.ts` — all Route 1 copy, case data, and the pure lifecycle-carbon/cost
-  math (no React — importable anywhere).
+- `lib/route1.ts` / `lib/route2.ts` — each route's copy, case data, and pure math
+  (no React — importable anywhere).
 - `lib/store.ts` — the generic Zustand + `localStorage` store (key
   `aion-greenit-day5`), shared by every route.
-- `components/route1/*` — Route 1's mechanics: the material blocks and their
-  visualizers, the stage explorer, the tag pool, the calculator, the analysis panel,
-  the pushback modal, and the report/export/print components.
-- `components/chrome/*`, `components/ui/*`, `components/icons/*` — shared chrome
-  (top bar, footer), generic UI (reveal-on-scroll, section heading, confirm dialog),
-  and the single-colour icon registry, reused across all three routes.
+- `lib/routeGating.ts` — cross-route unlock keys and the `useRouteUnlocked` hook.
+- `components/route1/*`, `components/route2/*` — each route's mechanics (visualizers,
+  task steps, and the report/export/print components).
+- `components/chrome/*`, `components/ui/*`, `components/icons/*` — shared chrome (top
+  bar, footer, `RouteGate`), generic UI (reveal-on-scroll, section heading, confirm
+  dialog, `MaterialBlock`, `IndustryCallout`, `RadarChart`, `MiniStepper`), the
+  single-colour icon registry, and `useAnimatedNumber` — all reused across routes.

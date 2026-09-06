@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import clsx from "clsx";
 import { useProgress } from "@/lib/store";
 import { R1, TCO_LAYERS, TCO_TOTAL_EUR } from "@/lib/route1";
-import { useAnimatedNumber } from "./useAnimatedNumber";
+import { useAnimatedNumber } from "@/lib/useAnimatedNumber";
 import { Plus, Check } from "@/components/icons/LineIcons";
 
 const fmt = (n: number) => `€${Math.round(n).toLocaleString("en-GB")}`;

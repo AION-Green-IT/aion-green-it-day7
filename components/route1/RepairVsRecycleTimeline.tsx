@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { useProgress } from "@/lib/store";
 import { R1, BASELINE_KG, purchasesNeeded, recycledPathKg, repairedPathKg } from "@/lib/route1";
-import { useAnimatedNumber } from "./useAnimatedNumber";
+import { useAnimatedNumber } from "@/lib/useAnimatedNumber";
 import { ArrowRight } from "@/components/icons/LineIcons";
 
 const fmt = (n: number) => `${Math.round(n).toLocaleString("en-GB")} kg CO2e`;

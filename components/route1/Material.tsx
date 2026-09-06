@@ -1,6 +1,6 @@
 import { MATERIAL } from "@/lib/route1";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { MaterialBlock } from "./MaterialBlock";
+import { MaterialBlock } from "@/components/ui/MaterialBlock";
 import { TcoRevealBar } from "./TcoRevealBar";
 import { ManufacturingUsePhaseStack } from "./ManufacturingUsePhaseStack";
 import { RepairVsRecycleTimeline } from "./RepairVsRecycleTimeline";

@@ -3,25 +3,26 @@
 import { useState } from "react";
 import { useProgress } from "@/lib/store";
 import { markRouteExported } from "@/lib/routeGating";
-import { R1, TASK1 } from "@/lib/route1";
-import { useRoute1 } from "./useRoute1";
-import { useLifecycleDocData } from "./useLifecycleDocData";
-import { LifecycleReportDoc } from "./LifecycleReportDoc";
+import { LEARNER_NAME_KEY } from "@/lib/route1";
+import { TASK2 } from "@/lib/route2";
+import { useRoute2 } from "./useRoute2";
+import { useProcurementDocData } from "./useProcurementDocData";
+import { ProcurementReportDoc } from "./ProcurementReportDoc";
 import { exportFilename, printAsFile } from "@/lib/exportFilename";
 import { Lock, Close } from "@/components/icons/LineIcons";
 
-export function LifecycleExport() {
-  const r1 = useRoute1();
+export function ProcurementExport() {
+  const r2 = useRoute2();
   const setNote = useProgress((s) => s.setNote);
   const toggleCheck = useProgress((s) => s.toggleCheck);
-  const data = useLifecycleDocData();
+  const data = useProcurementDocData();
   const [open, setOpen] = useState(false);
 
-  const canExport = r1.hydrated && r1.exportEnabled;
+  const canExport = r2.hydrated && r2.exportEnabled;
 
   const download = () => {
-    printAsFile(exportFilename(r1.name, 1));
-    markRouteExported(toggleCheck, 1);
+    printAsFile(exportFilename(r2.name, 2));
+    markRouteExported(toggleCheck, 2);
   };
 
   return (
@@ -33,9 +34,9 @@ export function LifecycleExport() {
         className="btn-accent flex items-center gap-2 disabled:cursor-not-allowed"
       >
         {!canExport && <Lock className="h-4 w-4" />}
-        Export {TASK1.export.taskLabel}
+        Export {TASK2.export.taskLabel}
       </button>
-      {!canExport && <p className="mt-2 text-caption text-ash">Complete Steps 1–5 to unlock export.</p>}
+      {!canExport && <p className="mt-2 text-caption text-ash">Complete Steps 1–4 to unlock export.</p>}
 
       {open && (
         <div
@@ -56,14 +57,14 @@ export function LifecycleExport() {
               <label className="mb-4 block">
                 <span className="text-caption font-semibold text-ink">Your name</span>
                 <input
-                  value={r1.name}
-                  onChange={(e) => setNote(R1.name, e.target.value)}
+                  value={r2.name}
+                  onChange={(e) => setNote(LEARNER_NAME_KEY, e.target.value)}
                   placeholder="Full name for the export filename"
                   className="mt-1 w-full max-w-xs rounded-xl border border-line bg-paper px-3 py-2 text-body text-ink"
                 />
               </label>
               <div className="rounded-xl border border-line bg-canvas p-5">
-                <LifecycleReportDoc data={data} />
+                <ProcurementReportDoc data={data} />
               </div>
             </div>
             <div className="flex justify-end gap-2 border-t border-line p-4">
