@@ -34,8 +34,8 @@ export default function DayLanding() {
       {/* Route cards */}
       <div className="mt-10 grid gap-5 lg:grid-cols-3">
         {ROUTES.map((rt) => {
-          const reachable = rt.available && unlockedByN[rt.n];
-          const statusLabel = !rt.available ? "Not built" : reachable ? "Available" : "Locked";
+          const reachable = rt.available;
+          const recommendedFirst = reachable && rt.n > 1 && !unlockedByN[rt.n];
 
           const inner = (
             <>
@@ -49,7 +49,7 @@ export default function DayLanding() {
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 rounded-full border border-line px-2.5 py-1 text-micro font-semibold uppercase tracking-wide text-ash">
-                    <Lock className="h-3.5 w-3.5" /> {statusLabel}
+                    <Lock className="h-3.5 w-3.5" /> Not built
                   </span>
                 )}
               </div>
@@ -60,6 +60,12 @@ export default function DayLanding() {
               <h2 className="mt-1 text-h2 text-ink">{rt.cardTitle}</h2>
               <p className="mt-2 flex-1 text-body text-ash">{rt.cardBlurb}</p>
 
+              {recommendedFirst && (
+                <p className="mt-2 text-micro text-ash">
+                  Recommended: finish Route {rt.n - 1} first — you can still open this anytime.
+                </p>
+              )}
+
               <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
                 <span className="text-caption text-ash">
                   Deliverable:{" "}
@@ -69,8 +75,6 @@ export default function DayLanding() {
                   <span className="inline-flex items-center gap-1.5 text-caption font-semibold text-accent">
                     Open <ArrowRight className="h-4 w-4" />
                   </span>
-                ) : rt.available ? (
-                  <span className="text-caption text-ash">Complete the previous route</span>
                 ) : (
                   <span className="text-caption text-ash">Not yet</span>
                 )}

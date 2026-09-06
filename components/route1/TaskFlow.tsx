@@ -31,13 +31,13 @@ export function TaskFlow() {
   };
 
   const placedByStage = useMemo(() => {
-    const map: Partial<Record<StageId, { tagId: string; label: string; valid: boolean }[]>> = {};
+    const map: Partial<Record<StageId, { tagId: string; label: string; valid: boolean; hint: string }[]>> = {};
     for (const tag of TAGS) {
       const stageId = r1.tagPlacements[tag.id];
       if (!stageId) continue;
       const valid = (tag.validStages as StageId[]).includes(stageId as StageId);
       const list = map[stageId as StageId] ?? [];
-      list.push({ tagId: tag.id, label: tag.label, valid });
+      list.push({ tagId: tag.id, label: tag.label, valid, hint: tag.hint });
       map[stageId as StageId] = list;
     }
     return map;

@@ -19,6 +19,13 @@ export function LifecycleExport() {
 
   const canExport = r1.hydrated && r1.exportEnabled;
 
+  const missing: string[] = [];
+  if (!r1.step1Complete) missing.push("Step 1 — click every lifecycle stage");
+  if (!r1.step2Complete) missing.push("Step 2 — correctly place every real tag");
+  if (!r1.step3Complete) missing.push("Step 3 — run the calculator and use the data");
+  if (!r1.step4Complete) missing.push("Step 4 — risks, classification, and a recommendation");
+  if (!r1.step5Complete) missing.push("Step 5 — justify your decision and pick a response");
+
   const download = () => {
     printAsFile(exportFilename(r1.name, 1));
     markRouteExported(toggleCheck, 1);
@@ -35,7 +42,16 @@ export function LifecycleExport() {
         {!canExport && <Lock className="h-4 w-4" />}
         Export {TASK1.export.taskLabel}
       </button>
-      {!canExport && <p className="mt-2 text-caption text-ash">Complete Steps 1–5 to unlock export.</p>}
+      {!canExport && missing.length > 0 && (
+        <div className="mt-2 text-caption text-ash">
+          <p>Still needed:</p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-5">
+            {missing.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {open && (
         <div

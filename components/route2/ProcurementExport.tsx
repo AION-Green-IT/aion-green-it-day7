@@ -20,6 +20,12 @@ export function ProcurementExport() {
 
   const canExport = r2.hydrated && r2.exportEnabled;
 
+  const missing: string[] = [];
+  if (!r2.step1Complete) missing.push("Step 1 — answer all six classification questions");
+  if (!r2.step2Complete) missing.push("Step 2 — lock in your weighted scoring");
+  if (!r2.step3Complete) missing.push("Step 3 — save your cost & risk analysis");
+  if (!r2.step4Complete) missing.push("Step 4 — rank all three models, justify with numbers, and fill in stakeholders and risks");
+
   const download = () => {
     printAsFile(exportFilename(r2.name, 2));
     markRouteExported(toggleCheck, 2);
@@ -36,7 +42,16 @@ export function ProcurementExport() {
         {!canExport && <Lock className="h-4 w-4" />}
         Export {TASK2.export.taskLabel}
       </button>
-      {!canExport && <p className="mt-2 text-caption text-ash">Complete Steps 1–4 to unlock export.</p>}
+      {!canExport && missing.length > 0 && (
+        <div className="mt-2 text-caption text-ash">
+          <p>Still needed:</p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-5">
+            {missing.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {open && (
         <div

@@ -359,19 +359,69 @@ export const STAGES: Stage[] = [
 // ---------------------------------------------------------------------------
 // Step 2 — Sustainability factor tagging (drag-to-classify onto stages)
 // ---------------------------------------------------------------------------
-export type Tag = { id: string; label: string; validStages: StageId[] };
+export type Tag = { id: string; label: string; validStages: StageId[]; hint: string };
 
 export const TAGS: Tag[] = [
-  { id: "spare-parts", label: "Spare parts availability", validStages: ["maintenance", "refurbishment"] },
-  { id: "energy-efficiency", label: "Energy efficiency", validStages: ["use"] },
-  { id: "take-back", label: "Take-back program", validStages: ["return"] },
-  { id: "supply-chain", label: "Supply chain transparency", validStages: ["procurement"] },
-  { id: "repairability", label: "Repairability score", validStages: ["maintenance", "refurbishment", "upgrade"] },
-  { id: "standardization-speed", label: "Standardization speed", validStages: [] },
-  { id: "lowest-bid", label: "Lowest bid pricing", validStages: [] },
-  { id: "modularity", label: "Modularity", validStages: ["upgrade", "refurbishment", "reuse"] },
-  { id: "certification", label: "Certification (TCO/EPEAT/Blauer Engel)", validStages: ["procurement"] },
-  { id: "material-recyclability", label: "Material recyclability", validStages: ["recycling", "disposal"] },
+  {
+    id: "spare-parts",
+    label: "Spare parts availability",
+    validStages: ["maintenance", "refurbishment"],
+    hint: "Think about when a broken device actually gets fixed — not when it's bought or thrown away.",
+  },
+  {
+    id: "energy-efficiency",
+    label: "Energy efficiency",
+    validStages: ["use"],
+    hint: "This is about ongoing power draw while the device is switched on, not the purchase or the write-off.",
+  },
+  {
+    id: "take-back",
+    label: "Take-back program",
+    validStages: ["return"],
+    hint: "This is about what happens when the device's time with you ends and it has to go back somewhere.",
+  },
+  {
+    id: "supply-chain",
+    label: "Supply chain transparency",
+    validStages: ["procurement"],
+    hint: "This is something you'd check before any money changes hands.",
+  },
+  {
+    id: "repairability",
+    label: "Repairability score",
+    validStages: ["maintenance", "refurbishment", "upgrade"],
+    hint: "This describes how easy a device is to physically service or extend — several stages in its working life depend on it.",
+  },
+  {
+    id: "standardization-speed",
+    label: "Standardization speed",
+    validStages: [],
+    hint: "This is an IT deployment concern, not a sustainability factor — it may not belong on this timeline at all.",
+  },
+  {
+    id: "lowest-bid",
+    label: "Lowest bid pricing",
+    validStages: [],
+    hint: "This is a pure pricing concern, not a lifecycle sustainability factor — it may not belong on this timeline at all.",
+  },
+  {
+    id: "modularity",
+    label: "Modularity",
+    validStages: ["upgrade", "refurbishment", "reuse"],
+    hint: "This is about swapping or reusing components without replacing the whole device.",
+  },
+  {
+    id: "certification",
+    label: "Certification (TCO/EPEAT/Blauer Engel)",
+    validStages: ["procurement"],
+    hint: "This is checked before a purchase decision is made, not afterward.",
+  },
+  {
+    id: "material-recyclability",
+    label: "Material recyclability",
+    validStages: ["recycling", "disposal"],
+    hint: "This only becomes relevant once a device is no longer being used by anyone at all.",
+  },
 ];
 
 // ---------------------------------------------------------------------------

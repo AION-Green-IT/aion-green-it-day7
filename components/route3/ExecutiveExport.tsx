@@ -20,6 +20,12 @@ export function ExecutiveExport() {
 
   const canExport = r3.hydrated && r3.exportEnabled;
 
+  const missing: string[] = [];
+  if (!r3.step1Complete) missing.push("Step 1 — click every node and every tension line in the map");
+  if (!r3.step2Complete) missing.push("Step 2 — rank 4 leverage points and justify your #1");
+  if (!r3.step3Complete) missing.push("Step 3 — all six parts of the Executive Decision Builder");
+  if (!r3.step4Complete) missing.push("Step 4 — the board challenge and a 3-sentence executive summary");
+
   const download = () => {
     printAsFile(exportFilename(r3.name, 3));
     markRouteExported(toggleCheck, 3);
@@ -36,7 +42,16 @@ export function ExecutiveExport() {
         {!canExport && <Lock className="h-4 w-4" />}
         Export {TASK3.export.taskLabel}
       </button>
-      {!canExport && <p className="mt-2 text-caption text-ash">Complete both phases to unlock export.</p>}
+      {!canExport && missing.length > 0 && (
+        <div className="mt-2 text-caption text-ash">
+          <p>Still needed:</p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-5">
+            {missing.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {open && (
         <div

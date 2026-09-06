@@ -21,6 +21,9 @@ export function TaskFlow() {
     { label: "Board Challenge", done: r3.step4Complete },
   ];
   const phase2Unlocked = r3.step2Complete;
+  const step2Missing: string[] = [];
+  if (r3.rankedCount < 4) step2Missing.push(`rank all 4 priority slots (${r3.rankedCount}/4 filled)`);
+  if (!r3.leverageJustify.trim()) step2Missing.push("justify your #1 pick");
 
   return (
     <section id="task" className="space-y-10">
@@ -52,7 +55,7 @@ export function TaskFlow() {
             </div>
           </div>
 
-          {phase2Unlocked && (
+          {phase2Unlocked ? (
             <>
               <div className="anim-pop rounded-xl border border-accent bg-accentSoft p-5">
                 <p className="text-caption font-semibold uppercase tracking-wide text-accent">{TASK3.phase2.label}</p>
@@ -72,6 +75,16 @@ export function TaskFlow() {
 
               <ExecutiveExport />
             </>
+          ) : (
+            <div className="rounded-xl border border-dashed border-line p-5">
+              <p className="text-caption font-semibold text-ink">{TASK3.phase2.label} unlocks after Step 2.</p>
+              <p className="mt-1 text-caption text-ash">Still needed:</p>
+              <ul className="mt-1 list-disc space-y-0.5 pl-5 text-caption text-ash">
+                {step2Missing.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
 

@@ -91,7 +91,7 @@ function StageGlyph({ id }: { id: StageId }) {
   }
 }
 
-type PlacedTag = { tagId: string; label: string; valid: boolean };
+type PlacedTag = { tagId: string; label: string; valid: boolean; hint: string };
 
 type Props = {
   compact?: boolean;
@@ -191,33 +191,37 @@ export function LifecycleStageExplorer({
                     <span className="min-w-0 flex-1 truncate font-semibold text-ink">{s.label}</span>
                   </button>
                   {placed.length > 0 && (
-                    <div className="flex flex-wrap gap-1 px-2 pb-1.5 pl-9">
+                    <div className="space-y-1 px-2 pb-1.5 pl-9">
                       {placed.map((p) => (
-                        <span
-                          key={p.tagId}
-                          className={clsx(
-                            "inline-flex items-center gap-1 rounded-full py-0.5 pl-1.5 pr-1 text-micro font-medium",
-                            !reviewing
-                              ? "bg-mist text-ink"
-                              : p.valid
-                                ? "bg-accentSoft text-accent"
-                                : "bg-canvas text-warn ring-1 ring-warn/40",
-                          )}
-                        >
-                          {reviewing && (p.valid ? <Check className="h-2.5 w-2.5" /> : <Info className="h-2.5 w-2.5" />)}
-                          {p.label}
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onRemoveTag?.(p.tagId);
-                            }}
-                            aria-label={`Remove ${p.label} from ${s.label}`}
-                            className="rounded-full p-0.5 text-ash hover:bg-line hover:text-ink"
+                        <div key={p.tagId}>
+                          <span
+                            className={clsx(
+                              "inline-flex items-center gap-1 rounded-full py-0.5 pl-1.5 pr-1 text-micro font-medium",
+                              !reviewing
+                                ? "bg-mist text-ink"
+                                : p.valid
+                                  ? "bg-accentSoft text-accent"
+                                  : "bg-canvas text-warn ring-1 ring-warn/40",
+                            )}
                           >
-                            <Close className="h-2.5 w-2.5" />
-                          </button>
-                        </span>
+                            {reviewing && (p.valid ? <Check className="h-2.5 w-2.5" /> : <Info className="h-2.5 w-2.5" />)}
+                            {p.label}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onRemoveTag?.(p.tagId);
+                              }}
+                              aria-label={`Remove ${p.label} from ${s.label}`}
+                              className="rounded-full p-0.5 text-ash hover:bg-line hover:text-ink"
+                            >
+                              <Close className="h-2.5 w-2.5" />
+                            </button>
+                          </span>
+                          {reviewing && !p.valid && (
+                            <p className="reveal-in mt-0.5 max-w-[220px] text-micro italic text-ash">{p.hint}</p>
+                          )}
+                        </div>
                       ))}
                     </div>
                   )}
@@ -228,7 +232,8 @@ export function LifecycleStageExplorer({
         </ol>
         {reviewing && (
           <p className="reveal-in mt-2 text-micro text-ash">
-            Green = fits this stage. Amber = doesn't fit here — tap the × to remove it, then place it somewhere else.
+            Green = fits this stage. Amber = doesn't fit here — read the clue, tap × to remove it, then place it
+            somewhere else.
           </p>
         )}
       </aside>

@@ -27,6 +27,11 @@ export function ManagementPushback() {
   const justificationValid = hasDigit(r1.pushbackJustification);
   const selectedChoice = TASK1.step5.choices.find((c) => c.id === r1.pushbackChoice);
 
+  const step4Missing: string[] = [];
+  if (!r1.risksFilled) step4Missing.push("fill in all three risk fields");
+  if (!r1.allClassified) step4Missing.push("classify all three risks as Purchasing- or Governance-level");
+  if (!r1.recommendation) step4Missing.push("choose a recommendation");
+
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between">
@@ -38,7 +43,16 @@ export function ManagementPushback() {
         )}
       </div>
 
-      {!r1.step4Complete && <p className="text-caption text-ash">Complete Step 4 first.</p>}
+      {!r1.step4Complete && (
+        <div className="text-caption text-ash">
+          <p>Step 4 still needs:</p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-5">
+            {step4Missing.map((m) => (
+              <li key={m}>{m}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {r1.step5Complete && !open && selectedChoice && (
         <div className="reveal-in rounded-xl border border-line bg-canvas p-4">
