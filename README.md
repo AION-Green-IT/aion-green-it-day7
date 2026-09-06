@@ -8,6 +8,9 @@ shared chrome, state, and export conventions.
 - **State:** `localStorage` only — no backend, no auth, no accounts
 - **Output:** static export (`out/`), deploy-ready to any static host
 
+See [`UX-STANDARDS.md`](./UX-STANDARDS.md) for the 10 interaction/UX conventions every
+route — on this day and every future day built from this folder — is expected to follow.
+
 ---
 
 ## Routes
