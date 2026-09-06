@@ -26,7 +26,7 @@ export function TaskFlow() {
       <MiniStepper steps={steps} />
       <CaseBrief />
 
-      <div>
+      <div id="r2-step1">
         <h3 className="text-h3 text-ink">{TASK2.step1.heading}</h3>
         <p className="mt-1 text-caption text-ash">{TASK2.step1.instructions}</p>
         <div className="mt-4">
@@ -34,7 +34,7 @@ export function TaskFlow() {
         </div>
       </div>
 
-      <div>
+      <div id="r2-step2">
         <h3 className="text-h3 text-ink">{TASK2.step2.heading}</h3>
         <p className="mt-1 text-caption text-ash">{TASK2.step2.instructions}</p>
         <div className="card mt-4 p-5">
@@ -42,7 +42,7 @@ export function TaskFlow() {
         </div>
       </div>
 
-      <div>
+      <div id="r2-step3">
         <h3 className="text-h3 text-ink">{TASK2.step3.heading}</h3>
         <p className="mt-1 text-caption text-ash">{TASK2.step3.instructions}</p>
         <div className="card mt-4 p-5">
@@ -50,7 +50,7 @@ export function TaskFlow() {
         </div>
       </div>
 
-      <div>
+      <div id="r2-step4">
         <h3 className="text-h3 text-ink">{TASK2.step4.heading}</h3>
         <div className="mt-4">
           <DecisionPanel />

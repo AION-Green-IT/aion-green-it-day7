@@ -16,7 +16,7 @@ export function ExecutiveDecisionBuilder() {
     <div className="space-y-8">
       <StrategicRelevance />
       <CoreDecisions />
-      <section>
+      <section id="r3-step3-3">
         <h4 className="text-caption font-semibold text-ink">{S3.conflictQuestion}</h4>
         <p className="mt-1 text-caption text-ash">{S3.conflictInstructions}</p>
         <div className="mt-3">
@@ -24,7 +24,7 @@ export function ExecutiveDecisionBuilder() {
         </div>
       </section>
       <FirstStepChoice />
-      <section>
+      <section id="r3-step3-5">
         <h4 className="text-caption font-semibold text-ink">{S3.governanceQuestion}</h4>
         <div className="mt-3">
           <RaciGrid mode="build" />
@@ -39,7 +39,7 @@ function StrategicRelevance() {
   const setNote = useProgress((s) => s.setNote);
   const r3 = useRoute3();
   return (
-    <section>
+    <section id="r3-step3-1">
       <h4 className="text-caption font-semibold text-ink">{S3.relevanceQuestion}</h4>
       <p className="mt-1 text-caption text-ash">{S3.relevanceInstructions}</p>
       <div className="mt-3 max-w-md">
@@ -71,7 +71,7 @@ function CoreDecisions() {
   const choose = useProgress((s) => s.choose);
   const r3 = useRoute3();
   return (
-    <section>
+    <section id="r3-step3-2">
       <h4 className="text-caption font-semibold text-ink">{S3.coreDecisionsQuestion}</h4>
       <p className="mt-1 text-caption text-ash">
         Phrase each one as a decision to be made, not a task to be done — e.g. "Approve binding repairability
@@ -117,7 +117,7 @@ function FirstStepChoice() {
   const setNote = useProgress((s) => s.setNote);
   const r3 = useRoute3();
   return (
-    <section>
+    <section id="r3-step3-4">
       <h4 className="text-caption font-semibold text-ink">{S3.firstStepQuestion}</h4>
       <div className="mt-2 space-y-2">
         {FIRST_STEP_OPTIONS.map((o) => (
@@ -153,7 +153,7 @@ function IncompleteInfo() {
   const r3 = useRoute3();
   const short = r3.incompleteInfo.trim().length > 0 && r3.incompleteInfo.trim().length < 40;
   return (
-    <section>
+    <section id="r3-step3-6">
       <h4 className="text-caption font-semibold text-ink">{S3.incompleteQuestion}</h4>
       <p className="mt-1 text-caption text-ash">
         State the decision you'd make right now, and name what data you're missing that you're deciding without.

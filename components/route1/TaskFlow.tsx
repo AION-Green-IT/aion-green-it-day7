@@ -49,7 +49,7 @@ export function TaskFlow() {
       <MiniStepper />
       <CaseBrief />
 
-      <div>
+      <div id="r1-step1">
         <h3 className="text-h3 text-ink">{TASK1.step1.heading}</h3>
         <p className="mt-1 text-caption text-ash">{TASK1.step1.instructions}</p>
         <div className="mt-4">
@@ -59,7 +59,7 @@ export function TaskFlow() {
 
       <div className="grid gap-8 lg:grid-cols-[1fr_240px]">
         <div className="min-w-0 space-y-10">
-          <div>
+          <div id="r1-step2">
             <div className="flex items-baseline justify-between gap-3">
               <h3 className="text-h3 text-ink">{TASK1.step2.heading}</h3>
               <p className="text-caption tabular-nums text-ash">
@@ -80,7 +80,7 @@ export function TaskFlow() {
             </div>
           </div>
 
-          <div>
+          <div id="r1-step3">
             <h3 className="text-h3 text-ink">{TASK1.step3.heading}</h3>
             <p className="mt-1 text-caption text-ash">{TASK1.step3.instructions}</p>
             <div className="card mt-4 p-5">
@@ -88,7 +88,7 @@ export function TaskFlow() {
             </div>
           </div>
 
-          <div>
+          <div id="r1-step4">
             <h3 className="text-h3 text-ink">{TASK1.step4.heading}</h3>
             <div className="mt-4">
               <AnalysisPanel />

@@ -4,6 +4,7 @@ import { LeafMark } from "@/components/chrome/Icons";
 import { Material } from "@/components/route1/Material";
 import { TaskFlow } from "@/components/route1/TaskFlow";
 import { LifecycleReportPrint } from "@/components/route1/LifecycleReportPrint";
+import { MentorTools } from "@/components/route1/MentorTools";
 
 const ROUTE = ROUTES[0];
 
@@ -15,6 +16,7 @@ export default function Route1Page() {
   return (
     <>
       <div className="space-y-16 py-12 print:hidden">
+        <MentorTools />
         <div className="max-w-prose">
           <p className="mb-2 flex items-center gap-2 text-micro font-semibold uppercase tracking-wide text-accent">
             <LeafMark className="h-4 w-4" /> {ROUTE.tag} — 1 of 3

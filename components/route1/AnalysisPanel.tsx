@@ -34,7 +34,7 @@ function RiskFields() {
   const notes = useProgress((s) => s.notes);
   const setNote = useProgress((s) => s.setNote);
   return (
-    <section className="space-y-3">
+    <section id="r1-step4-risks" className="space-y-3">
       <h3 className="text-h3 text-ink">Risk identification</h3>
       <p className="text-caption text-ash">
         Name one concrete risk per box — reference a specific vendor, lifecycle stage, or number from the case, not a
@@ -131,7 +131,7 @@ function ClassificationBoard() {
   const truncate = (t: string) => (t.length > 90 ? `${t.slice(0, 90)}…` : t);
 
   return (
-    <section className="space-y-3">
+    <section id="r1-step4-classify" className="space-y-3">
       <h3 className="text-h3 text-ink">Classify your own findings</h3>
       <p className="text-caption text-ash">{TASK1.step4.classifyInstructions}</p>
       {items.length === 0 && (
@@ -221,7 +221,7 @@ function RecommendationField() {
     { id: "phased", label: "Phased approach" },
   ];
   return (
-    <section className="space-y-3">
+    <section id="r1-step4-recommend" className="space-y-3">
       <h3 className="text-h3 text-ink">{TASK1.step4.recommendationLabel}</h3>
       <div className="flex flex-wrap gap-2">
         {options.map((o) => (

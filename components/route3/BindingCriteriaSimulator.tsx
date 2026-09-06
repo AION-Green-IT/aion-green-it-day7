@@ -13,7 +13,8 @@ export function BindingCriteriaSimulator() {
 
   const optionalWinner = simRanking(false)[0];
   const scoredWinner = simRanking(true)[0];
-  const currentRanking = simRanking(scored);
+  const scoreOf = (v: (typeof SIM_VENDORS)[number]) => (scored ? v.price * 0.8 + v.repairability * 0.2 : v.price);
+  const rankedIds = [...SIM_VENDORS].sort((a, b) => scoreOf(b) - scoreOf(a)).map((v) => v.id);
 
   const toggle = () => {
     if (!touchedRef.current) {
@@ -49,12 +50,13 @@ export function BindingCriteriaSimulator() {
       </div>
 
       <div className="mt-4 space-y-2">
-        {currentRanking.map((v, i) => {
-          const score = scored ? v.price * 0.8 + v.repairability * 0.2 : v.price;
-          const isWinner = i === 0;
+        {SIM_VENDORS.map((v) => {
+          const score = scoreOf(v);
+          const rank = rankedIds.indexOf(v.id) + 1;
+          const isWinner = rank === 1;
           return (
             <div key={v.id} className="flex items-center gap-2">
-              <span className="w-5 shrink-0 text-caption tabular-nums text-ash">{i + 1}</span>
+              <span className="w-5 shrink-0 text-caption tabular-nums text-ash">{rank}</span>
               <span className="w-20 shrink-0 text-caption font-semibold text-ink">{v.label}</span>
               <div className="h-6 flex-1 overflow-hidden rounded-full bg-mist">
                 <div

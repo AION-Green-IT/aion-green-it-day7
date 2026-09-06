@@ -178,6 +178,23 @@
   animation: popIn 0.4s ease-out;
 }
 
+/* Draws the eye to a section a "still needed" link just scrolled to. */
+@keyframes flashWarn {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(178, 59, 59, 0);
+    background-color: transparent;
+  }
+  25% {
+    box-shadow: 0 0 0 4px rgba(178, 59, 59, 0.35);
+    background-color: rgba(178, 59, 59, 0.06);
+  }
+}
+.anim-flash-warn {
+  animation: flashWarn 1.2s ease-in-out;
+  border-radius: theme("borderRadius.2xl");
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

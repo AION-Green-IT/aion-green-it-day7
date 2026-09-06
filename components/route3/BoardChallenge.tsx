@@ -6,6 +6,7 @@ import { useProgress } from "@/lib/store";
 import { R3, BOARD_CHALLENGE, TASK3 } from "@/lib/route3";
 import { useRoute3 } from "./useRoute3";
 import { Close } from "@/components/icons/LineIcons";
+import { MissingList } from "@/components/ui/MissingList";
 
 /** Step 4 — a curveball modal, same pattern as Route 1's Management Pushback, board-level context. */
 export function BoardChallenge() {
@@ -25,16 +26,17 @@ export function BoardChallenge() {
   const selectedChoice = BOARD_CHALLENGE.choices.find((c) => c.id === r3.boardChoice);
   const canConfirm = !!r3.boardChoice && r3.execSummary.trim().length >= 30;
 
-  const step3Missing: string[] = [];
-  if (!r3.step3_1Complete) step3Missing.push("mark your ladder position and explain its relevance");
-  if (!r3.step3_2Complete) step3Missing.push("fill all three core decisions with an accountable owner");
-  if (!r3.step3_3Complete) step3Missing.push("place all five conflict statements on the matrix");
-  if (!r3.step3_4Complete) step3Missing.push("pick a first step and justify it (15+ characters)");
-  if (!r3.step3_5Complete) step3Missing.push("assign exactly one Accountable per decision in the RACI grid");
-  if (!r3.step3_6Complete) step3Missing.push("answer what must be decided despite incomplete information");
+  const step3Missing = [
+    !r3.step3_1Complete && { id: "r3-step3-1", label: "mark your ladder position and explain its relevance" },
+    !r3.step3_2Complete && { id: "r3-step3-2", label: "fill all three core decisions with an accountable owner" },
+    !r3.step3_3Complete && { id: "r3-step3-3", label: "place all five conflict statements on the matrix" },
+    !r3.step3_4Complete && { id: "r3-step3-4", label: "pick a first step and justify it (15+ characters)" },
+    !r3.step3_5Complete && { id: "r3-step3-5", label: "assign exactly one Accountable per decision in the RACI grid" },
+    !r3.step3_6Complete && { id: "r3-step3-6", label: "answer what must be decided despite incomplete information" },
+  ].filter(Boolean) as { id: string; label: string }[];
 
   return (
-    <section className="space-y-3">
+    <section id="r3-step4" className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-h3 text-ink">{TASK3.phase2.step4.heading}</h3>
         {r3.step3Complete && !open && (
@@ -44,16 +46,7 @@ export function BoardChallenge() {
         )}
       </div>
 
-      {!r3.step3Complete && (
-        <div className="text-caption text-ash">
-          <p>Step 3 still needs:</p>
-          <ul className="mt-1 list-disc space-y-0.5 pl-5">
-            {step3Missing.map((m) => (
-              <li key={m}>{m}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {!r3.step3Complete && <MissingList items={step3Missing} lead="Step 3 still needs:" />}
 
       {r3.step4Complete && !open && selectedChoice && (
         <div className="reveal-in rounded-xl border border-line bg-canvas p-4">

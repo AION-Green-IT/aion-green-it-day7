@@ -8,6 +8,8 @@ import { useRoute1 } from "./useRoute1";
 import { useLifecycleDocData } from "./useLifecycleDocData";
 import { LifecycleReportDoc } from "./LifecycleReportDoc";
 import { exportFilename, printAsFile } from "@/lib/exportFilename";
+import { scrollToAndFlash } from "@/lib/scrollToAndFlash";
+import { MissingList } from "@/components/ui/MissingList";
 import { Lock, Close } from "@/components/icons/LineIcons";
 
 export function LifecycleExport() {
@@ -19,12 +21,13 @@ export function LifecycleExport() {
 
   const canExport = r1.hydrated && r1.exportEnabled;
 
-  const missing: string[] = [];
-  if (!r1.step1Complete) missing.push("Step 1 — click every lifecycle stage");
-  if (!r1.step2Complete) missing.push("Step 2 — correctly place every real tag");
-  if (!r1.step3Complete) missing.push("Step 3 — run the calculator and use the data");
-  if (!r1.step4Complete) missing.push("Step 4 — risks, classification, and a recommendation");
-  if (!r1.step5Complete) missing.push("Step 5 — justify your decision and pick a response");
+  const missing = [
+    !r1.step1Complete && { id: "r1-step1", label: "Step 1 — click every lifecycle stage" },
+    !r1.step2Complete && { id: "r1-step2", label: "Step 2 — correctly place every real tag" },
+    !r1.step3Complete && { id: "r1-step3", label: "Step 3 — run the calculator and use the data" },
+    !r1.step4Complete && { id: "r1-step4", label: "Step 4 — risks, classification, and a recommendation" },
+    !r1.step5Complete && { id: "r1-step5", label: "Step 5 — justify your decision and pick a response" },
+  ].filter(Boolean) as { id: string; label: string }[];
 
   const download = () => {
     printAsFile(exportFilename(r1.name, 1));
@@ -35,21 +38,16 @@ export function LifecycleExport() {
     <div className="border-t border-line pt-6">
       <button
         type="button"
-        disabled={!canExport}
-        onClick={() => setOpen(true)}
-        className="btn-accent flex items-center gap-2 disabled:cursor-not-allowed"
+        onClick={() => (canExport ? setOpen(true) : scrollToAndFlash("r1-export-missing"))}
+        className="btn-accent flex items-center gap-2"
+        aria-describedby={canExport ? undefined : "r1-export-missing"}
       >
         {!canExport && <Lock className="h-4 w-4" />}
         Export {TASK1.export.taskLabel}
       </button>
-      {!canExport && missing.length > 0 && (
-        <div className="mt-2 text-caption text-ash">
-          <p>Still needed:</p>
-          <ul className="mt-1 list-disc space-y-0.5 pl-5">
-            {missing.map((m) => (
-              <li key={m}>{m}</li>
-            ))}
-          </ul>
+      {!canExport && (
+        <div id="r1-export-missing" className="mt-2 p-1">
+          <MissingList items={missing} />
         </div>
       )}
 

@@ -4,6 +4,7 @@ import { TASK3 } from "@/lib/route3";
 import { useRoute3 } from "./useRoute3";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { MiniStepper } from "@/components/ui/MiniStepper";
+import { MissingList } from "@/components/ui/MissingList";
 import { ProximaBrief, HelionBrief } from "./CaseBriefs";
 import { TensionMap } from "./TensionMap";
 import { LeverageRanking } from "./LeverageRanking";
@@ -21,9 +22,10 @@ export function TaskFlow() {
     { label: "Board Challenge", done: r3.step4Complete },
   ];
   const phase2Unlocked = r3.step2Complete;
-  const step2Missing: string[] = [];
-  if (r3.rankedCount < 4) step2Missing.push(`rank all 4 priority slots (${r3.rankedCount}/4 filled)`);
-  if (!r3.leverageJustify.trim()) step2Missing.push("justify your #1 pick");
+  const step2Missing = [
+    r3.rankedCount < 4 && { id: "r3-step2", label: `rank all 4 priority slots (${r3.rankedCount}/4 filled)` },
+    !r3.leverageJustify.trim() && { id: "r3-step2", label: "justify your #1 pick" },
+  ].filter(Boolean) as { id: string; label: string }[];
 
   return (
     <section id="task" className="space-y-10">
@@ -39,7 +41,7 @@ export function TaskFlow() {
             </div>
           </div>
 
-          <div>
+          <div id="r3-step1">
             <h3 className="text-h3 text-ink">{TASK3.phase1.step1.heading}</h3>
             <p className="mt-1 text-caption text-ash">{TASK3.phase1.step1.instructions}</p>
             <div className="mt-4">
@@ -47,7 +49,7 @@ export function TaskFlow() {
             </div>
           </div>
 
-          <div>
+          <div id="r3-step2">
             <h3 className="text-h3 text-ink">{TASK3.phase1.step2.heading}</h3>
             <p className="mt-1 text-caption text-ash">{TASK3.phase1.step2.instructions}</p>
             <div className="mt-4">
@@ -64,7 +66,7 @@ export function TaskFlow() {
 
               <HelionBrief />
 
-              <div>
+              <div id="r3-step3">
                 <h3 className="text-h3 text-ink">{TASK3.phase2.step3.heading}</h3>
                 <div className="mt-4">
                   <ExecutiveDecisionBuilder />
@@ -78,12 +80,7 @@ export function TaskFlow() {
           ) : (
             <div className="rounded-xl border border-dashed border-line p-5">
               <p className="text-caption font-semibold text-ink">{TASK3.phase2.label} unlocks after Step 2.</p>
-              <p className="mt-1 text-caption text-ash">Still needed:</p>
-              <ul className="mt-1 list-disc space-y-0.5 pl-5 text-caption text-ash">
-                {step2Missing.map((m) => (
-                  <li key={m}>{m}</li>
-                ))}
-              </ul>
+              <MissingList items={step2Missing} />
             </div>
           )}
         </div>

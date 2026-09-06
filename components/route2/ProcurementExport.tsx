@@ -9,6 +9,8 @@ import { useRoute2 } from "./useRoute2";
 import { useProcurementDocData } from "./useProcurementDocData";
 import { ProcurementReportDoc } from "./ProcurementReportDoc";
 import { exportFilename, printAsFile } from "@/lib/exportFilename";
+import { scrollToAndFlash } from "@/lib/scrollToAndFlash";
+import { MissingList } from "@/components/ui/MissingList";
 import { Lock, Close } from "@/components/icons/LineIcons";
 
 export function ProcurementExport() {
@@ -20,11 +22,15 @@ export function ProcurementExport() {
 
   const canExport = r2.hydrated && r2.exportEnabled;
 
-  const missing: string[] = [];
-  if (!r2.step1Complete) missing.push("Step 1 — answer all six classification questions");
-  if (!r2.step2Complete) missing.push("Step 2 — lock in your weighted scoring");
-  if (!r2.step3Complete) missing.push("Step 3 — save your cost & risk analysis");
-  if (!r2.step4Complete) missing.push("Step 4 — rank all three models, justify with numbers, and fill in stakeholders and risks");
+  const missing = [
+    !r2.step1Complete && { id: "r2-step1", label: "Step 1 — answer all six classification questions" },
+    !r2.step2Complete && { id: "r2-step2", label: "Step 2 — lock in your weighted scoring" },
+    !r2.step3Complete && { id: "r2-step3", label: "Step 3 — save your cost & risk analysis" },
+    !r2.step4Complete && {
+      id: "r2-step4",
+      label: "Step 4 — rank all three models, justify with numbers, and fill in stakeholders and risks",
+    },
+  ].filter(Boolean) as { id: string; label: string }[];
 
   const download = () => {
     printAsFile(exportFilename(r2.name, 2));
@@ -35,21 +41,16 @@ export function ProcurementExport() {
     <div className="border-t border-line pt-6">
       <button
         type="button"
-        disabled={!canExport}
-        onClick={() => setOpen(true)}
-        className="btn-accent flex items-center gap-2 disabled:cursor-not-allowed"
+        onClick={() => (canExport ? setOpen(true) : scrollToAndFlash("r2-export-missing"))}
+        className="btn-accent flex items-center gap-2"
+        aria-describedby={canExport ? undefined : "r2-export-missing"}
       >
         {!canExport && <Lock className="h-4 w-4" />}
         Export {TASK2.export.taskLabel}
       </button>
-      {!canExport && missing.length > 0 && (
-        <div className="mt-2 text-caption text-ash">
-          <p>Still needed:</p>
-          <ul className="mt-1 list-disc space-y-0.5 pl-5">
-            {missing.map((m) => (
-              <li key={m}>{m}</li>
-            ))}
-          </ul>
+      {!canExport && (
+        <div id="r2-export-missing" className="mt-2 p-1">
+          <MissingList items={missing} />
         </div>
       )}
 
