@@ -1,8 +1,8 @@
-# AION Green IT — Day 5
+# AION Green IT — Day 6
 
-**Sustainable IT Lifecycle & Circular Procurement** — the interactive working companion
-for Day 5. Three routes, each its own case and its own deliverable, built on the same
-shared chrome, state, and export conventions.
+**Data Center Efficiency, Trade-offs & Governance** — the interactive working companion
+for Day 6. Three routes, each its own case and its own deliverable, built on the same
+shared chrome, state, and export conventions established in Day 5.
 
 - **Stack:** Next.js 14 (App Router) · TypeScript · Tailwind · Zustand
 - **State:** `localStorage` only — no backend, no auth, no accounts
@@ -17,101 +17,82 @@ route — on this day and every future day built from this folder — is expecte
 
 | Route | Deliverable | Status |
 |---|---|---|
-| `/` | Day overview | — | built |
-| `/route-1-lifecycle-foundations` | Lifecycle Impact Mapper | **built** |
-| `/route-2-decision-tradeoffs` | Procurement Decision Matrix | **built** |
-| `/route-3-management-governance` | Governance Diagnostic & Executive Proposal | **built** |
+| `/` | Day overview | built |
+| `/route-1-the-audit` | Diagnostic Mapping & Priority Decision | **built** |
+| `/route-2-the-tradeoff` | Trade-off Analysis | **built** |
+| `/route-3-the-boardroom` | Board Proposal | **built** |
 
 Each route is a separate page and its own independent case study — see `lib/routes.ts`
 for the shared route registry (`CASE`, `Route`, `ROUTES`) consumed by the home page and
-the top-bar nav rail. Routes 2 and 3 are additionally gated at runtime by
-`lib/routeGating.ts` / `components/chrome/RouteGate.tsx`: a route stays locked until the
-previous route's export has actually been downloaded (tracked via a `checks["rN:exported"]`
-flag set the moment the export button's "Download as PDF" fires).
+the top-bar nav rail. Every route is always reachable: `lib/routeGating.ts` /
+`components/chrome/RouteGate.tsx` never hides a route's content, it only shows a
+non-blocking banner recommending the previous route's export be submitted first
+(tracked via a `checks["rN:exported"]` flag set the moment that route's "Download as
+PDF" fires) — see [`UX-STANDARDS.md`](./UX-STANDARDS.md) standard #6.
 
-**Export filenames** follow `<day>-<name>-day<day>-task<n>` — e.g.
-`5-muchson-day5-task1`. Built in `lib/exportFilename.ts`; export itself is the browser's
-native print dialog (`window.print()`, "Save as PDF") — there is no PDF library in this
-project by design.
+**Export filenames** follow `<day>-<name>-day<day>-<suffix>` — e.g.
+`6-muchson-day6-audit-mapping`. Built in `lib/exportFilename.ts` (`suffix` is either a
+descriptive string or a `taskN` number); export itself is the browser's native print
+dialog (`window.print()`, "Save as PDF") — there is no PDF library in this project by
+design.
 
-## Route 1 — Lifecycle Foundations (built)
+## Route 1 — The Audit (built)
 
-Case: **LogicSphere Solutions**, choosing between two notebook vendors for a 300-unit
-fleet — one cheaper with a 3-year replacement cycle, one 18% more expensive with a
-6-year cycle and real lifecycle service.
+Case: **CoreAxis Data Services**, a mid-size facility that grew organically for a
+decade and has never had a technical efficiency audit — 18% average utilization, a PUE
+of 1.9 against a 1.56 global average, no continuous monitoring, Tier IV-equivalent 2N
+redundancy everywhere, and an 11-week decommission process.
 
-1. **Material** — four blocks (TCO vs. purchase price, embodied carbon, the
-   circular-economy R-ladder, EU regulatory context), each pairing a real framework
-   with an "Impact Delta Visualizer": a TCO Reveal Bar, a manufacturing/use-phase
-   stacked chart with a lifespan slider, a repair-vs-recycle cumulative-carbon
-   timeline, and a certification trust checker (verified vs. self-declared claims).
-2. **Task 1 — Lifecycle Impact Mapper**, five steps:
-   - Step 1 — a 9-node lifecycle-stage SVG explorer (Procurement → Disposal), click
-     any node for case-specific facts.
-   - Step 2 — drag (or tap-to-place) 10 sustainability tags onto the stages they
-     belong to; 2 are distractors. The same stage explorer, shrunk to a sticky
-     sidebar, is the drop target for the rest of the task.
-   - Step 3 — a lifecycle cost calculator projecting each vendor's replacement
-     schedule (units × cycle × the 299 kg CO2e baseline) across a 6–15 year horizon.
-   - Step 4 — a split-screen analysis panel: risk fields, a procurement-criteria
-     checklist seeded from Step 2, a drag-to-classify board (purchasing vs.
-     governance), and a recommendation — with the report assembling live on the
-     right.
-   - Step 5 — a Finance Director pushback modal that only appears once Step 4 is
-     submitted; the learner must cite a number from Step 3 and pick a branching
-     response.
-   - Export unlocks only once all five steps are complete.
+1. **Material** — six sections (why data centers matter, the IT-load/facility-load
+   split, common inefficiency patterns, technical levers, PUE/monitoring with a live
+   worked-example calculator, and Uptime Institute Tier classification including its
+   2009 percentage removal), anchored by the shared "Anatomy of a Data Center" SVG.
+2. **Task 1a — Diagnostic Mapping**: click all 6 zones on the facility map, each with a
+   forced-choice reasoning question (nothing is graded on click), then a
+   Categorization & Prioritization panel — classify every zone (technical vs.
+   governance, short- vs. medium-term), pick one zone to prioritize, and describe the
+   improvement approach. Exports as `...-audit-mapping`.
+3. **Task 1b — Priority Simulator**: two sliders (Budget Available, Risk Tolerance)
+   re-weight a 6-axis radar (reusing `RadarChart`'s existing weights mechanic) across
+   three funding options, then commit to one with a justification, a follow-on
+   decision, and two named risks. Exports as `...-priority-decision`.
 
-## Route 2 — Decision Trade-offs (built)
+## Route 2 — The Trade-off (built)
 
-Case: **Ferrotech Dynamics**, choosing between three procurement models — cheapest/
-CapEx/3-year, repairable/CapEx/6-year, and a DaaS lease with return + refurbishment.
-Locked until Route 1's export is downloaded.
+Case: **DeltaGrid Hosting GmbH** — the learner is promoted from field analyst to
+senior consultant. Materi covers the TCO/CapEx/OpEx/Cost-of-Risk framework, Uptime
+Institute downtime-cost figures, why technical fixes regress without governance, ISO
+50001's PDCA loop, and a conceptual "governance sweet spot" cost curve. The facility
+SVG is evolved (not rebuilt) with per-rack build-generation badges and a cost-of-risk
+marker — see `components/ui/FacilitySvg.tsx`.
 
-1. **Material** — four blocks (Kraljic Portfolio Matrix, CapEx vs. DaaS hidden costs,
-   vendor lock-in risk, the weighted decision matrix), with a Kraljic quadrant-shift
-   dot animation, a two-model Hidden Cost Iceberg (extends Route 1's TCO Reveal Bar),
-   a dependency-risk gauge with overshoot easing, and a 7-axis radar weighting demo.
-2. **Task 2 — Procurement Decision Matrix**, four steps:
-   - Step 1 — the learner answers 6 branching questions; the system (not a manual
-     drag) computes the Kraljic quadrant and explains it from their own answers.
-   - Step 2 — set 7 criteria weights (auto-rebalancing to stay at 100%), score
-     Models A/B/C 1–5 each, watch a 3-shape radar and weighted totals update live.
-   - Step 3 — a 3-way Hidden Cost Iceberg (fleet-size slider) plus the dependency
-     gauge fixed to Model C's lock-in risk.
-   - Step 4 — split-screen: drag all three models into a priority ranking, justify
-     with a Step 2 number and a Step 3 number/risk level, stakeholder next-steps,
-     and two risk statements — with the report assembling live on the right.
-   - Export unlocks only once all four steps are complete.
+**Task 2 — The DeltaGrid Case**:
+- Step 1 — exploratory Scenario Dials (Utilization / Cooling / Transparency), never
+  graded, projecting directional (not fake-precise) Energy Cost / Risk / Investment
+  trends.
+- Step 2 — Structured Analysis: pick 4 of 7 levers with a justification each,
+  drag-to-reorder them with a full undo/redo history stack
+  (`components/route2/LeverRanking.tsx`), choose a management-framed first step,
+  classify each lever's time horizon, and name information gaps. Exports as
+  `...-tradeoff-analysis`.
 
-## Route 3 — Management & Governance (built)
+## Route 3 — The Boardroom (built)
 
-Two cases in one continuous arc, locked until Route 2's export is downloaded. Phase 1:
-**Proxima Digital Systems GmbH** (diagnostic — you're the consultant). Phase 2:
-**Helion Systems Group** (executive proposal — you're the CIO presenting to the board).
+Case: **NovaCore Infrastructure Group** — the capstone; the learner becomes strategic
+advisor building a decision-ready board proposal. Materi covers decision architecture
+vs. a technical checklist, no-regret decisions under uncertainty, the RACI model, the
+2026 CSRD/Omnibus I scope narrowing, and board-level goal conflicts. The facility SVG
+gets a third evolution layer — a "Board Decision Points" overlay of 3 clickable
+flag/tooltip pins — plus a second static diagram, `AccountabilityFlow`, showing the
+Board → CTO → Infrastructure Lead → Operations Team mandate/review loop.
 
-1. **Material** — four blocks (ISO 20400 governance framework, binding vs. optional
-   award criteria, RACI role governance, short-term vs. structural decisions), with a
-   4-rung Governance Maturity Ladder, a 5-vendor ranking that re-sorts when a criterion
-   becomes scored, a RACI grid with pre-seeded Accountable-conflicts to resolve, and a
-   drag-to-horizon card sorter.
-2. **Task 3 — Governance Diagnostic & Executive Proposal**, two phases, four steps:
-   - Step 1 — a 5-node network diagram (not a linear timeline) of Purchasing/IT/
-     Sustainability/Suppliers/Management; click nodes for goals, click edges for why
-     the tension exists.
-   - Step 2 — force-rank 4 of 6 leverage-point candidates (the other 2 fall to "Not
-     prioritized" automatically), then justify the #1 pick. Completing this triggers a
-     one-time "level up" transition into Phase 2.
-   - Step 3 — six interactive sub-blocks: mark Helion's position on a mini Governance
-     Ladder, three core decisions each tagged with a RACI-accountable owner, a free 2D
-     drag placement of conflict statements onto a Cost-Discipline-vs-Sustainability-
-     Ambition matrix, a first-step choice justified against the Step 2 ranking, a RACI
-     grid built from scratch (exactly one Accountable per decision), and an
-     incomplete-information call.
-   - Step 4 — a board-challenge modal (once Step 3 is submitted) with three response
-     strategies, plus a 3-sentence executive summary.
-   - The export is styled as a formal board memo (Executive Summary first, numbered
-     sections after) and combines both phases in one document.
+**Task 3 — The Board Proposal**: a form-left/live-document-right board memo builder —
+Strategic Relevance, three key 12-month decisions, prioritization logic, goal-conflict
+selection (curated 5, pick ≥2, justify each), a first-priority path, a dropdown RACI
+grid (4 decision types × 4 roles, `components/route3/RaciGrid.tsx`, validated for
+exactly one Accountable per row), and incomplete-data reasoning — plus a non-blocking
+"boardroom readiness" self-check before export. Exports as `...-board-proposal`, and
+the export *is* the live document, unchanged.
 
 ## Run it
 
@@ -132,11 +113,14 @@ npm run typecheck  # tsc --noEmit
 - `lib/route1.ts` / `lib/route2.ts` / `lib/route3.ts` — each route's copy, case data,
   and pure math (no React — importable anywhere).
 - `lib/store.ts` — the generic Zustand + `localStorage` store (key
-  `aion-greenit-day5`), shared by every route.
-- `lib/routeGating.ts` — cross-route unlock keys and the `useRouteUnlocked` hook.
+  `aion-greenit-day6`), shared by every route.
+- `lib/routeGating.ts` — cross-route unlock keys and the `useRouteUnlocked` hook (drives
+  the soft banner only, never blocks rendering).
 - `components/route1/*`, `components/route2/*`, `components/route3/*` — each route's
-  mechanics (visualizers, task steps, and the report/export/print components).
+  mechanics (task steps, and the report/export/print components).
 - `components/chrome/*`, `components/ui/*`, `components/icons/*` — shared chrome (top
-  bar, footer, `RouteGate`), generic UI (reveal-on-scroll, section heading, confirm
-  dialog, `MaterialBlock`, `IndustryCallout`, `RadarChart`, `MiniStepper`), the
-  single-colour icon registry, and `useAnimatedNumber` — all reused across routes.
+  bar, footer, `RouteGate`), generic UI (`Reveal`, `SectionHeading`, `MaterialBlock`,
+  `IndustryCallout`, `RadarChart`, `MiniStepper`, `MissingList`, `MentorFillButton`,
+  and the content-agnostic `FacilitySvg` — the one facility diagram all three routes
+  evolve), the single-colour icon registry, and `useAnimatedNumber` — all reused across
+  routes.

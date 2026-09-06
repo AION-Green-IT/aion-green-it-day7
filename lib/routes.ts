@@ -28,7 +28,7 @@ export type Route = {
   n: 1 | 2 | 3;
   slug: string;
   href: string;
-  tag: string; // "Route 1 — Lifecycle Foundations"
+  tag: string; // "Route 1 — The Audit"
   title: string; // page H1
   cardTitle: string; // landing card title
   cardBlurb: string; // landing card one-liner
