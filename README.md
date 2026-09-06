@@ -1,4 +1,4 @@
-# AION Green IT — Day 6
+# AION Green IT — Day 7
 
 **Data Center Efficiency, Trade-offs & Governance** — the interactive working companion
 for Day 6. Three routes, each its own case and its own deliverable, built on the same
