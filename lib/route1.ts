@@ -5,6 +5,7 @@
  */
 
 import type { IconKey } from "@/lib/routes";
+import type { FacilityZoneId } from "@/components/ui/FacilitySvg";
 
 export const LEARNER_NAME_KEY = "learner:name";
 
@@ -190,7 +191,7 @@ export const CASE_BRIEF = {
 // Master SVG zones — shared across Materi (read-only facts) and Task 1a
 // (forced-choice diagnostic). Each zone's `fact` mirrors CASE_BRIEF.facts.
 // ---------------------------------------------------------------------------
-export type ZoneId = "utilization" | "cooling" | "power" | "monitoring" | "redundancy" | "operations";
+export type ZoneId = FacilityZoneId;
 
 export type ZoneChoice = { id: string; label: string };
 

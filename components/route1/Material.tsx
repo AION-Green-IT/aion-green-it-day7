@@ -5,7 +5,7 @@ import { useProgress } from "@/lib/store";
 import { MATERIAL, ZONES, CASE_BRIEF, type ZoneId } from "@/lib/route1";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { MaterialBlock } from "@/components/ui/MaterialBlock";
-import { MasterFacilitySvg } from "./MasterFacilitySvg";
+import { FacilitySvg } from "@/components/ui/FacilitySvg";
 import { PueCalculator } from "./PueCalculator";
 import { Check } from "@/components/icons/LineIcons";
 
@@ -78,7 +78,7 @@ function FacilityMapExplainer() {
 
   return (
     <div>
-      <MasterFacilitySvg title={`${CASE_BRIEF.company} Facility Map`} flaggedZones={seen as ZoneId[]} activeZoneId={activeZoneId} onZoneClick={handleClick} />
+      <FacilitySvg title={`${CASE_BRIEF.company} Facility Map`} utilizationPct={18} flaggedZones={seen as ZoneId[]} activeZoneId={activeZoneId} onZoneClick={handleClick} />
       <p className="mt-3 text-micro text-ash">Click any zone to see what's actually known about it at CoreAxis. This is context, not a quiz.</p>
       {active && (
         <div className="reveal-in mt-3 rounded-xl border border-accent/25 bg-accentSoft p-4">

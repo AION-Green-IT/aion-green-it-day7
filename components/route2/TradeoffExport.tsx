@@ -3,37 +3,41 @@
 import { useState } from "react";
 import { useProgress } from "@/lib/store";
 import { markRouteExported } from "@/lib/routeGating";
-import { LEARNER_NAME_KEY } from "@/lib/route1";
-import { TASK2 } from "@/lib/route2";
+import { R2, LEVERS, REQUIRED_LEVER_COUNT, TASK2 } from "@/lib/route2";
 import { useRoute2 } from "./useRoute2";
-import { useProcurementDocData } from "./useProcurementDocData";
-import { ProcurementReportDoc } from "./ProcurementReportDoc";
+import { useTradeoffDocData } from "./useTradeoffDocData";
+import { TradeoffReportDoc } from "./TradeoffReportDoc";
 import { exportFilename, printAsFile } from "@/lib/exportFilename";
 import { scrollToAndFlash } from "@/lib/scrollToAndFlash";
 import { MissingList } from "@/components/ui/MissingList";
 import { Lock, Close } from "@/components/icons/LineIcons";
 
-export function ProcurementExport() {
+export function TradeoffExport() {
   const r2 = useRoute2();
   const setNote = useProgress((s) => s.setNote);
   const toggleCheck = useProgress((s) => s.toggleCheck);
-  const data = useProcurementDocData();
+  const data = useTradeoffDocData();
   const [open, setOpen] = useState(false);
 
   const canExport = r2.hydrated && r2.exportEnabled;
 
   const missing = [
-    !r2.step1Complete && { id: "r2-step1", label: "Step 1 — answer all six classification questions" },
-    !r2.step2Complete && { id: "r2-step2", label: "Step 2 — lock in your weighted scoring" },
-    !r2.step3Complete && { id: "r2-step3", label: "Step 3 — save your cost & risk analysis" },
-    !r2.step4Complete && {
-      id: "r2-step4",
-      label: "Step 4 — rank all three models, justify with numbers, and fill in stakeholders and risks",
-    },
+    !r2.selectionComplete && { id: "r2-levers", label: `Select exactly ${REQUIRED_LEVER_COUNT} levers` },
+    ...r2.selectedIds
+      .filter((id) => !r2.leverJustify[id]?.trim())
+      .map((id) => ({ id: "r2-levers", label: `Justify your selection: ${LEVERS.find((l) => l.id === id)?.label}` })),
+    ...(r2.selectionComplete
+      ? r2.selectedIds
+          .filter((id) => !r2.leverHorizon[id])
+          .map((id) => ({ id: "r2-horizon", label: `Classify the horizon for: ${LEVERS.find((l) => l.id === id)?.label}` }))
+      : []),
+    r2.selectionComplete && !r2.firstStep && { id: "r2-first-step", label: "Choose which lever should go first" },
+    r2.selectionComplete && !!r2.firstStep && !r2.firstStepJustify.trim() && { id: "r2-first-step", label: "Justify the first-step decision, management-framed" },
+    !r2.infoGaps.trim() && { id: "r2-infogaps", label: "Name the information gaps" },
   ].filter(Boolean) as { id: string; label: string }[];
 
   const download = () => {
-    printAsFile(exportFilename(r2.name, 2));
+    printAsFile(exportFilename(r2.name, TASK2.export.filenameSuffix));
     markRouteExported(toggleCheck, 2);
   };
 
@@ -72,16 +76,16 @@ export function ProcurementExport() {
             <div className="flex-1 overflow-y-auto p-5">
               <label className="mb-4 block">
                 <span className="text-caption font-semibold text-ink">Your name</span>
-                <p className="text-micro text-ash">Used to build your export filename — e.g. "5-jane-day5-task2".</p>
+                <p className="text-micro text-ash">Used to build your export filename — e.g. "6-jane-day6-tradeoff-analysis".</p>
                 <input
                   value={r2.name}
-                  onChange={(e) => setNote(LEARNER_NAME_KEY, e.target.value)}
+                  onChange={(e) => setNote(R2.name, e.target.value)}
                   placeholder="Full name"
                   className="mt-1 w-full max-w-xs rounded-xl border border-line bg-paper px-3 py-2 text-body text-ink"
                 />
               </label>
               <div className="rounded-xl border border-line bg-canvas p-5">
-                <ProcurementReportDoc data={data} />
+                <TradeoffReportDoc data={data} />
               </div>
             </div>
             <div className="flex justify-end gap-2 border-t border-line p-4">

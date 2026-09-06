@@ -1,45 +1,46 @@
 "use client";
 
 import { useProgress } from "@/lib/store";
-import { R2, KRALJIC_QUESTIONS, CRITERIA } from "@/lib/route2";
-import { LEARNER_NAME_KEY } from "@/lib/route1";
+import { R2, LEVERS, REQUIRED_LEVER_COUNT, LEARNER_NAME_KEY } from "@/lib/route2";
 import { MentorFillButton } from "@/components/ui/MentorFillButton";
 
-const MODELS = ["modelA", "modelB", "modelC"] as const;
-const MODEL_SCORES: Record<(typeof MODELS)[number], string> = { modelA: "3", modelB: "4", modelC: "3" };
+const DEMO_JUSTIFICATIONS: Record<string, string> = {
+  consolidate: "Underused servers are the single most visible line item on the energy bill, and consolidation needs no new hardware.",
+  monitoring: "Without a baseline, none of the other three levers can be proven to have worked afterward.",
+  cooling: "Piecemeal cooling adjustments over the years suggest real headroom, but it needs real data first.",
+  "review-cycle": "A one-off fix regresses without a standing review — this is what makes the other three stick.",
+};
 
 /** Mentor-only: fills every field on Route 2 with plausible demo answers. */
 export function MentorTools() {
-  const choose = useProgress((s) => s.choose);
-  const setNote = useProgress((s) => s.setNote);
   const toggleCheck = useProgress((s) => s.toggleCheck);
-  const markSeen = useProgress((s) => s.markSeen);
+  const setNote = useProgress((s) => s.setNote);
+  const choose = useProgress((s) => s.choose);
 
   const fillDemoAnswers = () => {
-    (["kraljic", "hiddenCost", "lockIn", "weighting"] as const).forEach((id) => markSeen(R2.material, id));
+    setNote(R2.dialUtilization, "0");
+    setNote(R2.dialCooling, "0");
+    setNote(R2.dialTransparency, "0");
 
-    KRALJIC_QUESTIONS.forEach((q) => choose(R2.kraljicQ(q.id), q.options[1].id));
+    const picks = Object.keys(DEMO_JUSTIFICATIONS).slice(0, REQUIRED_LEVER_COUNT);
+    LEVERS.forEach((l) => toggleCheck(R2.leverSelected(l.id), picks.includes(l.id)));
+    picks.forEach((id) => setNote(R2.leverJustify(id), DEMO_JUSTIFICATIONS[id]));
+    setNote(R2.rankOrder, JSON.stringify(picks));
 
-    CRITERIA.forEach((c) => {
-      MODELS.forEach((m) => setNote(R2.score(m, c.id), MODEL_SCORES[m]));
-    });
-    toggleCheck(R2.scoringLocked, true);
+    choose(R2.leverHorizon("monitoring"), "short");
+    choose(R2.leverHorizon("consolidate"), "short");
+    choose(R2.leverHorizon("cooling"), "medium");
+    choose(R2.leverHorizon("review-cycle"), "structural");
 
-    setNote(R2.calcUnits, "350");
-    setNote(R2.dependencyReflection, "Weak — high switching cost, limited leverage at contract renewal.");
-    toggleCheck(R2.costUsed, true);
-
-    choose(R2.rank("modelA"), "3");
-    choose(R2.rank("modelB"), "1");
-    choose(R2.rank("modelC"), "2");
-    setNote(R2.justifyScore, "Model B scored highest (around 3.4) on weighted criteria among the three options.");
-    setNote(R2.justifyRisk, "Model C carries high dependency risk per the gauge, and costs the most at 350 units.");
-    setNote(R2.stakeholder("purchasing"), "Issue the RFP with lifecycle criteria scored at 20% weight.");
-    setNote(R2.stakeholder("it"), "Confirm imaging/staging capacity for the chosen model.");
-    setNote(R2.stakeholder("management"), "Approve the budget delta between Model A and Model B.");
-    setNote(R2.risk(1), "Higher failure rates drive unplanned downtime cost later.");
-    setNote(R2.risk(2), "No take-back program means disposal cost falls entirely on the company.");
-
+    choose(R2.firstStep, "monitoring");
+    setNote(
+      R2.firstStepJustify,
+      "We fund monitoring first because every other recommendation in this plan needs a real baseline to be defensible to the board later — it's the cheapest, lowest-risk move that unblocks everything else.",
+    );
+    setNote(
+      R2.infoGaps,
+      "We don't yet have consumption data for the colocated racks — once monitoring is live for 30 days, the consolidation business case can be sized precisely instead of estimated. The decision to start monitoring now doesn't need to wait for that data.",
+    );
     setNote(LEARNER_NAME_KEY, "Mentor Demo");
   };
 

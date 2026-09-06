@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { useProgress } from "@/lib/store";
 import { R1, ZONES, type ZoneId } from "@/lib/route1";
 import { useRoute1 } from "./useRoute1";
-import { MasterFacilitySvg } from "./MasterFacilitySvg";
+import { FacilitySvg } from "@/components/ui/FacilitySvg";
 import { Check } from "@/components/icons/LineIcons";
 
 /** Task 1a, Step 1 — click a zone, answer its forced-choice question. Any answer just flags the zone; nothing is graded here. */
@@ -29,7 +29,8 @@ export function DiagnosticMapping() {
       </div>
 
       <div className="mt-3">
-        <MasterFacilitySvg
+        <FacilitySvg
+          utilizationPct={18}
           flaggedZones={Object.keys(r1.zoneAnswers) as ZoneId[]}
           activeZoneId={openZoneId}
           onZoneClick={(id) => setOpenZoneId((cur) => (cur === id ? null : id))}

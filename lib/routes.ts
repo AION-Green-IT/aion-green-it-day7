@@ -55,14 +55,14 @@ export const ROUTES: Route[] = [
   },
   {
     n: 2,
-    slug: "route-2-decision-tradeoffs",
-    href: "/route-2-decision-tradeoffs",
-    tag: "Route 2 — Decision Trade-offs",
-    title: "Route 2 — Decision Trade-offs",
-    cardTitle: "Decision Trade-offs",
+    slug: "route-2-the-tradeoff",
+    href: "/route-2-the-tradeoff",
+    tag: "Route 2 — The Trade-off",
+    title: "Route 2 — The Trade-off",
+    cardTitle: "The Trade-off",
     cardBlurb:
-      "Kraljic positioning, CapEx vs. DaaS, vendor lock-in risk, and weighted scoring across three procurement models.",
-    deliverable: "Procurement Decision Matrix",
+      "TCO, the real cost of downtime, and ISO 50001's PDCA loop — then build a prioritized, defensible recommendation under real constraints.",
+    deliverable: "Trade-off Analysis",
     available: true,
   },
   {

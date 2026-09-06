@@ -1,41 +1,56 @@
 /**
- * Route 2 — Decision Trade-offs. All learner-facing copy and pure math for
- * the Kraljic classification, hidden-cost, dependency-risk, and weighted
- * scoring mechanics live here. Case used throughout Task 2: Ferrotech
- * Dynamics (fictional).
+ * Route 2 — The Trade-off. All learner-facing copy and the pure dial/scoring
+ * math live here so components stay presentational. Case used throughout:
+ * DeltaGrid Hosting GmbH (fictional).
  */
 
 import type { IconKey } from "@/lib/routes";
+
+export const LEARNER_NAME_KEY = "learner:name";
 
 // ---------------------------------------------------------------------------
 // Store key map
 // ---------------------------------------------------------------------------
 export const R2 = {
   material: "r2:material",
-  kraljicQ: (id: string) => `r2:kraljic:${id}`,
-  weight: (id: string) => `r2:weight:${id}`,
-  score: (model: string, criterionId: string) => `r2:score:${model}:${criterionId}`,
-  scoringLocked: "r2:scoring:locked",
-  calcUnits: "r2:calc:units",
-  calcMaturity: "r2:calc:maturity",
-  calcLayer: (model: string, layerId: string) => `r2:calc:layer:${model}:${layerId}`,
-  dependencyReflection: "r2:dependency:reflection",
-  costUsed: "r2:cost:used",
-  rank: (model: string) => `r2:rank:${model}`,
-  justifyScore: "r2:justify:score",
-  justifyRisk: "r2:justify:risk",
-  stakeholder: (id: string) => `r2:stakeholder:${id}`,
-  risk: (n: 1 | 2) => `r2:risk${n}`,
+  dialUtilization: "r2:dial:utilization",
+  dialCooling: "r2:dial:cooling",
+  dialTransparency: "r2:dial:transparency",
+  leverSelected: (id: string) => `r2:lever:${id}:selected`,
+  leverJustify: (id: string) => `r2:lever:${id}:justify`,
+  leverHorizon: (id: string) => `r2:lever:${id}:horizon`,
+  rankOrder: "r2:rankorder",
+  firstStep: "r2:firststep",
+  firstStepJustify: "r2:firststep:justify",
+  infoGaps: "r2:infogaps",
+  name: LEARNER_NAME_KEY,
 } as const;
 
 // ---------------------------------------------------------------------------
-// Material — 4 blocks
+// Case brief — DeltaGrid Hosting GmbH
 // ---------------------------------------------------------------------------
-export type MaterialBlockId = "kraljic" | "hiddenCost" | "lockIn" | "weighting";
+export const CASE_BRIEF = {
+  company: "DeltaGrid Hosting GmbH",
+  setup:
+    "You've been promoted: you're now the senior consultant leading the engagement for DeltaGrid Hosting GmbH, a company running its own data center for internal and external services. Over several years, the infrastructure grew rapidly — new systems were integrated project-by-project, without a systematic architectural or efficiency review. Energy costs are rising. At the same time, leadership demands high availability, data security, and performance. Your job is no longer just to spot problems — it's to build a prioritized, defensible recommendation for management.",
+  facts: [
+    "Several physical servers are consistently underused.",
+    "Some duplicate or historically-grown systems exist without clear current need.",
+    "Cooling and airflow setup has only been adjusted piecemeal over the years.",
+    "Consumption data is only available for part of the facility.",
+    "IT operations staff worry that major intervention could cause disruption.",
+    "Management wants a solution that is both economically and sustainably justifiable.",
+  ],
+} as const;
 
-export type MaterialBlock = {
-  id: MaterialBlockId;
-  n: 1 | 2 | 3 | 4;
+// ---------------------------------------------------------------------------
+// Materi — 6 sections
+// ---------------------------------------------------------------------------
+export type MaterialSectionId = "bridge" | "tco" | "downtime" | "regression" | "iso50001" | "synthesis";
+
+export type MaterialSection = {
+  id: MaterialSectionId;
+  n: 1 | 2 | 3 | 4 | 5 | 6;
   icon: IconKey;
   kicker: string;
   title: string;
@@ -45,400 +60,211 @@ export type MaterialBlock = {
   callout: { label: string; text: string };
 };
 
-export const MATERIAL: MaterialBlock[] = [
+export const MATERIAL: MaterialSection[] = [
   {
-    id: "kraljic",
+    id: "bridge",
     n: 1,
-    icon: "target",
-    kicker: "Block 1 · Portfolio classification",
-    title: "The Kraljic Portfolio Purchasing Matrix",
+    icon: "link",
+    kicker: "1 · From audit to advice",
+    title: "Bridging Reflection",
     definition:
-      "Peter Kraljic's matrix (Harvard Business Review, 1983) classifies every purchasing category on two axes: Supply Risk (how hard is this to source — few vendors, long lead times, technical complexity) and Profit/Business Impact (how much this category affects the outcome that matters — cost, revenue, or operational continuity). The four quadrants: Non-critical (low risk, low impact — buy routinely, minimize effort), Leverage (low risk, high impact — many vendors, exploit your bargaining power), Bottleneck (high risk, low impact — few vendors, protect availability), and Strategic (high risk, high impact — build a genuine partnership, not just a transaction).",
+      "Route 1 asked one question: where are the technical problems? Route 2 asks a harder one: given limited budget and real organizational risk, what do we actually do about them — and how do we defend that choice to people who control budget and risk appetite?",
     insight:
-      "The matrix is still the standard procurement risk-classification tool in European procurement strategy today. The common mistake is treating every category with the same strategy — always chase the lowest bid — when the correct strategy differs sharply by quadrant.",
+      "A list of correctly-diagnosed inefficiencies is not a recommendation. The move from analyst to consultant is the move from finding gaps to owning a prioritized, defensible position on what happens next.",
     takeaway:
-      "A corporate notebook fleet with spare-parts dependency and a sustainability requirement tends to drift from \"Leverage\" toward \"Strategic\" once lifecycle criteria are included, because supply risk (spare-parts availability, long-term support) rises even though the category still looks like a routine, high-volume buy.",
-    callout: {
-      label: "Industry callout",
-      text: "A category doesn't have one fixed Kraljic position — the criteria you score it against can move it. Lifecycle criteria almost always push supply risk up.",
-    },
+      "Before you touch DeltaGrid's case, sit with these for a moment — they're framing, not a task:",
+    callout: { label: "Reflect", text: "Where in my own organization is data center operation managed more by habit than by deliberate strategy?" },
   },
   {
-    id: "hiddenCost",
+    id: "tco",
     n: 2,
     icon: "coins",
-    kicker: "Block 2 · Acquisition model",
-    title: "Hidden Cost of Ownership — CapEx vs. Device-as-a-Service",
+    kicker: "2 · The framework",
+    title: "TCO: The Framework Behind the Decision",
     definition:
-      "Frame this as an operational cost layer, not just a purchase number. Downstream processes — evaluation, provisioning and staging, inventory management, logistics, IT support, returns management, certified data-wiping, and remarketing — absorb real resource that rarely enters the initial purchase calculation. CapEx (buy outright) is recorded as a fixed asset, depreciated over time, but it hides the IT labour spent on maintenance, troubleshooting, and manual disposal. DaaS/HaaS (leasing/subscription) shifts cost from CapEx to OpEx: the per-device monthly fee already bundles procurement, staging, support, swap replacement, and end-of-life processing into one contract.",
+      "Total Cost of Ownership for a data center spans three categories: CapEx (hardware, facility build-out), OpEx (energy, maintenance, staffing, licensing), and Cost of Risk (downtime, security incidents, compliance failure).",
     insight:
-      "For an organization without dedicated hardware-management staff, a subscription model is often cheaper in real terms even though the monthly figure looks like an added cost next to a one-time purchase price.",
+      "Most organizations track CapEx and OpEx carefully — they're line items on a budget. Cost of Risk is usually an afterthought, because it's probabilistic rather than billed monthly. That asymmetry systematically distorts investment decisions toward \"cheap now, expensive later.\"",
     takeaway:
-      "Never compare \"purchase price vs. monthly lease fee\" directly. Compare total cost including the hidden operational layer — that's the only comparison that means anything.",
+      "Any recommendation that only compares CapEx and OpEx between options is incomplete. Cost of Risk has to be named explicitly, even when it can't be priced as precisely as the other two.",
     callout: {
       label: "Industry callout",
-      text: "IT team maturity changes the answer: an organization with strong internal imaging/support capability absorbs CapEx's hidden costs far more cheaply than one without it.",
+      text: "A cheaper option is only actually cheaper once its Cost of Risk is priced in — not before.",
     },
   },
   {
-    id: "lockIn",
+    id: "downtime",
     n: 3,
-    icon: "link",
-    kicker: "Block 3 · Supplier risk",
-    title: "Vendor Lock-in & Supplier Dependency Risk",
-    definition:
-      "Single-sourcing risk vs. multi-sourcing strategy is a core modern-procurement concept. Risk factors to assess: dependency on one vendor for spare parts, proprietary architecture that complicates migration, the exit clause in a leasing/subscription contract, and price-escalation risk at renewal.",
-    insight:
-      "A vendor offering a complete lifecycle service (refurbishment, take-back, and so on) can actually increase dependency on that same vendor — a real trade-off between convenience/sustainability and strategic flexibility.",
-    takeaway:
-      "Every lifecycle-aware procurement decision needs an exit-strategy assessment alongside it — not an evaluation of lifecycle benefits alone.",
-    callout: {
-      label: "Industry callout",
-      text: "Ask for the exit clause before you ask about the sustainability programme. A contract with no defined exit path is the real risk, however good the lifecycle pitch sounds.",
-    },
-  },
-  {
-    id: "weighting",
-    n: 4,
     icon: "shield",
-    kicker: "Block 4 · Decision method",
-    title: "Weighted Multi-Criteria Decision Matrix",
+    kicker: "3 · Pricing the risk side",
+    title: "The Economics of Downtime",
     definition:
-      "The Weighted Decision Matrix (also known as a Pugh Matrix or scoring model) is how procurement professionals compare complex options in a structured way instead of by intuition. Method: define evaluation criteria, assign a weight to each matching organizational priority, score every option per criterion (typically 1–5), multiply score by weight, and sum. Common criteria for sustainable IT procurement: acquisition cost, lifecycle cost, environmental impact, operational flexibility, control capability, supplier dependency, and strategic robustness.",
+      "Per the most recent available industry survey (Uptime Institute), 54% of organizations report their most recent significant/serious outage cost more than $100,000, and roughly 1 in 5 (≈20%) report costs exceeding $1 million. Separately, ITIC's 2024 enterprise survey found 91% of mid-size and large enterprises lose more than $300,000 per hour of downtime.",
     insight:
-      "Criteria weights are not universal objective numbers. An organization under tight budget constraint weights cost higher; one under a strong sustainability mandate weights environmental impact higher. The method isn't meant to produce one \"correct\" answer — it's meant to make trade-offs explicit and defensible.",
+      "If a single serious outage has a 1-in-5 chance of costing over $1 million, how much annual efficiency savings would it take to \"pay for\" the redundancy that prevents it? This is the actual question infrastructure leaders are answering, whether they realize it or not.",
     takeaway:
-      "Document the weights and scores in the tender/RFP evaluation record. That record is what makes a procurement decision defensible when it's audited or questioned later.",
+      "Redundancy and availability investment are not \"inefficiency\" to be trimmed by default — they're a hedge against a quantifiable, often six-to-seven-figure risk. The skill is balancing this against energy waste, not treating either side as automatically correct.",
     callout: {
       label: "Industry callout",
-      text: "A weighted matrix without a documented weighting rationale is exactly as defensible as no matrix at all — the paper trail is the point.",
+      text: "\"Cut redundancy to save energy\" and \"never touch redundancy\" are both the wrong default — the right answer depends on what's actually at stake.",
+    },
+  },
+  {
+    id: "regression",
+    n: 4,
+    icon: "target",
+    kicker: "4 · Why fixes decay",
+    title: "Why Technical Fixes Alone Regress",
+    definition:
+      "In the same survey data, roughly 4 in 5 operators say their most recent serious outage could have been prevented through better management, process, and configuration — not better hardware.",
+    insight:
+      "A one-off consolidation project or a single cooling retune is a point-in-time fix. Without an ongoing review mechanism, the same drift that created the original inefficiency — new systems added ad hoc, nobody reviewing utilization — simply starts again.",
+    takeaway:
+      "A strong recommendation includes not just what to fix, but how the fix stays fixed. That's a governance question, not a technical one.",
+    callout: {
+      label: "Industry callout",
+      text: "This is the direct bridge to governance: technical fixes without process discipline don't hold.",
+    },
+  },
+  {
+    id: "iso50001",
+    n: 5,
+    icon: "recycleLoop",
+    kicker: "5 · Embedded governance, concretely",
+    title: "ISO 50001 and the PDCA Loop",
+    definition:
+      "ISO 50001 (Energy Management Systems) is the internationally recognized standard for systematic energy management, built on the Plan-Do-Check-Act (PDCA) cycle: Plan (identify significant energy uses, set targets), Do (implement measures), Check (monitor via KPIs/PUE tracking), Act (review and adjust) — then the loop repeats.",
+    insight:
+      "This is not an abstract framework — it's a certifiable, audited management system that serious European enterprises actually run, widely adopted across German industry. The older \"Spitzenausgleich\" peak-compensation tax rebate tied to ISO 50001 expired at the end of 2023, but certification remains directly relevant today through the EEG levy limitation (BesAR, via BAFA) and obligations under the 2023 Energy Efficiency Act (EnEfG).",
+    takeaway:
+      "PDCA is what \"embedding technical efficiency in a governance logic\" actually looks like in practice: a repeating cycle, not a one-time project.",
+    callout: {
+      label: "Industry callout",
+      text: "Figures shift with policy — treat the EEG/EnEfG detail above as current as of the most recent guidance, not a permanent constant.",
+    },
+  },
+  {
+    id: "synthesis",
+    n: 6,
+    icon: "gavel",
+    kicker: "6 · Synthesis",
+    title: "From Technical Priority to Management Priority",
+    definition:
+      "A good Route 2 recommendation distinguishes short-term, medium-term, and structural/governance actions — and stays defensible even when the underlying data is incomplete.",
+    insight:
+      "This is the same decision-under-uncertainty skill Route 1 asked for in its Finance Director pushback, now applied at higher stakes: a full consulting recommendation, not a single justified choice.",
+    takeaway:
+      "When you build DeltaGrid's recommendation, every lever you prioritize should carry both a time horizon and a reason it survives incomplete information.",
+    callout: {
+      label: "Industry callout",
+      text: "\"We need more data first\" is sometimes right — but it's also the easiest way to avoid ever deciding anything.",
     },
   },
 ];
 
 // ---------------------------------------------------------------------------
-// Block 1 visualizer — Kraljic Quadrant Shift
+// Scenario Dials — exploratory, never gates anything
 // ---------------------------------------------------------------------------
-export const KRALJIC_CLASSIC = { risk: 22, impact: 68 };
-export const KRALJIC_LIFECYCLE = { risk: 74, impact: 68 };
+export type DialLevel = 0 | 1 | 2;
 
-// ---------------------------------------------------------------------------
-// Block 2 visualizer — Hidden Cost Iceberg v2
-// ---------------------------------------------------------------------------
-export type MaturityLevel = "low" | "medium" | "high";
-export const MATURITY_IT_LABOR_EUR: Record<MaturityLevel, number> = {
-  low: 260,
-  medium: 150,
-  high: 70,
+export const UTILIZATION_LABELS = ["Low", "Medium", "High"] as const;
+export const COOLING_LABELS = ["Legacy", "Mixed", "Modern"] as const;
+export const TRANSPARENCY_LABELS = ["None", "Partial", "Full"] as const;
+
+export type Direction = "down2" | "down1" | "flat" | "up1" | "up2";
+
+const DIRECTION_META: Record<Direction, { arrows: string; label: string }> = {
+  down2: { arrows: "↓↓", label: "Trending down (strong)" },
+  down1: { arrows: "↓", label: "Trending down" },
+  flat: { arrows: "→", label: "Roughly flat" },
+  up1: { arrows: "↑", label: "Trending up" },
+  up2: { arrows: "↑↑", label: "Trending up (strong)" },
 };
-export const CAPEX_LAYERS = [
-  { id: "purchase", label: "Purchase price", amountEur: 780 },
-  { id: "itLabor", label: "IT labor (procurement & imaging)", amountEur: MATURITY_IT_LABOR_EUR.medium },
-  { id: "maintenance", label: "Maintenance & troubleshooting", amountEur: 150 },
-  { id: "downtime", label: "Downtime cost (device failure)", amountEur: 180 },
-  { id: "disposal", label: "Disposal & data-wiping", amountEur: 90 },
-] as const;
-// Deliberately close to CapEx's fully-loaded total at medium maturity: at high
-// IT maturity CapEx can beat this; at low maturity it clearly cannot. Neither
-// model is hardcoded to always win.
-export const DAAS_TOTAL_EUR = 1300;
-export const DAAS_INCLUDES =
-  "All-inclusive: procurement, staging, support, swap replacement, and end-of-life processing.";
 
-// ---------------------------------------------------------------------------
-// Block 3 visualizer — Dependency Risk Meter
-// ---------------------------------------------------------------------------
-export type RiskLevel = "low" | "medium" | "high";
-export type DependencyScenario = {
-  id: string;
-  label: string;
-  risk: RiskLevel;
-  gain: string;
-  loss: string;
+function bucket(score: number, min: number, max: number): Direction {
+  const span = max - min || 1;
+  const t = (score - min) / span; // 0..1
+  if (t < 0.2) return "down2";
+  if (t < 0.4) return "down1";
+  if (t < 0.6) return "flat";
+  if (t < 0.8) return "up1";
+  return "up2";
+}
+
+export type DialProjection = {
+  energyCostTrend: { arrows: string; label: string };
+  riskExposure: { arrows: string; label: string };
+  investmentNeeded: { arrows: string; label: string };
 };
-export const DEPENDENCY_SCENARIOS: DependencyScenario[] = [
-  {
-    id: "multi",
-    label: "Multi-vendor, standardized hardware",
-    risk: "low",
-    gain: "Easy to re-tender, strong price competition, no single point of failure.",
-    loss: "No vendor is incentivized to offer deep lifecycle service — you coordinate it yourself.",
-  },
-  {
-    id: "single-lifecycle",
-    label: "Single-vendor with strong lifecycle service",
-    risk: "medium",
-    gain: "Refurbishment, take-back, and support are bundled and genuinely convenient.",
-    loss: "Switching cost rises every year you stay — renewal leverage shifts to the vendor.",
-  },
-  {
-    id: "single-proprietary",
-    label: "Single-vendor leasing with proprietary lock-in",
-    risk: "high",
-    gain: "Simplest possible operations — one contract, one throat to choke.",
-    loss: "Minimal negotiating leverage at renewal; migration cost could be prohibitive.",
-  },
-];
-export const RISK_ANGLE: Record<RiskLevel, number> = { low: -60, medium: 0, high: 60 };
+
+/** Directional-only projection (per spec: no false-precision numbers). */
+export function projectDials(utilization: DialLevel, cooling: DialLevel, transparency: DialLevel): DialProjection {
+  const energyScore = (2 - utilization) + (2 - cooling); // 0..4, higher = costs trending up more
+  const riskScore = (2 - cooling) + (2 - transparency); // 0..4, higher = more risk exposure
+  const investmentScore = (2 - cooling) + (2 - utilization); // 0..4, higher = more investment needed
+
+  const energyDir = bucket(energyScore, 0, 4);
+  const riskDir = bucket(riskScore, 0, 4);
+  const investDir = bucket(investmentScore, 0, 4);
+
+  return {
+    energyCostTrend: DIRECTION_META[energyDir],
+    riskExposure: DIRECTION_META[riskDir],
+    investmentNeeded: DIRECTION_META[investDir],
+  };
+}
 
 // ---------------------------------------------------------------------------
-// Block 4 / Step 2 — Weighted decision matrix
+// Task 2, Step 2 — Levers, ranking, horizon, first step, info gaps
 // ---------------------------------------------------------------------------
-export type CriterionId =
-  | "acquisitionCost"
-  | "lifecycleCost"
-  | "environmentalImpact"
-  | "operationalFlexibility"
-  | "controlCapability"
-  | "supplierDependency"
-  | "strategicRobustness";
+export type Horizon2 = "short" | "medium" | "structural";
 
-export const CRITERIA: { id: CriterionId; label: string }[] = [
-  { id: "acquisitionCost", label: "Acquisition cost" },
-  { id: "lifecycleCost", label: "Lifecycle cost" },
-  { id: "environmentalImpact", label: "Environmental impact" },
-  { id: "operationalFlexibility", label: "Operational flexibility" },
-  { id: "controlCapability", label: "Control capability" },
-  { id: "supplierDependency", label: "Supplier dependency (lower risk scores higher)" },
-  { id: "strategicRobustness", label: "Strategic robustness" },
+export type Lever = { id: string; label: string };
+
+export const LEVERS: Lever[] = [
+  { id: "consolidate", label: "Consolidate underused physical servers" },
+  { id: "monitoring", label: "Establish baseline consumption monitoring" },
+  { id: "redundancy", label: "Review redundancy against actual need" },
+  { id: "cooling", label: "Modernize airflow/cooling control" },
+  { id: "review-cycle", label: "Formalize a regular efficiency review cycle" },
+  { id: "decommission", label: "Decommission duplicate/legacy systems with no current need" },
+  { id: "scheduling", label: "Introduce workload-aware scheduling to reduce peak draw" },
 ];
 
-/** Demo-only preset shapes for the Block 4 "Live Weighting Preview" (not the real Step 2 case). */
-export const DEMO_OPTION_X: Record<CriterionId, number> = {
-  acquisitionCost: 5,
-  lifecycleCost: 2,
-  environmentalImpact: 2,
-  operationalFlexibility: 4,
-  controlCapability: 4,
-  supplierDependency: 4,
-  strategicRobustness: 2,
-};
-export const DEMO_OPTION_Y: Record<CriterionId, number> = {
-  acquisitionCost: 2,
-  lifecycleCost: 4,
-  environmentalImpact: 5,
-  operationalFlexibility: 3,
-  controlCapability: 3,
-  supplierDependency: 3,
-  strategicRobustness: 4,
-};
+export const REQUIRED_LEVER_COUNT = 4;
 
-export const EVEN_WEIGHT = Math.round(100 / CRITERIA.length);
-
-/** An even weight split across all criteria that sums to exactly 100. */
-export function evenWeights(): Record<string, number> {
-  const base = Math.floor(100 / CRITERIA.length);
-  const remainder = 100 - base * CRITERIA.length;
-  const map: Record<string, number> = {};
-  CRITERIA.forEach((c, i) => {
-    map[c.id] = base + (i < remainder ? 1 : 0);
-  });
-  return map;
-}
-
-/** Redistributes the other weights proportionally so the total always stays 100. */
-export function redistributeWeights(
-  weights: Record<string, number>,
-  changedId: string,
-  nextValue: number,
-): Record<string, number> {
-  const clamped = Math.max(0, Math.min(100, Math.round(nextValue)));
-  const ids = Object.keys(weights);
-  const othersIds = ids.filter((id) => id !== changedId);
-  const othersSum = othersIds.reduce((s, id) => s + weights[id], 0);
-  const remaining = 100 - clamped;
-  const next: Record<string, number> = { ...weights, [changedId]: clamped };
-  if (othersSum <= 0) {
-    const share = remaining / (othersIds.length || 1);
-    othersIds.forEach((id) => (next[id] = Math.round(share)));
-  } else {
-    const scale = remaining / othersSum;
-    othersIds.forEach((id) => (next[id] = Math.round(weights[id] * scale)));
-  }
-  const total = ids.reduce((s, id) => s + next[id], 0);
-  const drift = 100 - total;
-  if (drift !== 0) next[othersIds[0] ?? changedId] += drift;
-  return next;
-}
-
-export function weightedTotal(weights: Record<string, number>, scores: Record<string, number>): number {
-  const totalWeight = Object.values(weights).reduce((s, w) => s + w, 0) || 100;
-  const sum = Object.keys(weights).reduce((s, id) => s + (weights[id] / totalWeight) * (scores[id] ?? 0), 0);
-  return sum;
-}
-
-// ---------------------------------------------------------------------------
-// Case brief — Ferrotech Dynamics (Task 2)
-// ---------------------------------------------------------------------------
-export const CASE_BRIEF = {
-  company: "Ferrotech Dynamics",
-  setup:
-    "Ferrotech Dynamics must choose between three procurement models for its device fleet. Budget is constrained, management wants cost discipline, IT wants low operational complexity, sustainability goals need to be taken more seriously going forward, and only partial long-term lifecycle data is available.",
-  modelA: {
-    label: "Model A",
-    headline: "Cheapest standard, 3-year cycle, CapEx",
-    detail: "The cheapest standard option, with a short 3-year replacement cycle, purchased outright as CapEx.",
-    cycleYears: 3,
-  },
-  modelB: {
-    label: "Model B",
-    headline: "Slightly higher cost, higher repairability, 6-year cycle, CapEx",
-    detail:
-      "A slightly more expensive option with higher repairability and a longer 6-year service life, still purchased outright as CapEx.",
-    cycleYears: 6,
-  },
-  modelC: {
-    label: "Model C",
-    headline: "DaaS with return, refurbishment, 4-year contract + extend option",
-    detail:
-      "A lease/DaaS model with return, refurbishment, and integrated lifecycle service, on a 4-year contract with an extend option.",
-    cycleYears: 4,
-  },
-} as const;
-
-// ---------------------------------------------------------------------------
-// Step 1 — Guided Kraljic classification
-// ---------------------------------------------------------------------------
-export type KraljicOption = { id: string; label: string; risk: number; impact: number };
-export type KraljicQuestion = { id: string; prompt: string; axis: "risk" | "impact"; options: KraljicOption[] };
-
-export const KRALJIC_QUESTIONS: KraljicQuestion[] = [
-  {
-    id: "vendors",
-    axis: "risk",
-    prompt: "How many qualified vendors currently offer this device category with comparable specifications?",
-    options: [
-      { id: "many", label: "Many", risk: 0, impact: 0 },
-      { id: "few", label: "Few", risk: 1, impact: 0 },
-      { id: "one-two", label: "Only one or two", risk: 2, impact: 0 },
-    ],
-  },
-  {
-    id: "spareParts",
-    axis: "risk",
-    prompt: "How critical is spare-parts availability to business continuity if a device fails?",
-    options: [
-      { id: "low", label: "Low", risk: 0, impact: 0 },
-      { id: "medium", label: "Medium", risk: 1, impact: 0 },
-      { id: "high", label: "High", risk: 2, impact: 0 },
-    ],
-  },
-  {
-    id: "spend",
-    axis: "impact",
-    prompt: "What is the relative spend of this category in the total IT procurement budget?",
-    options: [
-      { id: "small", label: "Small", risk: 0, impact: 0 },
-      { id: "moderate", label: "Moderate", risk: 0, impact: 1 },
-      { id: "large", label: "Large", risk: 0, impact: 2 },
-    ],
-  },
-  {
-    id: "replaceable",
-    axis: "impact",
-    prompt: "How replaceable is this hardware within your standardized fleet if you had to switch brands today?",
-    options: [
-      { id: "highly", label: "Highly replaceable", risk: 0, impact: 0 },
-      { id: "somewhat", label: "Somewhat replaceable", risk: 0, impact: 1 },
-      { id: "not-without", label: "Not without major rework", risk: 0, impact: 2 },
-    ],
-  },
-  {
-    id: "disruption",
-    axis: "risk",
-    prompt: "If this vendor exited the market tomorrow, how disruptive would switching be to operations?",
-    options: [
-      { id: "minor", label: "Minor", risk: 0, impact: 0 },
-      { id: "moderate", label: "Moderate", risk: 1, impact: 0 },
-      { id: "severe", label: "Severe", risk: 2, impact: 0 },
-    ],
-  },
-  {
-    id: "integration",
-    axis: "impact",
-    prompt: "Does this category require deep integration with existing IT management tools (imaging, MDM, security policy)?",
-    options: [
-      { id: "none", label: "No, standard", risk: 0, impact: 0 },
-      { id: "some", label: "Some integration", risk: 0, impact: 1 },
-      { id: "deep", label: "Deep, custom integration", risk: 0, impact: 2 },
-    ],
-  },
-];
-
-export type Quadrant = "non-critical" | "leverage" | "bottleneck" | "strategic";
-export const QUADRANT_LABEL: Record<Quadrant, string> = {
-  "non-critical": "Non-critical",
-  leverage: "Leverage",
-  bottleneck: "Bottleneck",
-  strategic: "Strategic",
-};
-
-export function classifyQuadrant(riskScore: number, impactScore: number): Quadrant {
-  const highRisk = riskScore >= 3;
-  const highImpact = impactScore >= 3;
-  if (highRisk && highImpact) return "strategic";
-  if (highRisk && !highImpact) return "bottleneck";
-  if (!highRisk && highImpact) return "leverage";
-  return "non-critical";
-}
-
-// ---------------------------------------------------------------------------
-// Step 3 — hidden-cost & risk calculator per model
-// ---------------------------------------------------------------------------
-export const MODEL_B_LAYERS = [
-  { id: "purchase", label: "Purchase price", amountEur: 920 },
-  { id: "itLabor", label: "IT labor (procurement & imaging)", amountEur: MATURITY_IT_LABOR_EUR.medium },
-  { id: "maintenance", label: "Maintenance & troubleshooting", amountEur: 90 },
-  { id: "downtime", label: "Downtime cost (device failure)", amountEur: 80 },
-  { id: "disposal", label: "Disposal & data-wiping", amountEur: 90 },
-] as const;
-
-export const UNITS_MIN = 200;
-export const UNITS_MAX = 500;
-export const UNITS_DEFAULT = 350;
-
-// ---------------------------------------------------------------------------
-// Task copy
-// ---------------------------------------------------------------------------
 export const TASK2 = {
   kicker: "Task 2",
-  heading: "Procurement Decision Matrix",
+  heading: "The DeltaGrid Case",
   subtext:
-    "Four steps. Let the system classify the category from your own answers, score three real models, price the hidden costs, then commit to a ranked recommendation.",
+    "You're the senior consultant on this engagement. Explore the scenario, then build a prioritized, defensible recommendation.",
   step1: {
-    heading: "Step 1 — Guided Kraljic Classification",
+    heading: "Step 1 — Scenario Dials",
     instructions:
-      "Answer every question about this procurement category. Your answers — not a manual drag — determine where it lands on the Kraljic matrix.",
+      "Explore freely — move all three dials to see how DeltaGrid's projected trends shift. This step isn't graded; it's here so your Step 2 recommendation is informed by more than one scenario.",
+    utilizationLabel: "Utilization Rate",
+    coolingLabel: "Cooling System Age/Efficiency",
+    transparencyLabel: "Transparency Level",
   },
   step2: {
-    heading: "Step 2 — Weighted Scoring: Model A vs. B vs. C",
-    instructions:
-      "Set your weights first (they always sum to 100%), then score each model 1–5 on every criterion. The radar and the weighted totals update live — there's no \"best model\" label here, that's your call in Step 4.",
-    lockLabel: "Lock in my scoring",
-  },
-  step3: {
-    heading: "Step 3 — Hidden Cost & Risk Calculator",
-    instructions:
-      "Toggle the hidden cost layers that apply to Model A and B. Model C's cost is shown fully bundled from the start — a lease contract has no separate layers to reveal.",
-    saveLabel: "Save cost & risk analysis",
-    dependencyPrompt: "If this vendor increases prices at contract renewal, what is your negotiating position?",
-  },
-  step4: {
-    heading: "Step 4 — Decision & Justification Under Uncertainty",
-    rankLabel: "Your prioritized decision",
-    rankInstructions: "Drag all three models into a priority order — most recommended first.",
-    justifyScoreLabel: "Reference a number from your Step 2 weighted scoring.",
-    justifyRiskLabel: "Reference a number or risk level from your Step 3 hidden-cost & risk analysis.",
-    stakeholderLabel: "Next critical decision per stakeholder",
-    stakeholders: [
-      { id: "purchasing", label: "Purchasing" },
-      { id: "it", label: "IT" },
-      { id: "management", label: "Management" },
-    ],
-    riskLabel: "Two risks of choosing short-term cheap over lifecycle-robust",
+    heading: "Step 2 — Structured Analysis",
+    leverHeading: "Identify the biggest levers",
+    leverInstructions: `Select the ${REQUIRED_LEVER_COUNT} biggest levers for DeltaGrid, and justify each in 1-2 sentences.`,
+    rankHeading: "Prioritized recommendation",
+    rankInstructions: "Drag to reorder your selected levers — top means highest priority.",
+    firstStepHeading: "First step decision",
+    firstStepPrompt: "Which lever should DeltaGrid start first?",
+    firstStepJustifyLabel: "Justify this from a management perspective",
+    firstStepJustifyCaption: "Explain this as you would to DeltaGrid's leadership team, not to a fellow engineer.",
+    horizonHeading: "Time-horizon classification",
+    horizonInstructions: "For each selected lever, classify when it could realistically happen.",
+    infoGapsHeading: "Information gaps",
+    infoGapsLabel: "What information would sharpen this recommendation later, and what can responsibly be decided right now despite incomplete data?",
+    infoGapsCaption: "Name a specific missing data point, not just \"we need more data.\"",
   },
   export: {
-    taskLabel: "Procurement Decision Matrix",
-    docHeading: "Procurement Decision Matrix — Analysis Report",
+    taskLabel: "Trade-off Analysis",
+    docHeading: "Trade-off Analysis — Consulting Recommendation",
+    filenameSuffix: "tradeoff-analysis",
   },
 } as const;

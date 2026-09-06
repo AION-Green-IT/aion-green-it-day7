@@ -4,7 +4,7 @@ import { LeafMark } from "@/components/chrome/Icons";
 import { RouteGate } from "@/components/chrome/RouteGate";
 import { Material } from "@/components/route2/Material";
 import { TaskFlow } from "@/components/route2/TaskFlow";
-import { ProcurementReportPrint } from "@/components/route2/ProcurementReportPrint";
+import { TradeoffReportPrint } from "@/components/route2/TradeoffReportPrint";
 import { MentorTools } from "@/components/route2/MentorTools";
 
 const ROUTE = ROUTES[1];
@@ -26,9 +26,8 @@ export default function Route2Page() {
               </p>
               <h1 className="text-display text-ink">{ROUTE.title}</h1>
               <p className="mt-4 text-body text-ash">
-                Three procurement models, one constrained budget. This route lets the system classify the
-                category from your own answers, scores the models against your own weights, and prices what a
-                purchase-price comparison always hides.
+                You've been promoted from field analyst to senior consultant. This route is about owning a
+                prioritized, defensible recommendation for DeltaGrid Hosting GmbH — not just finding what's wrong.
               </p>
             </div>
 
@@ -43,7 +42,7 @@ export default function Route2Page() {
         </RouteGate>
       </div>
 
-      <ProcurementReportPrint />
+      <TradeoffReportPrint />
     </>
   );
 }

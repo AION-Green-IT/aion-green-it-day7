@@ -1,13 +1,25 @@
 "use client";
 
 import clsx from "clsx";
-import { ZONES, type ZoneId } from "@/lib/route1";
 
 const INK = "#16191D";
 const ASH = "#5E6670";
 const ACCENT = "#0E7A5A";
 const LINE = "#E2E5E9";
 const PAPER = "#FFFFFF";
+const WARN = "#B87514";
+
+export const FACILITY_ZONE_IDS = ["utilization", "cooling", "power", "monitoring", "redundancy", "operations"] as const;
+export type FacilityZoneId = (typeof FACILITY_ZONE_IDS)[number];
+
+const ZONE_LABEL: Record<FacilityZoneId, string> = {
+  utilization: "Server & Utilization",
+  cooling: "Cooling & Airflow",
+  power: "Power Infrastructure",
+  monitoring: "Transparency & Monitoring",
+  redundancy: "Redundancy",
+  operations: "Operating Model",
+};
 
 const RACK_X = [115, 213, 311, 409, 507, 605];
 const RACK_Y = 150;
@@ -15,25 +27,36 @@ const RACK_W = 80;
 const RACK_H = 110;
 
 /**
- * Shared "Anatomy of a Data Center" diagram — one SVG, reused at full width
- * in Materi (read-only, click a zone for a fact) and in Task 1a (click a
- * zone to answer its diagnostic question). Every group carries a `data-zone`
- * attribute matching a ZoneId from lib/route1.ts.
+ * Shared "Anatomy of a Data Center" diagram — the same fixed 6-zone drawing
+ * (utilization/cooling/power/monitoring/redundancy/operations) reused across
+ * every route's Materi (read-only, click a zone for a fact) and task (click a
+ * zone to answer something). Content-agnostic: only a `title` and optional
+ * evolution layers vary per route/case. Every group carries a `data-zone`
+ * attribute matching a FacilityZoneId.
  */
-export function MasterFacilitySvg({
-  title = "CoreAxis Facility Map",
+export function FacilitySvg({
+  title = "Facility Map",
   flaggedZones = [],
   activeZoneId = null,
   onZoneClick,
+  utilizationPct = 18,
+  rackGenerations,
+  showCostOfRisk = false,
 }: {
   title?: string;
-  flaggedZones?: ZoneId[];
-  activeZoneId?: ZoneId | null;
-  onZoneClick?: (id: ZoneId) => void;
+  flaggedZones?: FacilityZoneId[];
+  activeZoneId?: FacilityZoneId | null;
+  onZoneClick?: (id: FacilityZoneId) => void;
+  /** Displayed under the rack row, e.g. "~18% average utilization". */
+  utilizationPct?: number;
+  /** One entry per rack (RACK_X order) — shows a small "Gen N" badge on that rack. Route 2+ only. */
+  rackGenerations?: (1 | 2 | 3 | undefined)[];
+  /** Small shield/€ overlay near the redundancy zone, foreshadowing "Cost of Risk". Route 2+ only. */
+  showCostOfRisk?: boolean;
 }) {
-  const isFlagged = (id: ZoneId) => flaggedZones.includes(id);
+  const isFlagged = (id: FacilityZoneId) => flaggedZones.includes(id);
 
-  const zoneGroupProps = (id: ZoneId) => ({
+  const zoneGroupProps = (id: FacilityZoneId) => ({
     "data-zone": id,
     role: "button" as const,
     tabIndex: onZoneClick ? 0 : -1,
@@ -49,26 +72,23 @@ export function MasterFacilitySvg({
     },
   });
 
-  const zoneStroke = (id: ZoneId) => (activeZoneId === id ? ACCENT : INK);
+  const zoneStroke = (id: FacilityZoneId) => (activeZoneId === id ? ACCENT : INK);
 
-  const label = (id: ZoneId, x: number, y: number) => {
-    const z = ZONES.find((zz) => zz.id === id)!;
-    return (
-      <text
-        x={x}
-        y={y}
-        textAnchor="middle"
-        fontSize="11"
-        fontWeight={600}
-        fill={activeZoneId === id ? ACCENT : INK}
-        className="transition-colors duration-150 group-hover:fill-current"
-      >
-        {z.label}
-      </text>
-    );
-  };
+  const label = (id: FacilityZoneId, x: number, y: number) => (
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      fontSize="11"
+      fontWeight={600}
+      fill={activeZoneId === id ? ACCENT : INK}
+      className="transition-colors duration-150 group-hover:fill-current"
+    >
+      {ZONE_LABEL[id]}
+    </text>
+  );
 
-  const badge = (id: ZoneId, x: number, y: number) =>
+  const badge = (id: FacilityZoneId, x: number, y: number) =>
     isFlagged(id) && (
       <g transform={`translate(${x}, ${y})`}>
         <circle r="8" fill={ACCENT} />
@@ -92,6 +112,12 @@ export function MasterFacilitySvg({
         <text x={670} y={104} textAnchor="middle" fontSize="9.5" fontWeight={700} fill={zoneStroke("redundancy")}>
           2N
         </text>
+        {showCostOfRisk && (
+          <g transform="translate(700, 100)">
+            <path d="M0,-11 L9,-7 V2 C9,8 4,11.5 0,13 C-4,11.5 -9,8 -9,2 V-7 Z" fill="none" stroke={WARN} strokeWidth={1.5} />
+            <text x={0} y={4} textAnchor="middle" fontSize="9" fontWeight={700} fill={WARN}>€</text>
+          </g>
+        )}
         {label("redundancy", 670, 128)}
         {badge("redundancy", 686, 88)}
       </g>
@@ -149,19 +175,35 @@ export function MasterFacilitySvg({
 
       {/* --- Server racks (utilization) -------------------------------------- */}
       <g {...zoneGroupProps("utilization")}>
-        {RACK_X.map((x) => (
+        {RACK_X.map((x, i) => (
           <g key={x}>
             <rect x={x} y={RACK_Y} width={RACK_W} height={RACK_H} rx={5} fill={PAPER} stroke={zoneStroke("utilization")} strokeWidth={1.6} />
-            {[0, 1, 2, 3].map((i) => (
-              <line key={i} x1={x + 8} y1={RACK_Y + 12 + i * 16} x2={x + RACK_W - 8} y2={RACK_Y + 12 + i * 16} stroke={LINE} strokeWidth={2} />
+            {[0, 1, 2, 3].map((row) => (
+              <line key={row} x1={x + 8} y1={RACK_Y + 12 + row * 16} x2={x + RACK_W - 8} y2={RACK_Y + 12 + row * 16} stroke={LINE} strokeWidth={2} />
             ))}
             <rect x={x + 8} y={RACK_Y + RACK_H - 14} width={RACK_W - 16} height={7} rx={3} fill={LINE} />
-            <rect x={x + 8} y={RACK_Y + RACK_H - 14} width={(RACK_W - 16) * 0.18} height={7} rx={3} fill="#B87514" className="motif-pulse" />
+            <rect
+              x={x + 8}
+              y={RACK_Y + RACK_H - 14}
+              width={(RACK_W - 16) * Math.min(1, utilizationPct / 100)}
+              height={7}
+              rx={3}
+              fill={WARN}
+              className="motif-pulse"
+            />
+            {rackGenerations?.[i] && (
+              <g transform={`translate(${x + RACK_W - 14}, ${RACK_Y - 10})`}>
+                <rect x={-13} y={-8} width={26} height={16} rx={4} fill={PAPER} stroke={ASH} strokeWidth={1.2} />
+                <text x={0} y={3.5} textAnchor="middle" fontSize="8" fontWeight={700} fill={ASH}>
+                  G{rackGenerations[i]}
+                </text>
+              </g>
+            )}
           </g>
         ))}
         {label("utilization", 400, RACK_Y + RACK_H + 22)}
         <text x={400} y={RACK_Y + RACK_H + 36} textAnchor="middle" fontSize="9" fill={ASH}>
-          ~18% average utilization
+          ~{utilizationPct}% average utilization
         </text>
         {badge("utilization", 690, RACK_Y - 8)}
       </g>
