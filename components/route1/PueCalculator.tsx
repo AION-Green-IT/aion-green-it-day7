@@ -4,7 +4,7 @@ import { useProgress } from "@/lib/store";
 import { R1, calcPue, PUE_BENCHMARKS } from "@/lib/route1";
 import { useAnimatedNumber } from "@/lib/useAnimatedNumber";
 
-/** Section 5 worked example: facility/IT draw sliders, live PUE readout against the two benchmarks. */
+/** Worked example under Block 1: facility/IT draw inputs, live PUE readout against the fixed benchmarks. */
 export function PueCalculator() {
   const notes = useProgress((s) => s.notes);
   const setNote = useProgress((s) => s.setNote);
@@ -16,6 +16,7 @@ export function PueCalculator() {
 
   return (
     <div>
+      <p className="mb-3 text-micro text-ash">Try it yourself: a facility drawing 180 kW total, with IT equipment drawing 120 kW.</p>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="flex flex-col gap-1">
           <span className="text-caption font-semibold text-ash">Total Facility Energy (kW)</span>
@@ -45,8 +46,8 @@ export function PueCalculator() {
         <p className="text-micro font-semibold uppercase tracking-wide text-ash">PUE = Facility ÷ IT</p>
         <p className="text-display tabular-nums text-ink">{pueAnimated.toFixed(2)}</p>
         <p className="mt-1 text-caption text-ash">
-          Global average (2024 survey): <span className="font-semibold text-ink">{PUE_BENCHMARKS.globalAverage}</span> · Hyperscale
-          range: <span className="font-semibold text-ink">{PUE_BENCHMARKS.hyperscaleLow}–{PUE_BENCHMARKS.hyperscaleHigh}</span>
+          Hyperscale range: <span className="font-semibold text-ink">{PUE_BENCHMARKS.hyperscaleLow}–{PUE_BENCHMARKS.hyperscaleHigh}</span> · Industry
+          average: <span className="font-semibold text-ink">{PUE_BENCHMARKS.industryAverageLow}–{PUE_BENCHMARKS.industryAverageHigh}</span>
         </p>
       </div>
     </div>

@@ -195,6 +195,23 @@
   border-radius: theme("borderRadius.2xl");
 }
 
+/* No-op feedback when Undo/Redo is clicked at a stack boundary — still clickable, just nothing to do. */
+@keyframes shakeNoop {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+.anim-shake-noop {
+  animation: shakeNoop 0.3s ease-in-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

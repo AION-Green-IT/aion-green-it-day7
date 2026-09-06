@@ -1,11 +1,10 @@
 /**
- * Route 1 — The Audit. All learner-facing copy and the pure PUE/radar math
- * live here so components stay presentational. Case used throughout:
- * CoreAxis Data Services (fictional).
+ * Route 1 — Foundations. All learner-facing copy and pure data/math for
+ * Day 7 live here so components stay presentational. Case used throughout:
+ * GreenStack Hosting (fictional).
  */
 
 import type { IconKey } from "@/lib/routes";
-import type { FacilityZoneId } from "@/components/ui/FacilitySvg";
 
 export const LEARNER_NAME_KEY = "learner:name";
 
@@ -13,35 +12,34 @@ export const LEARNER_NAME_KEY = "learner:name";
 // Store key map — every key this route writes to the shared progress store.
 // ---------------------------------------------------------------------------
 export const R1 = {
-  material: "r1:material",
+  name: LEARNER_NAME_KEY,
   pue: {
     facility: "r1:pue:facility",
     it: "r1:pue:it",
   },
-  zoneAnswer: (zoneId: string) => `r1:zone:${zoneId}`,
-  zoneImpact: (zoneId: string) => `r1:zone:${zoneId}:impact`,
-  zoneHorizon: (zoneId: string) => `r1:zone:${zoneId}:horizon`,
-  priorityZone: "r1:priority:zone",
-  improvementApproach: "r1:priority:approach",
-  simBudget: "r1:sim:budget",
-  simRisk: "r1:sim:risk",
-  simOption: "r1:sim:option",
-  simWhy: "r1:sim:why",
-  simFollowOn: "r1:sim:followon",
-  simRisk1: "r1:sim:risk1",
-  simRisk2: "r1:sim:risk2",
-  name: LEARNER_NAME_KEY,
+  stageA: {
+    category: (itemId: string) => `r1:a:cat:${itemId}`,
+  },
+  stageB: {
+    verdict: (claimId: string) => `r1:b:verdict:${claimId}`,
+  },
+  stageC: {
+    selected: (aspectId: string) => `r1:c:sel:${aspectId}`,
+    justification: (aspectId: string) => `r1:c:just:${aspectId}`,
+  },
+  stageD: {
+    placement: (itemId: string) => `r1:d:place:${itemId}`,
+  },
 } as const;
 
 // ---------------------------------------------------------------------------
-// Material — 6 sections. Sections 1/2/3/4/6 are prose + the shared master
-// SVG / callouts; section 5 (Monitoring) pairs with a small PUE calculator.
+// Material — 5 blocks, each pairing prose with an interactive/visual element.
 // ---------------------------------------------------------------------------
-export type MaterialSectionId = "why-matters" | "anatomy" | "usual-suspects" | "levers" | "monitoring" | "tension";
+export type MaterialSectionId = "anatomy" | "pathways" | "accounting" | "benchmarks" | "blindspots";
 
 export type MaterialSection = {
   id: MaterialSectionId;
-  n: 1 | 2 | 3 | 4 | 5 | 6;
+  n: 1 | 2 | 3 | 4 | 5;
   icon: IconKey;
   kicker: string;
   title: string;
@@ -53,111 +51,94 @@ export type MaterialSection = {
 
 export const MATERIAL: MaterialSection[] = [
   {
-    id: "why-matters",
+    id: "anatomy",
     n: 1,
     icon: "factory",
-    kicker: "1 · Why it matters",
-    title: "Why Data Centers Matter",
+    kicker: "1 · The energy chain",
+    title: "Anatomy of a Data Centre's Energy Flow & the PUE Formula",
     definition:
-      "Data centers are among the largest single categories of energy consumption in modern IT infrastructure — a single mid-size facility can draw as much power as a small town. That consumption is billed, taxed, reported, and increasingly regulated.",
+      "Grid power entering a data centre travels a fixed chain before any of it does useful computing work: incoming grid supply → primary switchgear → the UPS (uninterruptible power supply) → PDUs (power distribution units) → and only then does it split into IT load (servers, storage, network gear) and facility overhead (cooling plant, lighting, building and security systems).",
     insight:
-      "Unlike a laptop fleet, a data center's inefficiency doesn't hide in thousands of small devices — it concentrates in one place, on one meter, as one very visible number every month. That makes it one of the highest-leverage places to find real savings, and one of the hardest places to keep ignoring them.",
+      "The UPS is typically the single largest efficiency loss point in that chain — modern double-conversion systems commonly lose 3–6% to the AC–DC–AC conversion and battery buffering alone, before power has reached a single server. PDUs add a further 1–2% loss on top of that. Neither loss shows up anywhere except in the gap between what the grid delivers and what IT equipment actually receives.",
     takeaway:
-      "Every inefficiency you find in this audit has a direct line to a cost center and, increasingly, a regulatory disclosure line — this is not a hypothetical sustainability exercise.",
+      "PUE (Power Usage Effectiveness) is the industry's formal name for that gap: PUE = Total Facility Energy ÷ IT Equipment Energy, where Total Facility Energy = IT Equipment Energy + Cooling + Power Delivery Losses + Lighting + Other Facility Loads. It was introduced by The Green Grid consortium in 2007 as an industry attempt to standardise overhead-efficiency communication, and was later formalised into ISO/IEC 30134-2:2016 — giving it audit-grade legitimacy beyond marketing use.",
     callout: {
-      label: "Industry callout",
-      text: "Facility energy cost is usually IT's largest controllable non-staff operating expense — yet it is frequently owned by facilities, not IT, which is itself part of the problem this route explores.",
+      label: "The trap this whole route is built around",
+      text: "PUE is a ratio, not an absolute consumption figure. A facility reporting PUE 1.3 can still consume far more total energy than one reporting PUE 1.6, if the first simply hosts much more IT load. A \"good\" PUE says nothing about total energy footprint, utilisation efficiency, or the carbon intensity of the electricity being used.",
     },
   },
   {
-    id: "anatomy",
+    id: "pathways",
     n: 2,
-    icon: "layers",
-    kicker: "2 · Anatomy of consumption",
-    title: "Anatomy of Consumption",
+    icon: "supplier",
+    kicker: "2 · Sourcing renewable energy",
+    title: "Five Pathways to Renewable Energy Integration",
     definition:
-      "A facility's total energy draw splits into IT load (servers, storage, networking — the equipment actually doing computational work) and facility infrastructure load (cooling, power distribution and conversion losses, lighting, redundancy overhead). PUE (Power Usage Effectiveness) is the industry metric that separates these two.",
+      "\"We run on renewable energy\" can mean five structurally different things in practice, each with a different level of physical control and a different achievable scale: on-site generation, Power Purchase Agreements (PPAs), Guarantees of Origin (GoOs), utility green tariffs, and site selection.",
     insight:
-      "The two loads are managed by different teams, bought on different budgets, and almost never reviewed together — which is exactly why the total picture goes unmeasured for years, as you'll see in this audit's case.",
+      "On-site generation (solar PV, on-site wind, fuel cells) is physically simplest to defend as \"green\" since the electrons are locally sourced — but it rarely covers 100% of hyperscale load, constrained by space and intermittency. PPAs are long-term contracts (often 10–20 years) with a renewable generator, and come in two forms: physical PPAs, where electrons are delivered into the buyer's own grid region, and virtual/financial PPAs (a contract-for-difference), where the generator's output is sold into the wholesale grid and the buyer instead receives certificates plus a financial hedge against power-price volatility. This is the primary mechanism hyperscalers such as Google and Microsoft use to scale renewable procurement to gigawatt levels.",
     takeaway:
-      "Before recommending any fix, always identify which side of this split it addresses. A cooling fix and a server-consolidation fix attack completely different halves of the bill.",
+      "Guarantees of Origin (GoOs — the EU equivalent of RECs in the US) are tradable certificates, each representing 1 MWh of renewable generation, purchased entirely separately from the physical electricity supply contract. That separation is what lets a company claim \"100% renewable\" on paper independent of the actual grid mix at its site — and it is why the GHG Protocol Scope 2 Guidance (2015) requires two parallel reporting methods: location-based (the average emissions factor of the local grid) and market-based (reflecting contractual instruments like GoOs, RECs, and PPAs). The same facility can report very different \"green\" figures depending on which method is emphasised.",
     callout: {
-      label: "Industry callout",
-      text: "Idle capacity draws power on both sides of the split at once: an underused server still needs cooling for a load it isn't actually delivering.",
+      label: "Worked comparison",
+      text: "Utility green tariffs (buying a \"green tariff\" from a supplier, typically bundled with GoOs) and site selection (choosing locations with a naturally high renewable grid share, e.g. Nordic hydro/wind) round out the five — see the comparison below for how much direct control each pathway gives you versus how much of a large facility's load it can realistically cover.",
     },
   },
   {
-    id: "usual-suspects",
+    id: "accounting",
     n: 3,
-    icon: "target",
-    kicker: "3 · The usual suspects",
-    title: "The Usual Suspects: Typical Inefficiencies",
+    icon: "certificate",
+    kicker: "3 · Paper vs. physics",
+    title: "Accounting Reality vs. Physical Reality",
     definition:
-      "The same handful of inefficiency patterns recur across most audits: low server utilization with no consolidation, legacy systems left running past their useful purpose, absent or one-off monitoring instead of continuous measurement, over-cooling relative to current thermal guidance, and permanent unused backup/redundant capacity.",
+      "Annual/aggregate certificate matching allows a data centre running 24/7 in a coal-heavy grid region to purchase solar certificates generated at midday in a sunny region, and legitimately call itself \"100% renewable\" under market-based accounting — even though at 2 a.m. it is physically drawing power that is close to 100% fossil-based.",
     insight:
-      "None of these five require exotic new technology to fix. Every one of them is a known, well-documented pattern with a known category of fix — which is itself the uncomfortable finding: the barrier is rarely technical possibility.",
+      "This is legal under current Scope 2 methodology, but it has drawn sustained criticism from energy researchers for lacking \"additionality\" (does the purchase cause new renewable capacity to be built?) and \"temporal matching\" (does the renewable generation actually coincide with the hour of consumption?). A certificate bought for its calendar-year total says nothing about what was on the wire at the moment the servers were drawing power.",
     takeaway:
-      "When you audit a facility, check for these five by name before looking for anything more exotic. They account for most of the gap between a typical facility and a highly optimized one.",
+      "Google's 24/7 Carbon-Free Energy (CFE) initiative, publicly reported since roughly 2020, is the industry's most rigorous alternative: matching renewable generation to actual hourly consumption in each specific grid region, rather than annual aggregate matching — explicitly designed to close this accounting-vs-physical gap. Treat any \"100% renewable\" claim as a claim about accounting until you know which matching standard produced it.",
     callout: {
       label: "Industry callout",
-      text: "\"We've always run it this way\" is the single most common root cause underneath all five patterns — organizational inertia, not technical limitation.",
+      text: "\"Additionality\" and \"temporal matching\" are the two words to listen for in any renewable-energy claim — their absence is exactly what makes annual certificate matching cheaper, and exactly what makes it weaker evidence, than hourly matching.",
     },
   },
   {
-    id: "levers",
+    id: "benchmarks",
     n: 4,
-    icon: "recycleLoop",
-    kicker: "4 · Technical levers",
-    title: "Technical Levers for Efficiency",
-    definition:
-      "Consolidation and virtualization (running more workload on fewer, better-utilized machines), load optimization, decommissioning genuinely unused systems, hot/cold aisle containment, ASHRAE-aligned temperature management, and modern power components (higher-efficiency UPS/PDU hardware) are the standard technical toolkit.",
-    insight:
-      "These levers sit on different sides of the IT/facility split from Anatomy of Consumption above — consolidation attacks IT load, containment and thermal management attack facility load. A strong recommendation usually needs at least one lever from each side.",
-    takeaway:
-      "Don't let a single popular lever (usually consolidation) crowd out the others in a recommendation — the largest total saving is almost always a combination, not one silver bullet.",
-    callout: {
-      label: "Industry callout",
-      text: "Hot/cold aisle containment is frequently the cheapest lever on this list relative to its impact, because it's a physical-layout fix, not a hardware purchase.",
-    },
-  },
-  {
-    id: "monitoring",
-    n: 5,
-    icon: "shield",
-    kicker: "5 · Why monitoring is the foundation",
-    title: "Why Monitoring Is the Foundation",
-    definition:
-      "PUE (Power Usage Effectiveness), formalized by The Green Grid, is the industry-standard metric: PUE = Total Facility Energy ÷ IT Equipment Energy. A PUE of 1.0 would mean zero facility overhead — every watt goes to computing. As of the most recent industry survey (Uptime Institute, 2024), the global average has been flat at roughly 1.55–1.59 for several years, landing at 1.56 — barely moving in five years despite available optimization technology. Hyperscale facilities, by contrast, commonly report 1.1–1.2.",
-    insight:
-      "That gap between 1.56 and 1.1–1.2 is not a technology gap — the same cooling and power techniques are available to everyone. It is a measurement and organizational-priority gap: hyperscale operators track PUE continuously and act on it; most other facilities do not track it at all.",
-    takeaway:
-      "You cannot improve what you do not continuously measure. A single walkthrough reading is a snapshot, not monitoring — treat any facility without continuous PUE tracking as one whose efficiency claims cannot yet be verified.",
-    callout: {
-      label: "Worked example",
-      text: "A facility drawing 180 kW total, with IT equipment drawing 120 kW: PUE = 180 ÷ 120 = 1.5. Try the numbers yourself below.",
-    },
-  },
-  {
-    id: "tension",
-    n: 6,
     icon: "gavel",
-    kicker: "6 · The core tension",
-    title: "The Core Tension",
+    kicker: "4 · Benchmarks and the law",
+    title: "Interpreting PUE: Benchmarks and Regulatory Reality",
     definition:
-      "The Uptime Institute's Tier Classification (I–IV) describes data center redundancy architecture. Learners will still encounter the commonly-cited availability shorthand — 99.671% / 99.741% / 99.982% / 99.995% for Tiers I–IV — but Uptime Institute formally removed these percentages from the official Tier Standard in 2009, because operational discipline affects real-world uptime more than physical design alone. A poorly-run Tier IV facility can perform like a Tier I.",
+      "The Uptime Institute Global Data Center Survey has tracked the industry-average reported PUE declining from roughly 2.5 in 2007 to plateauing around 1.55–1.58 in recent survey years (2020–2023) — diminishing returns on the easy efficiency gains at industry scale. Purpose-built hyperscale facilities (Google, Microsoft, Meta) report fleet-wide average PUEs often in the 1.1–1.2 range, achieved through custom cooling (free cooling, direct liquid cooling) and scale effects unavailable to smaller or legacy operators.",
     insight:
-      "This is direct validation of the lesson underneath this whole route: classification and redundancy describe design capability, not a performance guarantee, and every efficiency decision here trades off against availability, redundancy, and investment size — with no universally \"correct\" balance, only one that matches the actual workload's need.",
+      "Germany's Energieeffizienzgesetz (EnEfG), in force since 18 November 2023 (BGBl. 2023 I Nr. 309), is currently the strictest data centre efficiency law in Europe. Under the originally enacted thresholds (§11 EnEfG): existing data centres (commissioned before 1 July 2026) must reach an annual-average PUE of ≤1.5 from 1 July 2027, tightening to ≤1.3 from 1 July 2030; new data centres (commissioned on or after 1 July 2026) must reach ≤1.2 within two years of commissioning. The law also mandates minimum waste-heat reuse quotas (10% from July 2026, 15% from July 2027, 20% from July 2028) and mandatory ISO 50001/EMAS energy management systems by 1 July 2025.",
     takeaway:
-      "When you recommend cutting redundancy or aggressively re-tuning cooling, always name what it trades against (availability risk, investment, speed of payback) — a recommendation that ignores the trade-off isn't a complete recommendation.",
+      "Even hard law evolves under industry pressure: a draft amendment published 9 April 2026 by the German Federal Ministry for Economic Affairs and Energy proposes easing these thresholds — existing data centres to ≤1.6 (2027) and ≤1.4 (2030), new data centres to ≤1.3 — reflecting pushback on implementation costs. As of this material's writing, the original 2023 thresholds remain the enacted law; the amendment is only a draft. Treat this as a live example of the tension between ambition and feasibility in sustainability regulation, not as a settled outcome.",
     callout: {
-      label: "Industry callout",
-      text: "ASHRAE's recommended inlet-temperature envelopes (Class A1/A2) have widened over successive revisions specifically to enable more free-cooling hours — many operators still cool to decade-old, stricter setpoints out of habit.",
+      label: "Regulatory watch",
+      text: "The gauge below defaults to the 2023 enacted thresholds. Toggle it to see the 9 April 2026 draft amendment's proposed easing side by side — and note which one is actually law right now.",
+    },
+  },
+  {
+    id: "blindspots",
+    n: 5,
+    icon: "target",
+    kicker: "5 · What the number hides",
+    title: "What PUE Does Not Tell You",
+    definition:
+      "PUE captures exactly one thing precisely: the ratio of total facility energy to IT equipment energy. Everything else in a sustainability claim has to come from somewhere else.",
+    insight:
+      "A data centre can report an excellent PUE of 1.1 while running on 100% coal power — PUE says nothing about the electricity source, and the same PUE value can represent very different carbon footprints depending on location. A facility full of idle, under-utilised servers can still report a \"good\" PUE, because PUE only measures the ratio of facility overhead to whatever IT load exists, not whether that IT load is being used efficiently. Cooling strategies that lower PUE — evaporative cooling, for instance — can significantly increase water consumption, a cost captured only by a separate metric, WUE (Water Usage Effectiveness). And PUE says nothing about total footprint or embodied carbon: emissions embedded in building materials, hardware manufacturing, or total absolute energy draw.",
+    takeaway:
+      "The professional companion metric is REF (Renewable Energy Factor), standardised in ISO/IEC 30134-3, which — unlike PUE — directly measures the proportion of renewable energy used. A mature sustainability assessment reports PUE and REF together, never PUE alone.",
+    callout: {
+      label: "Bridge into Task 1",
+      text: "GreenStack Hosting, the case you're about to audit, leans almost entirely on PUE for its sustainability story. Everything in this block is a candidate gap in that story — keep the five in mind as you read the case brief.",
     },
   },
 ];
 
 // ---------------------------------------------------------------------------
-// Section 5 — PUE worked-example calculator
+// PUE worked-example calculator + benchmark constants (Block 1 / Block 4)
 // ---------------------------------------------------------------------------
 export function calcPue(facilityKw: number, itKw: number): number {
   if (itKw <= 0) return 0;
@@ -165,242 +146,398 @@ export function calcPue(facilityKw: number, itKw: number): number {
 }
 
 export const PUE_BENCHMARKS = {
-  globalAverage: 1.56,
+  theoreticalMin: 1.0,
   hyperscaleLow: 1.1,
   hyperscaleHigh: 1.2,
+  industryAverageLow: 1.55,
+  industryAverageHigh: 1.58,
+  legacyPoor: 2.0,
 } as const;
 
+export type EnEfGThresholds = {
+  existing2027: number;
+  existing2030: number;
+  newFacility: number;
+};
+
+export const ENEFG_2023_ENACTED: EnEfGThresholds = {
+  existing2027: 1.5,
+  existing2030: 1.3,
+  newFacility: 1.2,
+};
+
+export const ENEFG_2026_DRAFT: EnEfGThresholds = {
+  existing2027: 1.6,
+  existing2030: 1.4,
+  newFacility: 1.3,
+};
+
 // ---------------------------------------------------------------------------
-// Case brief — CoreAxis Data Services (Task 1a + 1b)
+// Pathway comparison (Block 2) — qualitative, illustrative indicators only;
+// deliberately not dressed up as precise statistics.
+// ---------------------------------------------------------------------------
+export type PathwayLevel = "low" | "medium" | "high";
+
+export type Pathway = {
+  id: string;
+  label: string;
+  detail: string;
+  control: PathwayLevel;
+  scale: PathwayLevel;
+  scaleLabel: string;
+};
+
+export const PATHWAYS: Pathway[] = [
+  {
+    id: "onsite",
+    label: "On-site generation",
+    detail: "Solar PV, on-site wind, fuel cells — locally sourced electrons.",
+    control: "high",
+    scale: "low",
+    scaleLabel: "Rarely covers 100% of hyperscale load",
+  },
+  {
+    id: "ppa",
+    label: "Power Purchase Agreements",
+    detail: "Physical or virtual/financial, 10–20 year contracts with a generator.",
+    control: "medium",
+    scale: "high",
+    scaleLabel: "Scales to gigawatt-level procurement",
+  },
+  {
+    id: "goo",
+    label: "Guarantees of Origin",
+    detail: "Certificates bought separately from the physical power contract.",
+    control: "low",
+    scale: "high",
+    scaleLabel: "Can cover 100% of load on paper",
+  },
+  {
+    id: "tariff",
+    label: "Utility green tariffs",
+    detail: "A green tariff from your supplier, usually bundled with GoOs.",
+    control: "low",
+    scale: "medium",
+    scaleLabel: "Bounded by the supplier's offering",
+  },
+  {
+    id: "site",
+    label: "Site selection",
+    detail: "Locating in a grid region with naturally high renewable share.",
+    control: "medium",
+    scale: "medium",
+    scaleLabel: "Depends entirely on where you can build",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Case brief — GreenStack Hosting (Task 1)
 // ---------------------------------------------------------------------------
 export const CASE_BRIEF = {
-  company: "CoreAxis Data Services",
+  company: "GreenStack Hosting",
   setup:
-    "CoreAxis Data Services runs a mid-size facility that grew organically over roughly a decade, serving internal and external workloads. No one has ever run a full technical efficiency audit. The only visible symptom leadership can point to is rising energy cost — you're the junior infrastructure efficiency consultant sent to find out why.",
-  facts: [
-    "Average server utilization across CoreAxis's 40-rack floor is measured at 18%, but no server has been powered down or consolidated in over 3 years.",
-    "The facility runs a flat 18°C (64°F) supply-air setpoint sitewide, with no hot/cold aisle containment — set a decade ago and never revisited.",
-    "CoreAxis's most recent PUE reading, taken informally last year, was 1.9 — well above the 1.56 global average and far from the ~1.1–1.2 hyperscale benchmark.",
-    "There is no continuous PUE or sub-metering in place; the 1.9 reading came from a one-off consultant walkthrough, not ongoing monitoring.",
-    "CoreAxis operates every circuit at Tier IV-equivalent 2N redundancy, including two internal-only development racks with no uptime SLA.",
-    "Decommissioning a server currently requires sign-off from three different teams and takes an average of 11 weeks — most requests are simply never filed.",
-  ],
+    "GreenStack Hosting operates its own data centre and communicates externally that it is \"highly sustainable.\" Its evidence: certified green electricity purchases and an improved PUE value over the past two years. At the same time: strong seasonal load fluctuations, little transparency about individual consumption areas, heavy management reliance on the PUE figure for external communication, and Finance questioning the economic viability of the chosen approach.",
+  role:
+    "Your role: sustainability analyst. Audit this claim the way a professional would — systematically, not on gut feeling.",
 } as const;
 
 // ---------------------------------------------------------------------------
-// Master SVG zones — shared across Materi (read-only facts) and Task 1a
-// (forced-choice diagnostic). Each zone's `fact` mirrors CASE_BRIEF.facts.
+// Stage A — Evidence Sorter: 6 categories, 12 statements
 // ---------------------------------------------------------------------------
-export type ZoneId = FacilityZoneId;
+export type CategoryId = "energy-source" | "operating-model" | "metrics" | "communication" | "cost" | "credibility";
 
-export type ZoneChoice = { id: string; label: string };
+export const CATEGORIES: { id: CategoryId; label: string }[] = [
+  { id: "energy-source", label: "Energy Source" },
+  { id: "operating-model", label: "Operating Model" },
+  { id: "metrics", label: "Metrics" },
+  { id: "communication", label: "Communication" },
+  { id: "cost", label: "Cost" },
+  { id: "credibility", label: "Credibility" },
+];
 
-export type Zone = {
-  id: ZoneId;
-  n: number;
-  label: string;
-  fact: string;
-  question: string;
-  choices: ZoneChoice[];
+export type EvidenceItem = {
+  id: string;
+  text: string;
+  correctCategory: CategoryId;
+  clue: string;
 };
 
-export const ZONES: Zone[] = [
+export const EVIDENCE_ITEMS: EvidenceItem[] = [
   {
-    id: "utilization",
-    n: 1,
-    label: "Server & Utilization",
-    fact: CASE_BRIEF.facts[0],
-    question: "18% average utilization with no consolidation in 3 years. What's the most useful next diagnostic step?",
-    choices: [
-      { id: "consolidate", label: "Run a workload consolidation and virtualization assessment before buying any new hardware." },
-      { id: "wait", label: "Assume utilization will naturally improve as workloads grow — no action needed yet." },
-      { id: "replace", label: "Replace ageing servers with newer, faster ones at the same count." },
-    ],
+    id: "ev-goo",
+    text: "GreenStack purchases Guarantees of Origin to cover 100% of its annual electricity consumption on paper.",
+    correctCategory: "energy-source",
+    clue: "Does this describe where the electrons physically come from, or how they're accounted for on paper?",
   },
   {
-    id: "cooling",
-    n: 2,
-    label: "Cooling & Airflow",
-    fact: CASE_BRIEF.facts[1],
-    question: "A flat 18°C setpoint with no containment, unchanged for a decade. What does this most likely indicate?",
-    choices: [
-      { id: "overcooling", label: "The facility is over-cooling relative to what modern ASHRAE guidance allows." },
-      { id: "efficient", label: "18°C is already at the efficient edge of ASHRAE's envelope — nothing to revisit." },
-      { id: "irrelevant", label: "Cooling setpoint has no meaningful effect on overall facility PUE." },
-    ],
+    id: "ev-gridmix",
+    text: "The facility's physical grid connection draws from a national grid mix that is only partially renewable, especially overnight.",
+    correctCategory: "energy-source",
+    clue: "Is this about the contract GreenStack signed, or about the physical reality of the grid at any given hour?",
   },
   {
-    id: "power",
-    n: 3,
-    label: "Power Infrastructure",
-    fact: CASE_BRIEF.facts[2],
-    question: "A PUE of 1.9 against a 1.56 global average and ~1.1–1.2 hyperscale benchmark. How should this figure be read?",
-    choices: [
-      { id: "gap", label: "It signals real, quantifiable room for facility-infrastructure efficiency gains, not just IT-side savings." },
-      { id: "itonly", label: "PUE only measures IT equipment efficiency, so this doesn't say anything about the facility." },
-      { id: "normal", label: "Since 1.9 is common industry-wide, no action is warranted." },
-    ],
+    id: "ev-pue-trend",
+    text: "GreenStack's reported PUE has improved from 1.7 to 1.4 over the past two years.",
+    correctCategory: "metrics",
+    clue: "Is a PUE trend a source of energy, or a way of measuring something?",
   },
   {
-    id: "monitoring",
-    n: 4,
-    label: "Transparency & Monitoring",
-    fact: CASE_BRIEF.facts[3],
-    question: "The only PUE figure CoreAxis has ever produced came from a single consultant walkthrough, not ongoing measurement. What's the core problem here?",
-    choices: [
-      { id: "cant-verify", label: "Without continuous monitoring, no one can tell whether any future efficiency initiative actually worked." },
-      { id: "same", label: "A one-off reading is just as reliable as continuous monitoring for a facility this size." },
-      { id: "cost-only", label: "Monitoring is a cost center with no direct efficiency benefit of its own." },
-    ],
+    id: "ev-no-submeter",
+    text: "No sub-metering exists to show which specific systems or racks are driving the improvement in PUE.",
+    correctCategory: "metrics",
+    clue: "Can you verify a trend without knowing which parts of the system are actually changing?",
   },
   {
-    id: "redundancy",
-    n: 5,
-    label: "Redundancy",
-    fact: CASE_BRIEF.facts[4],
-    question: "Every circuit runs at Tier IV-equivalent 2N redundancy, including two internal dev racks with no uptime SLA. What does this reveal?",
-    choices: [
-      { id: "mismatch", label: "Redundancy level should match actual workload criticality — applying the highest tier everywhere is a cost/efficiency mismatch, not a safety virtue." },
-      { id: "always-max", label: "Maximum redundancy everywhere is always the correct default for any data center." },
-      { id: "no-link", label: "Redundancy level has no relationship to PUE or energy efficiency." },
-    ],
+    id: "ev-marketing",
+    text: "Marketing materials describe GreenStack as \"highly sustainable\" primarily by citing the improved PUE figure and the green-energy certificates.",
+    correctCategory: "communication",
+    clue: "Is this a fact about the facility itself, or about how that fact is being talked about externally?",
   },
   {
-    id: "operations",
-    n: 6,
-    label: "Operating Model",
-    fact: CASE_BRIEF.facts[5],
-    question: "Decommissioning needs three teams' sign-off and takes 11 weeks on average, so most requests are never filed. What kind of inefficiency is this?",
-    choices: [
-      { id: "process", label: "An organizational/process inefficiency, not a technical one — it causes unused hardware to keep drawing power indefinitely." },
-      { id: "ticketing", label: "This is purely an IT ticketing problem with no energy consequence." },
-      { id: "hardware", label: "This is a technical limitation of the hardware itself." },
-    ],
+    id: "ev-no-breakdown",
+    text: "Management has not published any figures on renewable share, carbon intensity, or utilisation alongside the PUE number.",
+    correctCategory: "communication",
+    clue: "What's missing here — a source of energy, or a category of information in a public statement?",
+  },
+  {
+    id: "ev-seasonal",
+    text: "The facility experiences strong seasonal load fluctuations, with summer peak demand roughly double the winter baseline.",
+    correctCategory: "operating-model",
+    clue: "Does \"summer vs. winter demand\" describe how the business runs day to day, or how it talks to the public?",
+  },
+  {
+    id: "ev-siloed",
+    text: "IT and Facilities track energy-related data separately, and neither team has full visibility into the other's consumption patterns.",
+    correctCategory: "operating-model",
+    clue: "Is a data-visibility gap between two internal teams about the outside world, or about how the operation itself is run?",
+  },
+  {
+    id: "ev-finance",
+    text: "Finance has publicly questioned whether the current efficiency investments are paying back fast enough to justify their cost.",
+    correctCategory: "cost",
+    clue: "Is Finance raising a concern about the electricity source, or about whether money spent is paying off?",
+  },
+  {
+    id: "ev-premium",
+    text: "The renewable electricity purchase agreements were signed on a multi-year basis, locking in a fixed premium over standard grid tariffs.",
+    correctCategory: "cost",
+    clue: "A fixed premium locked in for years — is that a technical fact or a financial commitment?",
+  },
+  {
+    id: "ev-no-verify",
+    text: "No third party has independently verified GreenStack's sustainability claims or underlying data.",
+    correctCategory: "credibility",
+    clue: "Is \"nobody checked this from outside\" a fact about energy, or about how much you should trust the claim?",
+  },
+  {
+    id: "ev-ambiguous-reading",
+    text: "GreenStack has never disclosed whether its PUE figure is a single point-in-time reading or a continuous annual average.",
+    correctCategory: "credibility",
+    clue: "Not knowing if a number is a snapshot or an average — does that change what's being measured, or whether you can trust it?",
   },
 ];
 
 // ---------------------------------------------------------------------------
-// Task 1a — Categorization & Prioritization panel
+// Stage B — PUE Claim Validity Check: 5 claims, 3-way verdict
 // ---------------------------------------------------------------------------
-export type ImpactType = "technical" | "governance";
-export type Horizon = "short" | "medium";
+export type Verdict = "supported" | "not-supported" | "partial";
 
-export const TASK1A = {
-  kicker: "Task 1a",
-  heading: "Diagnostic Mapping",
-  subtext:
-    "You're CoreAxis's junior infrastructure efficiency consultant. Click every zone on the facility map, reason through what's actually happening, then categorize and prioritize your findings.",
-  step1: {
-    heading: "Step 1 — Facility Map Diagnostic",
-    instructions:
-      "Click every zone on the CoreAxis Facility Map. Each one asks a short diagnostic question — there's no instant right or wrong, just your reasoning, so answer honestly and move on.",
-  },
-  step2: {
-    heading: "Step 2 — Categorization & Prioritization",
-    instructions:
-      "For every zone, classify what kind of fix it needs and how soon. Then pick the one zone you'd prioritize first, and describe the improvement approach you'd actually propose.",
-    impactLabel: "Is this primarily a technical fix, or a governance/architectural one?",
-    horizonLabel: "Could this realistically start short-term, or does it need medium-term planning?",
-    priorityLabel: "If CoreAxis could only fund one fix first, which zone should it be?",
-    approachLabel: "Describe the improvement approach for your top priority",
-    approachCaption: "Name the concrete action and why it should go first — not a restatement of the problem.",
-  },
-  export: {
-    taskLabel: "Diagnostic Mapping",
-    docHeading: "Diagnostic Mapping — Audit Report",
-    filenameSuffix: "audit-mapping",
-  },
-} as const;
-
-// ---------------------------------------------------------------------------
-// Task 1b — Priority Simulator
-// ---------------------------------------------------------------------------
-export type SimLevel = "low" | "med" | "high";
-export type SimOptionId = "consolidation" | "cooling" | "monitoring";
-
-export type RadarAxisId = "savings" | "feasibility" | "risk" | "investment" | "speed" | "leverage";
-
-export const RADAR_AXES: { id: RadarAxisId; label: string }[] = [
-  { id: "savings", label: "Energy Savings Potential" },
-  { id: "feasibility", label: "Implementation Feasibility" },
-  { id: "risk", label: "Risk" },
-  { id: "investment", label: "Investment Required" },
-  { id: "speed", label: "Speed of Visible Impact" },
-  { id: "leverage", label: "Strategic Leverage" },
+export const VERDICT_OPTIONS: { id: Verdict; label: string }[] = [
+  { id: "supported", label: "Supported" },
+  { id: "not-supported", label: "Not Supported" },
+  { id: "partial", label: "Partially Supported" },
 ];
 
-export type SimOption = {
-  id: SimOptionId;
-  label: string;
-  headline: string;
-  detail: string;
-  scores: Record<RadarAxisId, number>;
-  color: string;
-  note: string;
+export type PueClaim = {
+  id: string;
+  claim: string;
+  correctVerdict: Verdict;
+  clue: string;
 };
 
-export const SIM_OPTIONS: SimOption[] = [
+export const PUE_CLAIMS: PueClaim[] = [
   {
-    id: "consolidation",
-    label: "A) Consolidation & Virtualization",
-    headline: "Fast to justify, moderate ceiling",
-    detail: "Consolidate underused physical servers onto fewer, better-utilized virtualized hosts.",
-    scores: { savings: 4, feasibility: 4, risk: 2, investment: 3, speed: 3, leverage: 3 },
-    color: "#0E7A5A",
-    note:
-      "Consolidation moves fast and is easy to greenlight, but its savings ceiling is lower than a full modernization play — check whether it buys enough runway before the next budget cycle.",
+    id: "claim-overall-sustainable",
+    claim: "GreenStack's improving PUE proves the data centre is becoming more environmentally sustainable overall.",
+    correctVerdict: "partial",
+    clue: "Does better PUE contribute real evidence toward \"sustainable,\" or does it prove the whole claim on its own? Re-read Block 5's list of what PUE leaves out.",
   },
   {
-    id: "cooling",
-    label: "B) Cooling & Airflow Modernization",
-    headline: "Largest upside, slowest and priciest",
-    detail: "Rework hot/cold aisle containment and thermal setpoints against current ASHRAE guidance.",
-    scores: { savings: 5, feasibility: 2, risk: 4, investment: 5, speed: 2, leverage: 3 },
-    color: "#B87514",
-    note:
-      "Cooling modernization has the single largest efficiency upside here, but it's the slowest and priciest to justify without hard baseline numbers — expect this to need strong executive sponsorship.",
+    id: "claim-conversion-efficiency",
+    claim: "GreenStack's improving PUE shows the facility is converting a growing share of incoming power into usable IT capacity, rather than losing it to overhead.",
+    correctVerdict: "supported",
+    clue: "Re-read: what does PUE's denominator — IT Equipment Energy — actually represent?",
   },
   {
-    id: "monitoring",
-    label: "C) Systematic Monitoring & Transparency",
-    headline: "Lowest direct savings, highest leverage",
-    detail: "Install continuous PUE and sub-metering so every future initiative can actually be verified.",
-    scores: { savings: 2, feasibility: 5, risk: 1, investment: 1, speed: 4, leverage: 5 },
-    color: "#5E6670",
-    note:
-      "Monitoring alone won't cut a single kWh, but it's what makes every future efficiency claim defensible — many real consulting engagements start here precisely because it de-risks whatever comes next.",
+    id: "claim-physically-renewable",
+    claim: "Because GreenStack buys certified green electricity, its data centre is physically powered by renewable energy at every hour of the day.",
+    correctVerdict: "not-supported",
+    clue: "Re-read Block 3 — does an annual certificate guarantee what's actually on the grid at 2 a.m.?",
+  },
+  {
+    id: "claim-utilisation",
+    claim: "A lower PUE means GreenStack's servers are being used more efficiently, with less idle capacity.",
+    correctVerdict: "not-supported",
+    clue: "Re-read Block 5 — PUE is a ratio against \"whatever IT load exists.\" Does that load have to be efficiently used?",
+  },
+  {
+    id: "claim-ref-together",
+    claim: "GreenStack's PUE trend, on its own, is useful evidence but should be read alongside its REF (Renewable Energy Factor) before drawing any sustainability conclusion.",
+    correctVerdict: "supported",
+    clue: "Re-read Block 5's closing sentence about what a mature assessment reports together.",
   },
 ];
 
-export const TASK1B = {
-  kicker: "Task 1b",
-  heading: "Priority Simulator",
-  subtext:
-    "CoreAxis can fund only one initiative this cycle. Explore the trade-offs, then commit to one option and defend it.",
-  scenario:
-    "Budget is limited, IT operations is risk-averse, the data you gathered in Task 1a is still incomplete, and management wants a visible cost and sustainability impact.",
-  step1: {
-    heading: "Step 1 — Set the constraints",
-    instructions: "Move both sliders to reflect CoreAxis's real constraints, and watch how the radar shifts emphasis.",
-    budgetLabel: "Budget Available",
-    riskLabel: "Risk Tolerance",
-    chartCaption:
-      "Risk and Investment Required are cost-like axes — a bigger spike there means more of that cost, not a better score. The sliders re-weight how much each cost-like axis should count right now.",
+// ---------------------------------------------------------------------------
+// Stage C — Gap Finder: 8 candidate aspects, pick exactly 3
+// ---------------------------------------------------------------------------
+export type GapAspect = {
+  id: string;
+  label: string;
+  description: string;
+};
+
+export const GAP_ASPECTS: GapAspect[] = [
+  {
+    id: "renewable-transparency",
+    label: "Renewable share transparency",
+    description: "How much of actual consumption — not just certificates — is renewable, and when.",
   },
-  step2: {
-    heading: "Step 2 — Commit and justify",
-    instructions: "Pick the one option CoreAxis should fund, then justify it the way you'd defend it in the room.",
-    whyLabel: "Why this choice, given the constraints above?",
-    whyCaption: "Reference the actual budget/risk settings you chose — not a generic preference.",
-    followOnLabel: "What follow-on decision does this choice create?",
-    followOnCaption: "Name the next decision this forces CoreAxis to make, not just the immediate next step.",
-    risk1Label: "Risk 1 if this turns out to be the wrong first move",
-    risk2Label: "Risk 2 if this turns out to be the wrong first move",
-    riskCaption: "Be concrete about the consequence, not just the topic.",
+  {
+    id: "carbon-intensity",
+    label: "Carbon intensity of the grid",
+    description: "The gCO₂/kWh of the physical grid region the facility actually draws from.",
+  },
+  {
+    id: "utilisation-rate",
+    label: "Utilisation rate",
+    description: "How much of the running IT capacity is actually doing useful work.",
+  },
+  {
+    id: "water-usage",
+    label: "Water usage",
+    description: "Water consumed by the cooling strategy, tracked separately from PUE via WUE.",
+  },
+  {
+    id: "load-profile-granularity",
+    label: "Load profile granularity",
+    description: "Consumption broken down by time period and by system, not just an annual total.",
+  },
+  {
+    id: "cost-per-workload",
+    label: "Cost-per-workload data",
+    description: "What it actually costs to run a given unit of computing work, not just total spend.",
+  },
+  {
+    id: "third-party-verification",
+    label: "Third-party verification",
+    description: "Independent audit of the claims and the data behind them.",
+  },
+  {
+    id: "waste-heat-reuse",
+    label: "Waste-heat reuse",
+    description: "Whether heat rejected by the facility is captured and reused elsewhere.",
+  },
+];
+
+export const GAP_JUSTIFICATION_MIN_WORDS = 15;
+export const GAP_REQUIRED_COUNT = 3;
+
+// ---------------------------------------------------------------------------
+// Stage D — Technical vs. Governance Split: curated 8-item subset
+// ---------------------------------------------------------------------------
+export type Side = "technical" | "governance";
+
+export type SplitItem = {
+  id: string;
+  text: string;
+  correctSide: Side;
+  clue: string;
+};
+
+export const SPLIT_ITEMS: SplitItem[] = [
+  {
+    id: "ev-gridmix",
+    text: "The facility's physical grid connection draws from a national grid mix that is only partially renewable, especially overnight.",
+    correctSide: "technical",
+    clue: "Is this something measured at the meter, or something decided in a policy?",
+  },
+  {
+    id: "ev-pue-trend",
+    text: "GreenStack's reported PUE has improved from 1.7 to 1.4 over the past two years.",
+    correctSide: "technical",
+    clue: "A number produced by measurement — whose job is it to act on that, an engineer's or a policy-maker's?",
+  },
+  {
+    id: "ev-no-submeter",
+    text: "No sub-metering exists to show which specific systems or racks are driving the improvement in PUE.",
+    correctSide: "technical",
+    clue: "Is \"we don't have this instrument installed\" a strategy decision, or a gap in physical measurement capability?",
+  },
+  {
+    id: "ev-seasonal",
+    text: "The facility experiences strong seasonal load fluctuations, with summer peak demand roughly double the winter baseline.",
+    correctSide: "technical",
+    clue: "Does \"summer demand is double winter demand\" describe a rule someone wrote, or a physical pattern in the workload?",
+  },
+  {
+    id: "ev-marketing",
+    text: "Marketing materials describe GreenStack as \"highly sustainable\" primarily by citing the improved PUE figure and the green-energy certificates.",
+    correctSide: "governance",
+    clue: "Is a marketing claim produced by engineers, or by whoever approves external communication?",
+  },
+  {
+    id: "ev-no-breakdown",
+    text: "Management has not published any figures on renewable share, carbon intensity, or utilisation alongside the PUE number.",
+    correctSide: "governance",
+    clue: "Choosing what to publish and what not to — is that a technical constraint, or a decision someone made?",
+  },
+  {
+    id: "ev-finance",
+    text: "Finance has publicly questioned whether the current efficiency investments are paying back fast enough to justify their cost.",
+    correctSide: "governance",
+    clue: "Is Finance's concern about a physical system, or about how money and priorities are managed?",
+  },
+  {
+    id: "ev-no-verify",
+    text: "No third party has independently verified GreenStack's sustainability claims or underlying data.",
+    correctSide: "governance",
+    clue: "Is \"nobody from outside checked this\" a technical limitation, or a choice about oversight and assurance?",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Task 1 — copy
+// ---------------------------------------------------------------------------
+export const TASK1 = {
+  kicker: "Task 1",
+  heading: "Sustainability Claim Auditor",
+  subtext:
+    "Work through the four stages below in any order — nothing is locked. Each one feeds a section of the Audit Findings Report on the right, which is what you'll actually export.",
+  orderBanner: "Suggested order: A → B → C → D. You can work in any order.",
+  stageA: {
+    heading: "Stage A — Evidence Sorter",
+    instructions:
+      "Sort each piece of evidence from the case into the category it actually belongs to. Click a statement, pick a category, and use Show Clue if you're unsure — it points at the reasoning, not the answer.",
+  },
+  stageB: {
+    heading: "Stage B — PUE Claim Validity Check",
+    instructions:
+      "For each claim, decide whether GreenStack's PUE data actually supports it, doesn't support it, or partially supports it.",
+  },
+  stageC: {
+    heading: "Stage C — Gap Finder",
+    instructions:
+      "Select exactly the 3 aspects you judge most critical for a realistic assessment of GreenStack's claim, and justify each in a sentence or two.",
+  },
+  stageD: {
+    heading: "Stage D — Technical vs. Governance Split",
+    instructions:
+      "Drag (or tap, then tap a zone) each observation into Technical Topic or Management & Governance Topic. Undo/redo freely — nothing here is final until you export.",
   },
   export: {
-    taskLabel: "Priority Simulator",
-    docHeading: "Priority Simulator — Decision Report",
-    filenameSuffix: "priority-decision",
+    docHeading: "Audit Findings Report",
+    filenameLevel: 1,
+    filenameTask: 1,
   },
 } as const;

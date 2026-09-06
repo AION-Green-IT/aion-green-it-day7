@@ -1,14 +1,18 @@
 /**
- * Day 6 route registry. Each route is its own case study, so unlike a
+ * Day 7 route registry. Each route is its own case study, so unlike a
  * single-case module, there is no shared "CASE" business name here — only
  * the day-level program identity. Route-specific content (e.g. Route 1's
- * CoreAxis Data Services case) lives in that route's own lib/routeN.ts.
+ * GreenStack Hosting case) lives in that route's own lib/routeN.ts.
+ *
+ * Routes 2 and 3 are still Day 6's case content (DeltaGrid / NovaCore),
+ * carried over pending their own Day 7 rebuild — same transitional pattern
+ * Day 6 itself used while Route 1 was rebuilt before Routes 2/3.
  */
 
 export const CASE = {
   company: "AION Green IT",
-  module: "Day 6",
-  moduleTitle: "Data Center Efficiency, Trade-offs & Governance",
+  module: "Day 7",
+  moduleTitle: "Optimising and Greening Data Centre Operations",
 } as const;
 
 /** Icon keys resolved by components/icons/LineIcons.tsx. */
@@ -39,14 +43,14 @@ export type Route = {
 export const ROUTES: Route[] = [
   {
     n: 1,
-    slug: "route-1-the-audit",
-    href: "/route-1-the-audit",
-    tag: "Route 1 — The Audit",
-    title: "Route 1 — The Audit",
-    cardTitle: "The Audit",
+    slug: "route-1-foundations",
+    href: "/route-1-foundations",
+    tag: "Route 1 — Foundations",
+    title: "Route 1 — Foundations",
+    cardTitle: "Foundations",
     cardBlurb:
-      "PUE, Uptime Institute tiers, and ASHRAE thermal limits — then diagnose a real facility and simulate which fix to fund first.",
-    deliverable: "Diagnostic Mapping & Priority Decision",
+      "PUE, renewable-energy accounting, and the EU/German regulatory reality — then audit a sustainability claim that isn't as solid as it looks.",
+    deliverable: "Sustainability Claim Audit",
     available: true,
   },
   {

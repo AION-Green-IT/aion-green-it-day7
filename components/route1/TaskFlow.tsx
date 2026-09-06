@@ -1,75 +1,69 @@
 "use client";
 
-import { TASK1A, TASK1B } from "@/lib/route1";
+import { TASK1 } from "@/lib/route1";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Info } from "@/components/icons/LineIcons";
 import { CaseBrief } from "./CaseBrief";
-import { MiniStepper } from "./MiniStepper";
-import { DiagnosticMapping } from "./DiagnosticMapping";
-import { CategorizationPanel } from "./CategorizationPanel";
-import { AuditMappingExport } from "./AuditMappingExport";
-import { PrioritySimulator } from "./PrioritySimulator";
-import { PriorityDecisionForm } from "./PriorityDecisionForm";
-import { PriorityDecisionExport } from "./PriorityDecisionExport";
-import { useRoute1 } from "./useRoute1";
+import { EvidenceSorter } from "./EvidenceSorter";
+import { PueValidityCheck } from "./PueValidityCheck";
+import { GapFinder } from "./GapFinder";
+import { TechGovSplit } from "./TechGovSplit";
+import { AuditReportPanel } from "./AuditReportPanel";
+import { ExportBar } from "./ExportBar";
 
 export function TaskFlow() {
-  const r1 = useRoute1();
-
   return (
-    <section id="task" className="space-y-12">
-      <MiniStepper />
-      <CaseBrief />
+    <section id="task" className="space-y-8">
+      <SectionHeading kicker={TASK1.kicker} title={TASK1.heading} intro={TASK1.subtext} />
 
-      <div className="space-y-8">
-        <SectionHeading kicker={TASK1A.kicker} title={TASK1A.heading} intro={TASK1A.subtext} />
+      <div className="flex items-start gap-3 rounded-xl border border-line bg-canvas p-4">
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-ash" />
+        <p className="text-caption text-ash">{TASK1.orderBanner}</p>
+      </div>
 
-        <div id="r1a-step1">
-          <h3 className="text-h3 text-ink">{TASK1A.step1.heading}</h3>
-          <p className="mt-1 text-caption text-ash">{TASK1A.step1.instructions}</p>
-          <div className="mt-4">
-            <DiagnosticMapping />
-          </div>
-        </div>
+      <div className="lg:grid lg:grid-cols-[1fr_360px] lg:items-start lg:gap-8">
+        <div className="space-y-10">
+          <CaseBrief />
 
-        <div id="r1a-step2">
-          <h3 className="text-h3 text-ink">{TASK1A.step2.heading}</h3>
-          <p className="mt-1 text-caption text-ash">{TASK1A.step2.instructions}</p>
-          {r1.step1aStep1Complete ? (
+          <div id="r1-stageA">
+            <h3 className="text-h3 text-ink">{TASK1.stageA.heading}</h3>
+            <p className="mt-1 text-caption text-ash">{TASK1.stageA.instructions}</p>
             <div className="mt-4">
-              <CategorizationPanel />
+              <EvidenceSorter />
             </div>
-          ) : (
-            <p className="mt-3 text-caption text-ash">Diagnose every zone in Step 1 first — this panel unlocks automatically.</p>
-          )}
-        </div>
+          </div>
 
-        <AuditMappingExport />
-      </div>
+          <div id="r1-stageB">
+            <h3 className="text-h3 text-ink">{TASK1.stageB.heading}</h3>
+            <p className="mt-1 text-caption text-ash">{TASK1.stageB.instructions}</p>
+            <div className="mt-4">
+              <PueValidityCheck />
+            </div>
+          </div>
 
-      <hr className="border-line" />
+          <div id="r1-stageC">
+            <h3 className="text-h3 text-ink">{TASK1.stageC.heading}</h3>
+            <p className="mt-1 text-caption text-ash">{TASK1.stageC.instructions}</p>
+            <div className="mt-4">
+              <GapFinder />
+            </div>
+          </div>
 
-      <div className="space-y-8">
-        <SectionHeading kicker={TASK1B.kicker} title={TASK1B.heading} intro={TASK1B.subtext} />
-        <p className="rounded-xl border border-line bg-canvas p-4 text-caption text-ash">{TASK1B.scenario}</p>
-
-        <div id="r1b-step1">
-          <h3 className="text-h3 text-ink">{TASK1B.step1.heading}</h3>
-          <p className="mt-1 text-caption text-ash">{TASK1B.step1.instructions}</p>
-          <div className="mt-4">
-            <PrioritySimulator />
+          <div id="r1-stageD">
+            <h3 className="text-h3 text-ink">{TASK1.stageD.heading}</h3>
+            <p className="mt-1 text-caption text-ash">{TASK1.stageD.instructions}</p>
+            <div className="mt-4">
+              <TechGovSplit />
+            </div>
           </div>
         </div>
 
-        <div id="r1b-step2">
-          <h3 className="text-h3 text-ink">{TASK1B.step2.heading}</h3>
-          <p className="mt-1 text-caption text-ash">{TASK1B.step2.instructions}</p>
-          <div className="mt-4">
-            <PriorityDecisionForm />
-          </div>
+        <div className="mt-8 lg:mt-0">
+          <AuditReportPanel />
         </div>
-
-        <PriorityDecisionExport />
       </div>
+
+      <ExportBar />
     </section>
   );
 }

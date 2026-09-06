@@ -1,20 +1,31 @@
-import { CASE_BRIEF } from "@/lib/route1";
+"use client";
+
+import { useProgress } from "@/lib/store";
+import { R1, CASE_BRIEF } from "@/lib/route1";
 
 export function CaseBrief() {
+  const name = useProgress((s) => s.notes[R1.name] ?? "");
+  const setNote = useProgress((s) => s.setNote);
+
   return (
     <div className="card p-5">
       <p className="text-micro font-semibold uppercase tracking-wide text-ash">Case brief</p>
       <h3 className="mt-1 text-h3 text-ink">{CASE_BRIEF.company}</h3>
       <p className="mt-2 text-body text-ash">{CASE_BRIEF.setup}</p>
+      <p className="mt-3 text-caption font-semibold text-ink">{CASE_BRIEF.role}</p>
 
-      <ul className="mt-4 space-y-1.5 border-t border-line pt-3 text-caption text-ash">
-        {CASE_BRIEF.facts.map((f, i) => (
-          <li key={i} className="flex gap-2">
-            <span className="tabular-nums text-ash">{i + 1}.</span>
-            <span>{f}</span>
-          </li>
-        ))}
-      </ul>
+      <div id="r1-name" className="mt-4 border-t border-line pt-4">
+        <label className="block max-w-xs">
+          <span className="text-caption font-semibold text-ink">Your name</span>
+          <p className="text-micro text-ash">Used to label the exported report — e.g. "1-jane-day7-l1task1".</p>
+          <input
+            value={name}
+            onChange={(e) => setNote(R1.name, e.target.value)}
+            placeholder="Full name"
+            className="mt-1 w-full rounded-xl border border-line bg-paper px-3 py-2 text-body text-ink"
+          />
+        </label>
+      </div>
     </div>
   );
 }
