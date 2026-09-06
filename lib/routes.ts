@@ -72,6 +72,6 @@ export const ROUTES: Route[] = [
     cardBlurb:
       "ISO 20400, binding award criteria, RACI accountability, and an executive proposal that survives a board challenge.",
     deliverable: "Governance Diagnostic & Executive Proposal",
-    available: false,
+    available: true,
   },
 ];

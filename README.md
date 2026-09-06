@@ -17,7 +17,7 @@ shared chrome, state, and export conventions.
 | `/` | Day overview | — | built |
 | `/route-1-lifecycle-foundations` | Lifecycle Impact Mapper | **built** |
 | `/route-2-decision-tradeoffs` | Procurement Decision Matrix | **built** |
-| `/route-3-management-governance` | Governance Diagnostic & Executive Proposal | planned |
+| `/route-3-management-governance` | Governance Diagnostic & Executive Proposal | **built** |
 
 Each route is a separate page and its own independent case study — see `lib/routes.ts`
 for the shared route registry (`CASE`, `Route`, `ROUTES`) consumed by the home page and
@@ -81,6 +81,35 @@ Locked until Route 1's export is downloaded.
      and two risk statements — with the report assembling live on the right.
    - Export unlocks only once all four steps are complete.
 
+## Route 3 — Management & Governance (built)
+
+Two cases in one continuous arc, locked until Route 2's export is downloaded. Phase 1:
+**Proxima Digital Systems GmbH** (diagnostic — you're the consultant). Phase 2:
+**Helion Systems Group** (executive proposal — you're the CIO presenting to the board).
+
+1. **Material** — four blocks (ISO 20400 governance framework, binding vs. optional
+   award criteria, RACI role governance, short-term vs. structural decisions), with a
+   4-rung Governance Maturity Ladder, a 5-vendor ranking that re-sorts when a criterion
+   becomes scored, a RACI grid with pre-seeded Accountable-conflicts to resolve, and a
+   drag-to-horizon card sorter.
+2. **Task 3 — Governance Diagnostic & Executive Proposal**, two phases, four steps:
+   - Step 1 — a 5-node network diagram (not a linear timeline) of Purchasing/IT/
+     Sustainability/Suppliers/Management; click nodes for goals, click edges for why
+     the tension exists.
+   - Step 2 — force-rank 4 of 6 leverage-point candidates (the other 2 fall to "Not
+     prioritized" automatically), then justify the #1 pick. Completing this triggers a
+     one-time "level up" transition into Phase 2.
+   - Step 3 — six interactive sub-blocks: mark Helion's position on a mini Governance
+     Ladder, three core decisions each tagged with a RACI-accountable owner, a free 2D
+     drag placement of conflict statements onto a Cost-Discipline-vs-Sustainability-
+     Ambition matrix, a first-step choice justified against the Step 2 ranking, a RACI
+     grid built from scratch (exactly one Accountable per decision), and an
+     incomplete-information call.
+   - Step 4 — a board-challenge modal (once Step 3 is submitted) with three response
+     strategies, plus a 3-sentence executive summary.
+   - The export is styled as a formal board memo (Executive Summary first, numbered
+     sections after) and combines both phases in one document.
+
 ## Run it
 
 ```bash
@@ -97,13 +126,13 @@ npm run typecheck  # tsc --noEmit
 
 - `lib/routes.ts` — the day-level `CASE`, the `Route` type, and `ROUTES` (the actual
   route registry consumed by the home page and `TopBar`).
-- `lib/route1.ts` / `lib/route2.ts` — each route's copy, case data, and pure math
-  (no React — importable anywhere).
+- `lib/route1.ts` / `lib/route2.ts` / `lib/route3.ts` — each route's copy, case data,
+  and pure math (no React — importable anywhere).
 - `lib/store.ts` — the generic Zustand + `localStorage` store (key
   `aion-greenit-day5`), shared by every route.
 - `lib/routeGating.ts` — cross-route unlock keys and the `useRouteUnlocked` hook.
-- `components/route1/*`, `components/route2/*` — each route's mechanics (visualizers,
-  task steps, and the report/export/print components).
+- `components/route1/*`, `components/route2/*`, `components/route3/*` — each route's
+  mechanics (visualizers, task steps, and the report/export/print components).
 - `components/chrome/*`, `components/ui/*`, `components/icons/*` — shared chrome (top
   bar, footer, `RouteGate`), generic UI (reveal-on-scroll, section heading, confirm
   dialog, `MaterialBlock`, `IndustryCallout`, `RadarChart`, `MiniStepper`), the
