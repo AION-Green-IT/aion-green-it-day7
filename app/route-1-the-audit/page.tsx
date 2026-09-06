@@ -3,7 +3,7 @@ import { ROUTES } from "@/lib/routes";
 import { LeafMark } from "@/components/chrome/Icons";
 import { Material } from "@/components/route1/Material";
 import { TaskFlow } from "@/components/route1/TaskFlow";
-import { LifecycleReportPrint } from "@/components/route1/LifecycleReportPrint";
+import { Route1ReportPrint } from "@/components/route1/Route1ReportPrint";
 import { MentorTools } from "@/components/route1/MentorTools";
 
 const ROUTE = ROUTES[0];
@@ -23,9 +23,9 @@ export default function Route1Page() {
           </p>
           <h1 className="text-display text-ink">{ROUTE.title}</h1>
           <p className="mt-4 text-body text-ash">
-            A device&apos;s biggest costs and biggest carbon impact are both mostly invisible at the moment of
-            purchase. This route makes them visible — then asks you to defend a 300-unit procurement call once
-            someone with budget authority pushes back.
+            A facility's biggest inefficiencies are usually invisible until someone actually measures them. This
+            route makes them visible at CoreAxis Data Services — then asks you to simulate which single fix is worth
+            funding first.
           </p>
         </div>
 
@@ -38,7 +38,7 @@ export default function Route1Page() {
         <TaskFlow />
       </div>
 
-      <LifecycleReportPrint />
+      <Route1ReportPrint />
     </>
   );
 }

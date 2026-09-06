@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Day 5 tokens, shared across all three routes. A neutral corporate base —
+ * Day 6 tokens, shared across all three routes. A neutral corporate base —
  * charcoal, white and grey — with a single reserved accent (deep corporate
  * green) used ONLY for interactive/actionable surfaces: buttons, active drag
  * state, chart bars, progress fills. Nothing decorative uses the accent.

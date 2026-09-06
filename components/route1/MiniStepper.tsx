@@ -4,14 +4,14 @@ import clsx from "clsx";
 import { useRoute1 } from "./useRoute1";
 import { Check } from "@/components/icons/LineIcons";
 
-const STEP_LABELS = ["Explorer", "Tagging", "Calculator", "Analysis", "Pushback"];
+const STEP_LABELS = ["Diagnose", "Categorize", "Simulate", "Decide"];
 
-/** Task-local progress: which of the 5 steps are done, and which is next. */
+/** Task-local progress across both Task 1a and 1b's two steps each. */
 export function MiniStepper() {
   const r1 = useRoute1();
-  const complete = [r1.step1Complete, r1.step2Complete, r1.step3Complete, r1.step4Complete, r1.step5Complete];
+  const complete = [r1.step1aStep1Complete, r1.step1aStep2Complete, r1.step1bStep1Complete, r1.step1bStep2Complete];
   const firstIncomplete = complete.findIndex((c) => !c);
-  const current = firstIncomplete === -1 ? 5 : firstIncomplete + 1;
+  const current = firstIncomplete === -1 ? complete.length : firstIncomplete + 1;
 
   return (
     <ol className="flex flex-wrap items-center gap-2 rounded-xl border border-line bg-paper p-2">

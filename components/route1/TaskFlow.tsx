@@ -1,116 +1,74 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useProgress } from "@/lib/store";
-import { R1, TAGS, TASK1, type StageId } from "@/lib/route1";
-import { useRoute1 } from "./useRoute1";
+import { TASK1A, TASK1B } from "@/lib/route1";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CaseBrief } from "./CaseBrief";
 import { MiniStepper } from "./MiniStepper";
-import { LifecycleStageExplorer } from "./LifecycleStageExplorer";
-import { SustainabilityTagPool } from "./SustainabilityTagPool";
-import { LifecycleCostCalculator } from "./LifecycleCostCalculator";
-import { AnalysisPanel } from "./AnalysisPanel";
-import { ManagementPushback } from "./ManagementPushback";
-import { LifecycleExport } from "./LifecycleExport";
+import { DiagnosticMapping } from "./DiagnosticMapping";
+import { CategorizationPanel } from "./CategorizationPanel";
+import { AuditMappingExport } from "./AuditMappingExport";
+import { PrioritySimulator } from "./PrioritySimulator";
+import { PriorityDecisionForm } from "./PriorityDecisionForm";
+import { PriorityDecisionExport } from "./PriorityDecisionExport";
+import { useRoute1 } from "./useRoute1";
 
-/** Task 1 — owns the tag-placement selection shared between the tag pool and the stage explorer/drop target. */
 export function TaskFlow() {
-  const choose = useProgress((s) => s.choose);
   const r1 = useRoute1();
-  const [selectedTagId, setSelectedTagId] = useState<string | null>(null);
-
-  const place = (tagId: string, stageId: StageId) => {
-    choose(R1.tag(tagId), stageId);
-    setSelectedTagId(null);
-  };
-
-  const clearPlacement = (tagId: string) => {
-    choose(R1.tag(tagId), "");
-    setSelectedTagId(tagId);
-  };
-
-  const placedByStage = useMemo(() => {
-    const map: Partial<Record<StageId, { tagId: string; label: string; valid: boolean; hint: string }[]>> = {};
-    for (const tag of TAGS) {
-      const stageId = r1.tagPlacements[tag.id];
-      if (!stageId) continue;
-      const valid = (tag.validStages as StageId[]).includes(stageId as StageId);
-      const list = map[stageId as StageId] ?? [];
-      list.push({ tagId: tag.id, label: tag.label, valid, hint: tag.hint });
-      map[stageId as StageId] = list;
-    }
-    return map;
-  }, [r1.tagPlacements]);
 
   return (
-    <section id="task" className="space-y-10">
-      <SectionHeading kicker={TASK1.kicker} title={TASK1.heading} intro={TASK1.subtext} />
+    <section id="task" className="space-y-12">
       <MiniStepper />
       <CaseBrief />
 
-      <div id="r1-step1">
-        <h3 className="text-h3 text-ink">{TASK1.step1.heading}</h3>
-        <p className="mt-1 text-caption text-ash">{TASK1.step1.instructions}</p>
-        <div className="mt-4">
-          <LifecycleStageExplorer />
+      <div className="space-y-8">
+        <SectionHeading kicker={TASK1A.kicker} title={TASK1A.heading} intro={TASK1A.subtext} />
+
+        <div id="r1a-step1">
+          <h3 className="text-h3 text-ink">{TASK1A.step1.heading}</h3>
+          <p className="mt-1 text-caption text-ash">{TASK1A.step1.instructions}</p>
+          <div className="mt-4">
+            <DiagnosticMapping />
+          </div>
         </div>
+
+        <div id="r1a-step2">
+          <h3 className="text-h3 text-ink">{TASK1A.step2.heading}</h3>
+          <p className="mt-1 text-caption text-ash">{TASK1A.step2.instructions}</p>
+          {r1.step1aStep1Complete ? (
+            <div className="mt-4">
+              <CategorizationPanel />
+            </div>
+          ) : (
+            <p className="mt-3 text-caption text-ash">Diagnose every zone in Step 1 first — this panel unlocks automatically.</p>
+          )}
+        </div>
+
+        <AuditMappingExport />
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_240px]">
-        <div className="min-w-0 space-y-10">
-          <div id="r1-step2">
-            <div className="flex items-baseline justify-between gap-3">
-              <h3 className="text-h3 text-ink">{TASK1.step2.heading}</h3>
-              <p className="text-caption tabular-nums text-ash">
-                Tags correctly placed:{" "}
-                <span className="font-semibold text-ink">{r1.validPlacedCount}</span> / {r1.validTagCount}
-              </p>
-            </div>
-            <p className="mt-1 text-caption text-ash">{TASK1.step2.instructions}</p>
-            {selectedTagId && (
-              <p className="reveal-in mt-2 text-caption font-semibold text-accent">{TASK1.step2.tapHint}</p>
-            )}
-            <div className="mt-3">
-              <SustainabilityTagPool
-                selectedTagId={selectedTagId}
-                onSelectTag={setSelectedTagId}
-                tagPlacements={r1.tagPlacements}
-              />
-            </div>
+      <hr className="border-line" />
+
+      <div className="space-y-8">
+        <SectionHeading kicker={TASK1B.kicker} title={TASK1B.heading} intro={TASK1B.subtext} />
+        <p className="rounded-xl border border-line bg-canvas p-4 text-caption text-ash">{TASK1B.scenario}</p>
+
+        <div id="r1b-step1">
+          <h3 className="text-h3 text-ink">{TASK1B.step1.heading}</h3>
+          <p className="mt-1 text-caption text-ash">{TASK1B.step1.instructions}</p>
+          <div className="mt-4">
+            <PrioritySimulator />
           </div>
-
-          <div id="r1-step3">
-            <h3 className="text-h3 text-ink">{TASK1.step3.heading}</h3>
-            <p className="mt-1 text-caption text-ash">{TASK1.step3.instructions}</p>
-            <div className="card mt-4 p-5">
-              <LifecycleCostCalculator />
-            </div>
-          </div>
-
-          <div id="r1-step4">
-            <h3 className="text-h3 text-ink">{TASK1.step4.heading}</h3>
-            <div className="mt-4">
-              <AnalysisPanel />
-            </div>
-          </div>
-
-          <ManagementPushback />
-
-          <LifecycleExport />
         </div>
 
-        <LifecycleStageExplorer
-          compact
-          taggingEnabled
-          selectedTagId={selectedTagId}
-          onDropTag={place}
-          onTapStage={(stageId) => {
-            if (selectedTagId) place(selectedTagId, stageId);
-          }}
-          onRemoveTag={clearPlacement}
-          placedByStage={placedByStage}
-        />
+        <div id="r1b-step2">
+          <h3 className="text-h3 text-ink">{TASK1B.step2.heading}</h3>
+          <p className="mt-1 text-caption text-ash">{TASK1B.step2.instructions}</p>
+          <div className="mt-4">
+            <PriorityDecisionForm />
+          </div>
+        </div>
+
+        <PriorityDecisionExport />
       </div>
     </section>
   );

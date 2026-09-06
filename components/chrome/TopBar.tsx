@@ -29,7 +29,7 @@ export function TopBar() {
             </span>
           </Link>
 
-          <nav aria-label="Day 5 routes" className="ml-auto">
+          <nav aria-label="Day 6 routes" className="ml-auto">
             <ol className="flex items-center gap-1.5">
               {ROUTES.map((rt) => {
                 const active = pathname.includes(`/${rt.slug}`);

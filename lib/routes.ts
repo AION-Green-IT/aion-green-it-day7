@@ -1,15 +1,18 @@
 /**
- * Day 5 route registry. Each route is its own case study, so unlike the
- * previous day's single-case module, there is no shared "CASE" business
- * name here — only the day-level program identity. Route-specific content
- * (e.g. Route 1's LogicSphere Solutions case) lives in that route's own
- * lib/routeN.ts.
+ * Day 6 route registry. Each route is its own case study, so unlike a
+ * single-case module, there is no shared "CASE" business name here — only
+ * the day-level program identity. Route-specific content (e.g. Route 1's
+ * CoreAxis Data Services case) lives in that route's own lib/routeN.ts.
+ *
+ * moduleTitle covers Route 1's confirmed scope (data center technical
+ * efficiency); revise it once Route 2/3's own subjects are set, since this
+ * label is meant to span the whole day, not just Route 1.
  */
 
 export const CASE = {
   company: "AION Green IT",
-  module: "Day 5",
-  moduleTitle: "Sustainable IT Lifecycle & Circular Procurement",
+  module: "Day 6",
+  moduleTitle: "Data Center Efficiency, Trade-offs & Governance",
 } as const;
 
 /** Icon keys resolved by components/icons/LineIcons.tsx. */
@@ -40,14 +43,14 @@ export type Route = {
 export const ROUTES: Route[] = [
   {
     n: 1,
-    slug: "route-1-lifecycle-foundations",
-    href: "/route-1-lifecycle-foundations",
-    tag: "Route 1 — Lifecycle Foundations",
-    title: "Route 1 — Lifecycle Foundations",
-    cardTitle: "Lifecycle Foundations",
+    slug: "route-1-the-audit",
+    href: "/route-1-the-audit",
+    tag: "Route 1 — The Audit",
+    title: "Route 1 — The Audit",
+    cardTitle: "The Audit",
     cardBlurb:
-      "TCO, embodied carbon, the circular-economy R-ladder, and EU regulation — then defend a 300-unit procurement call under pressure.",
-    deliverable: "Lifecycle Impact Mapper",
+      "PUE, Uptime Institute tiers, and ASHRAE thermal limits — then diagnose a real facility and simulate which fix to fund first.",
+    deliverable: "Diagnostic Mapping & Priority Decision",
     available: true,
   },
   {

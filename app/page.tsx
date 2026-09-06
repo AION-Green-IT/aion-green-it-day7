@@ -23,11 +23,10 @@ export default function DayLanding() {
         </p>
         <h1 className="text-display text-ink">{CASE.moduleTitle}</h1>
         <p className="mt-4 text-body text-ash">
-          Three routes, each its own case and its own deliverable. You move from
-          reading the lifecycle economics of a device, to weighing procurement
-          models against each other, to presenting a governance proposal a
-          board would actually sit through. Each route lives on its own page
-          and ends in a document a professional would actually produce.
+          Three routes, each its own case and its own deliverable. You move from auditing a real facility's technical
+          efficiency, to weighing trade-offs and priorities, to presenting a governance proposal a board would
+          actually sit through. Each route lives on its own page and ends in a document a professional would
+          actually produce.
         </p>
       </div>
 

@@ -1,7 +1,7 @@
 /**
- * Route 1 — Lifecycle Foundations. All learner-facing copy and the pure
- * lifecycle-carbon/cost math live here so components stay presentational.
- * Case used throughout Task 1: LogicSphere Solutions (fictional).
+ * Route 1 — The Audit. All learner-facing copy and the pure PUE/radar math
+ * live here so components stay presentational. Case used throughout:
+ * CoreAxis Data Services (fictional).
  */
 
 import type { IconKey } from "@/lib/routes";
@@ -13,33 +13,34 @@ export const LEARNER_NAME_KEY = "learner:name";
 // ---------------------------------------------------------------------------
 export const R1 = {
   material: "r1:material",
-  stages: "r1:stages",
-  tag: (tagId: string) => `r1:tag:${tagId}`,
-  calcUnits: "r1:calc:units",
-  calcYears: "r1:calc:years",
-  calcUsed: "r1:calc:used",
-  risk1: "r1:risk1",
-  risk2: "r1:risk2",
-  risk3: "r1:risk3",
-  criteria: (id: string) => `r1:criteria:${id}`,
-  criteriaCustom: "r1:criteria:custom",
-  classify: (riskKey: string) => `r1:classify:${riskKey}`,
-  recommendation: "r1:recommendation",
-  pushbackJustification: "r1:pushback:justification",
-  pushbackChoice: "r1:pushback:choice",
+  pue: {
+    facility: "r1:pue:facility",
+    it: "r1:pue:it",
+  },
+  zoneAnswer: (zoneId: string) => `r1:zone:${zoneId}`,
+  zoneImpact: (zoneId: string) => `r1:zone:${zoneId}:impact`,
+  zoneHorizon: (zoneId: string) => `r1:zone:${zoneId}:horizon`,
+  priorityZone: "r1:priority:zone",
+  improvementApproach: "r1:priority:approach",
+  simBudget: "r1:sim:budget",
+  simRisk: "r1:sim:risk",
+  simOption: "r1:sim:option",
+  simWhy: "r1:sim:why",
+  simFollowOn: "r1:sim:followon",
+  simRisk1: "r1:sim:risk1",
+  simRisk2: "r1:sim:risk2",
   name: LEARNER_NAME_KEY,
 } as const;
 
-export const RISK_KEYS = [R1.risk1, R1.risk2, R1.risk3] as const;
-
 // ---------------------------------------------------------------------------
-// Material — 4 blocks: definition / insight / takeaway + one callout each.
+// Material — 6 sections. Sections 1/2/3/4/6 are prose + the shared master
+// SVG / callouts; section 5 (Monitoring) pairs with a small PUE calculator.
 // ---------------------------------------------------------------------------
-export type MaterialBlockId = "tco" | "carbon" | "rladder" | "regulatory";
+export type MaterialSectionId = "why-matters" | "anatomy" | "usual-suspects" | "levers" | "monitoring" | "tension";
 
-export type MaterialBlock = {
-  id: MaterialBlockId;
-  n: 1 | 2 | 3 | 4;
+export type MaterialSection = {
+  id: MaterialSectionId;
+  n: 1 | 2 | 3 | 4 | 5 | 6;
   icon: IconKey;
   kicker: string;
   title: string;
@@ -49,446 +50,356 @@ export type MaterialBlock = {
   callout: { label: string; text: string };
 };
 
-export const MATERIAL: MaterialBlock[] = [
+export const MATERIAL: MaterialSection[] = [
   {
-    id: "tco",
+    id: "why-matters",
     n: 1,
-    icon: "coins",
-    kicker: "Block 1 · Cost framework",
-    title: "Total Cost of Ownership (TCO) vs. Purchase Price",
-    definition:
-      "Total Cost of Ownership is the full cost of a device across its working life: acquisition cost, plus operating cost (energy, IT support, software licensing tied to the device), plus maintenance cost, plus end-of-life cost, minus any residual or resale value recovered at disposal. Purchase price is only the first of these five terms.",
-    insight:
-      "For a typical corporate laptop over a 4-year hold, the purchase price is usually only a minority share of the 4-year TCO. The rest is energy consumption, IT support and repair labour, software licences that follow the device, and certified data-wiping and disposal at end-of-life — costs that never appear on the vendor's quote.",
-    takeaway:
-      "When you read an RFP or tender scorecard, check whether TCO carries real scoring weight or is just a sentence in the preamble. A common European public-tender pattern splits scoring roughly Price ~40% / TCO & Lifecycle ~40% / Compliance ~20% — lowest bid alone is a red flag, not a badge of good procurement.",
-    callout: {
-      label: "Industry callout",
-      text: "In European public tenders this weighting is called \"award criteria\" — TCO has to be scored with a stated weight to count, not just mentioned.",
-    },
-  },
-  {
-    id: "carbon",
-    n: 2,
     icon: "factory",
-    kicker: "Block 2 · Embodied carbon",
-    title: "Embodied Carbon — Manufacturing Dominance",
+    kicker: "1 · Why it matters",
+    title: "Why Data Centers Matter",
     definition:
-      "Source: TCO Certified / Öko-Institut e.V. study, based on 15 carbon footprint reports of 14\" business notebooks from Dell, Lenovo, and HP. Total lifecycle carbon footprint of a business laptop over a 4-year hold: 299 kg CO2e, split Manufacturing 79.8% · Use-phase 13.2% · Transport 6.8% · End-of-life 0.2%.",
+      "Data centers are among the largest single categories of energy consumption in modern IT infrastructure — a single mid-size facility can draw as much power as a small town. That consumption is billed, taxed, reported, and increasingly regulated.",
     insight:
-      "Nearly 80% of a laptop's lifetime carbon impact has already happened before it is switched on for the first time at an employee's desk — it is locked in at the factory, in raw-material extraction, component fabrication, and assembly.",
+      "Unlike a laptop fleet, a data center's inefficiency doesn't hide in thousands of small devices — it concentrates in one place, on one meter, as one very visible number every month. That makes it one of the highest-leverage places to find real savings, and one of the hardest places to keep ignoring them.",
     takeaway:
-      "Extending device lifespan from 4 to 6 years cuts average annual emissions by roughly 30%, because the large one-time manufacturing footprint is spread over more years while the small use-phase slice barely grows. The metric procurement should chase is not \"energy efficiency rating\" alone — it's device longevity and repairability, because those are the actual lifecycle-carbon levers.",
+      "Every inefficiency you find in this audit has a direct line to a cost center and, increasingly, a regulatory disclosure line — this is not a hypothetical sustainability exercise.",
     callout: {
       label: "Industry callout",
-      text: "Öko-Institut's methodology counts raw-material extraction and PCB/display fabrication as \"manufacturing\" — not just final assembly at the factory.",
+      text: "Facility energy cost is usually IT's largest controllable non-staff operating expense — yet it is frequently owned by facilities, not IT, which is itself part of the problem this route explores.",
     },
   },
   {
-    id: "rladder",
+    id: "anatomy",
+    n: 2,
+    icon: "layers",
+    kicker: "2 · Anatomy of consumption",
+    title: "Anatomy of Consumption",
+    definition:
+      "A facility's total energy draw splits into IT load (servers, storage, networking — the equipment actually doing computational work) and facility infrastructure load (cooling, power distribution and conversion losses, lighting, redundancy overhead). PUE (Power Usage Effectiveness) is the industry metric that separates these two.",
+    insight:
+      "The two loads are managed by different teams, bought on different budgets, and almost never reviewed together — which is exactly why the total picture goes unmeasured for years, as you'll see in this audit's case.",
+    takeaway:
+      "Before recommending any fix, always identify which side of this split it addresses. A cooling fix and a server-consolidation fix attack completely different halves of the bill.",
+    callout: {
+      label: "Industry callout",
+      text: "Idle capacity draws power on both sides of the split at once: an underused server still needs cooling for a load it isn't actually delivering.",
+    },
+  },
+  {
+    id: "usual-suspects",
     n: 3,
-    icon: "recycleLoop",
-    kicker: "Block 3 · Circular economy",
-    title: "The Circular Economy R-Ladder (EU Standard)",
+    icon: "target",
+    kicker: "3 · The usual suspects",
+    title: "The Usual Suspects: Typical Inefficiencies",
     definition:
-      "The Ellen MacArthur Foundation's R-strategies hierarchy ranks circular actions from most to least value-retaining: Refuse → Rethink → Reduce → Reuse → Repair → Refurbish → Remanufacture → Repurpose → Recycle → Recover.",
+      "The same handful of inefficiency patterns recur across most audits: low server utilization with no consolidation, legacy systems left running past their useful purpose, absent or one-off monitoring instead of continuous measurement, over-cooling relative to current thermal guidance, and permanent unused backup/redundant capacity.",
     insight:
-      "A higher rung on the ladder retains more of the original material, energy, and labour value. Recycling sits near the bottom — it is a last resort, not the goal. A common misconception in corporate sustainability messaging treats \"it gets recycled eventually\" as the finish line, when in R-ladder terms it is closer to the material being written off.",
+      "None of these five require exotic new technology to fix. Every one of them is a known, well-documented pattern with a known category of fix — which is itself the uncomfortable finding: the barrier is rarely technical possibility.",
     takeaway:
-      "When you audit a vendor proposal, a vendor whose sustainability pitch is only a recycling program is operating low on the ladder. The right follow-up question is why they aren't offering repair, refurbishment, or reuse pathways first — those retain far more value than recycling ever can.",
+      "When you audit a facility, check for these five by name before looking for anything more exotic. They account for most of the gap between a typical facility and a highly optimized one.",
     callout: {
       label: "Industry callout",
-      text: "Term to use tomorrow: \"value retention\" — the R-ladder is ranked by how much of the original material, energy, and labour survives, not by whether something is eventually recyclable.",
+      text: "\"We've always run it this way\" is the single most common root cause underneath all five patterns — organizational inertia, not technical limitation.",
     },
   },
   {
-    id: "regulatory",
+    id: "levers",
     n: 4,
-    icon: "gavel",
-    kicker: "Block 4 · Regulatory context",
-    title: "EU Regulatory Context",
+    icon: "recycleLoop",
+    kicker: "4 · Technical levers",
+    title: "Technical Levers for Efficiency",
     definition:
-      "Three instruments now frame IT hardware procurement in the EU: the WEEE Directive (2012/19/EU), which obliges producers to run take-back programmes for electronic waste; the EU Right to Repair Directive, which mandates spare-parts availability for a defined period — a legal minimum, not a nice-to-have; and the Ecodesign for Sustainable Products Regulation (ESPR), which will require a Digital Product Passport, relevant to supply-chain transparency.",
+      "Consolidation and virtualization (running more workload on fewer, better-utilized machines), load optimization, decommissioning genuinely unused systems, hot/cold aisle containment, ASHRAE-aligned temperature management, and modern power components (higher-efficiency UPS/PDU hardware) are the standard technical toolkit.",
     insight:
-      "Independently verified certifications — TCO Certified, EPEAT, and Blauer Engel (Der Blaue Engel) — carry third-party audit criteria with defined, checkable thresholds. Marketing claims without third-party verification do not, even when the language sounds similar.",
+      "These levers sit on different sides of the IT/facility split from Anatomy of Consumption above — consolidation attacks IT load, containment and thermal management attack facility load. A strong recommendation usually needs at least one lever from each side.",
     takeaway:
-      "The test that separates a real certification from a greenwashing claim is simple: who audits it, and against what published, measurable criteria? If a vendor can't name an independent auditor and a criteria document, treat the claim as marketing, not compliance evidence.",
+      "Don't let a single popular lever (usually consolidation) crowd out the others in a recommendation — the largest total saving is almost always a combination, not one silver bullet.",
     callout: {
       label: "Industry callout",
-      text: "ESPR phases in through 2027 — Digital Product Passport requirements expand to more product categories over time, starting with batteries.",
+      text: "Hot/cold aisle containment is frequently the cheapest lever on this list relative to its impact, because it's a physical-layout fix, not a hardware purchase.",
+    },
+  },
+  {
+    id: "monitoring",
+    n: 5,
+    icon: "shield",
+    kicker: "5 · Why monitoring is the foundation",
+    title: "Why Monitoring Is the Foundation",
+    definition:
+      "PUE (Power Usage Effectiveness), formalized by The Green Grid, is the industry-standard metric: PUE = Total Facility Energy ÷ IT Equipment Energy. A PUE of 1.0 would mean zero facility overhead — every watt goes to computing. As of the most recent industry survey (Uptime Institute, 2024), the global average has been flat at roughly 1.55–1.59 for several years, landing at 1.56 — barely moving in five years despite available optimization technology. Hyperscale facilities, by contrast, commonly report 1.1–1.2.",
+    insight:
+      "That gap between 1.56 and 1.1–1.2 is not a technology gap — the same cooling and power techniques are available to everyone. It is a measurement and organizational-priority gap: hyperscale operators track PUE continuously and act on it; most other facilities do not track it at all.",
+    takeaway:
+      "You cannot improve what you do not continuously measure. A single walkthrough reading is a snapshot, not monitoring — treat any facility without continuous PUE tracking as one whose efficiency claims cannot yet be verified.",
+    callout: {
+      label: "Worked example",
+      text: "A facility drawing 180 kW total, with IT equipment drawing 120 kW: PUE = 180 ÷ 120 = 1.5. Try the numbers yourself below.",
+    },
+  },
+  {
+    id: "tension",
+    n: 6,
+    icon: "gavel",
+    kicker: "6 · The core tension",
+    title: "The Core Tension",
+    definition:
+      "The Uptime Institute's Tier Classification (I–IV) describes data center redundancy architecture. Learners will still encounter the commonly-cited availability shorthand — 99.671% / 99.741% / 99.982% / 99.995% for Tiers I–IV — but Uptime Institute formally removed these percentages from the official Tier Standard in 2009, because operational discipline affects real-world uptime more than physical design alone. A poorly-run Tier IV facility can perform like a Tier I.",
+    insight:
+      "This is direct validation of the lesson underneath this whole route: classification and redundancy describe design capability, not a performance guarantee, and every efficiency decision here trades off against availability, redundancy, and investment size — with no universally \"correct\" balance, only one that matches the actual workload's need.",
+    takeaway:
+      "When you recommend cutting redundancy or aggressively re-tuning cooling, always name what it trades against (availability risk, investment, speed of payback) — a recommendation that ignores the trade-off isn't a complete recommendation.",
+    callout: {
+      label: "Industry callout",
+      text: "ASHRAE's recommended inlet-temperature envelopes (Class A1/A2) have widened over successive revisions specifically to enable more free-cooling hours — many operators still cool to decade-old, stricter setpoints out of habit.",
     },
   },
 ];
 
 // ---------------------------------------------------------------------------
-// Block 1 visualizer — TCO Reveal Bar
+// Section 5 — PUE worked-example calculator
 // ---------------------------------------------------------------------------
-export type TcoLayer = { id: string; label: string; amountEur: number };
+export function calcPue(facilityKw: number, itKw: number): number {
+  if (itKw <= 0) return 0;
+  return facilityKw / itKw;
+}
 
-export const TCO_LAYERS: TcoLayer[] = [
-  { id: "purchase", label: "Purchase price", amountEur: 900 },
-  { id: "energy", label: "Energy cost (4 yr)", amountEur: 210 },
-  { id: "support", label: "IT support & repair", amountEur: 480 },
-  { id: "licensing", label: "Software licensing", amountEur: 250 },
-  { id: "disposal", label: "Disposal & data-wiping", amountEur: 90 },
-];
-
-export const TCO_TOTAL_EUR = TCO_LAYERS.reduce((s, l) => s + l.amountEur, 0);
-export const TCO_PURCHASE_SHARE = TCO_LAYERS[0].amountEur / TCO_TOTAL_EUR;
-
-// ---------------------------------------------------------------------------
-// Block 2 — carbon breakdown + annualized-footprint math
-// ---------------------------------------------------------------------------
-export const BASELINE_KG = 299;
-export const CARBON_BREAKDOWN = {
-  manufacturing: 0.798,
-  use: 0.132,
-  transport: 0.068,
-  endOfLife: 0.002,
+export const PUE_BENCHMARKS = {
+  globalAverage: 1.56,
+  hyperscaleLow: 1.1,
+  hyperscaleHigh: 1.2,
 } as const;
 
-export const CARBON_SEGMENTS = [
-  { id: "manufacturing", label: "Manufacturing", share: CARBON_BREAKDOWN.manufacturing },
-  { id: "use", label: "Use-phase", share: CARBON_BREAKDOWN.use },
-  { id: "transport", label: "Transport", share: CARBON_BREAKDOWN.transport },
-  { id: "endOfLife", label: "End-of-life", share: CARBON_BREAKDOWN.endOfLife },
-] as const;
-
-/** Annualized lifetime footprint if the device is kept for `lifespanYears`. */
-export function annualizedFootprintKg(lifespanYears: number): number {
-  const fixed =
-    BASELINE_KG * (CARBON_BREAKDOWN.manufacturing + CARBON_BREAKDOWN.transport + CARBON_BREAKDOWN.endOfLife);
-  const usePhasePerYear = (BASELINE_KG * CARBON_BREAKDOWN.use) / 4;
-  return fixed / lifespanYears + usePhasePerYear;
-}
-
 // ---------------------------------------------------------------------------
-// Block 3 — Repair-first vs Recycle-first timeline
-// ---------------------------------------------------------------------------
-/** How many full units have been purchased by `years` on a `cycleYears` replacement schedule. */
-export function purchasesNeeded(years: number, cycleYears: number): number {
-  return 1 + Math.floor(years / cycleYears);
-}
-
-/** Device A — recycled/replaced every `cycleYears`: a pure step function of full manufacturing events. */
-export function recycledPathKg(years: number, cycleYears = 2): number {
-  return purchasesNeeded(years, cycleYears) * BASELINE_KG;
-}
-
-/** Device B — repaired and kept in service: one manufacturing event plus linear use-phase accrual. */
-export function repairedPathKg(years: number): number {
-  const usePhasePerYear = (BASELINE_KG * CARBON_BREAKDOWN.use) / 4;
-  return BASELINE_KG + usePhasePerYear * years;
-}
-
-// ---------------------------------------------------------------------------
-// R-ladder reference list (sidebar)
-// ---------------------------------------------------------------------------
-export const R_LADDER = [
-  { id: "refuse", n: 1, label: "Refuse", blurb: "Don't acquire the device/feature at all." },
-  { id: "rethink", n: 2, label: "Rethink", blurb: "Meet the need a fundamentally different way." },
-  { id: "reduce", n: 3, label: "Reduce", blurb: "Use fewer devices, or less material per device." },
-  { id: "reuse", n: 4, label: "Reuse", blurb: "Same device, same purpose, another user." },
-  { id: "repair", n: 5, label: "Repair", blurb: "Fix the device so it keeps working as intended." },
-  { id: "refurbish", n: 6, label: "Refurbish", blurb: "Restore an older device to good working order." },
-  { id: "remanufacture", n: 7, label: "Remanufacture", blurb: "Rebuild to original spec using recovered parts." },
-  { id: "repurpose", n: 8, label: "Repurpose", blurb: "Use the device for a different function." },
-  { id: "recycle", n: 9, label: "Recycle", blurb: "Break down for materials — most value is lost." },
-  { id: "recover", n: 10, label: "Recover", blurb: "Energy recovery only — last resort." },
-] as const;
-
-// ---------------------------------------------------------------------------
-// Block 4 — certifications (verified vs. marketing-only distractors)
-// ---------------------------------------------------------------------------
-export type Certification = {
-  id: string;
-  name: string;
-  verified: boolean;
-  auditor: string;
-  criteria: string;
-  version: string;
-};
-
-export const CERTIFICATIONS: Certification[] = [
-  {
-    id: "tco",
-    name: "TCO Certified",
-    verified: true,
-    auditor: "Independent third-party auditors, coordinated by TCO Development (non-profit)",
-    criteria: "Social & environmental responsibility across the supply chain, hazardous substances, energy consumption, circular-design and durability criteria.",
-    version: "Generation 9 (current)",
-  },
-  {
-    id: "epeat",
-    name: "EPEAT",
-    verified: true,
-    auditor: "Global Electronics Council, with independent verification bodies",
-    criteria: "Tiered Bronze/Silver/Gold rating against environmental-performance criteria for electronics: materials, design for repair/recycling, energy, packaging.",
-    version: "IEEE 1680 series, current revision",
-  },
-  {
-    id: "blauer-engel",
-    name: "Blauer Engel (Der Blaue Engel)",
-    verified: true,
-    auditor: "German Federal Environment Agency (Umweltbundesamt) / RAL gGmbH",
-    criteria: "Repairability, hazardous-substance limits, noise, and energy criteria — the world's oldest eco-label, since 1978.",
-    version: "Current award criteria (DE-UZ 78 for notebooks)",
-  },
-  {
-    id: "greentech-ready",
-    name: "GreenTech Ready Seal",
-    verified: false,
-    auditor: "Self-declared by the manufacturer — no named third-party auditor",
-    criteria: "No published, measurable criteria document could be located.",
-    version: "n/a",
-  },
-  {
-    id: "ecosmart",
-    name: "EcoSmart Verified Label",
-    verified: false,
-    auditor: "Self-declared by the manufacturer's marketing department",
-    criteria: "Marketing copy references \"eco-friendly materials\" without a scored, publicly available standard.",
-    version: "n/a",
-  },
-];
-
-// ---------------------------------------------------------------------------
-// Case brief — LogicSphere Solutions (Task 1)
+// Case brief — CoreAxis Data Services (Task 1a + 1b)
 // ---------------------------------------------------------------------------
 export const CASE_BRIEF = {
-  company: "LogicSphere Solutions",
-  units: 300,
+  company: "CoreAxis Data Services",
   setup:
-    "LogicSphere Solutions is about to procure 300 new notebooks for several sites. Devices have historically been selected on price, supply availability, and technical standardization. Two bids have come in.",
-  vendor1: {
-    label: "Vendor 1",
-    headline: "Lowest price, replacement cycle 3 years",
-    detail:
-      "Very low price. No clear commitment on repairability, spare parts, or a take-back programme. Estimated replacement cycle: 3 years.",
-    cycleYears: 3,
-    priceDeltaPct: -18,
+    "CoreAxis Data Services runs a mid-size facility that grew organically over roughly a decade, serving internal and external workloads. No one has ever run a full technical efficiency audit. The only visible symptom leadership can point to is rising energy cost — you're the junior infrastructure efficiency consultant sent to find out why.",
+  facts: [
+    "Average server utilization across CoreAxis's 40-rack floor is measured at 18%, but no server has been powered down or consolidated in over 3 years.",
+    "The facility runs a flat 18°C (64°F) supply-air setpoint sitewide, with no hot/cold aisle containment — set a decade ago and never revisited.",
+    "CoreAxis's most recent PUE reading, taken informally last year, was 1.9 — well above the 1.56 global average and far from the ~1.1–1.2 hyperscale benchmark.",
+    "There is no continuous PUE or sub-metering in place; the 1.9 reading came from a one-off consultant walkthrough, not ongoing monitoring.",
+    "CoreAxis operates every circuit at Tier IV-equivalent 2N redundancy, including two internal-only development racks with no uptime SLA.",
+    "Decommissioning a server currently requires sign-off from three different teams and takes an average of 11 weeks — most requests are simply never filed.",
+  ],
+} as const;
+
+// ---------------------------------------------------------------------------
+// Master SVG zones — shared across Materi (read-only facts) and Task 1a
+// (forced-choice diagnostic). Each zone's `fact` mirrors CASE_BRIEF.facts.
+// ---------------------------------------------------------------------------
+export type ZoneId = "utilization" | "cooling" | "power" | "monitoring" | "redundancy" | "operations";
+
+export type ZoneChoice = { id: string; label: string };
+
+export type Zone = {
+  id: ZoneId;
+  n: number;
+  label: string;
+  fact: string;
+  question: string;
+  choices: ZoneChoice[];
+};
+
+export const ZONES: Zone[] = [
+  {
+    id: "utilization",
+    n: 1,
+    label: "Server & Utilization",
+    fact: CASE_BRIEF.facts[0],
+    question: "18% average utilization with no consolidation in 3 years. What's the most useful next diagnostic step?",
+    choices: [
+      { id: "consolidate", label: "Run a workload consolidation and virtualization assessment before buying any new hardware." },
+      { id: "wait", label: "Assume utilization will naturally improve as workloads grow — no action needed yet." },
+      { id: "replace", label: "Replace ageing servers with newer, faster ones at the same count." },
+    ],
   },
-  vendor2: {
-    label: "Vendor 2",
-    headline: "+18% upfront, replacement cycle 6 years",
-    detail:
-      "More expensive upfront (+18%). Offers long-term spare-parts availability, a return system, and a refurbishable device architecture. Estimated replacement cycle: 6 years.",
-    cycleYears: 6,
-    priceDeltaPct: 18,
+  {
+    id: "cooling",
+    n: 2,
+    label: "Cooling & Airflow",
+    fact: CASE_BRIEF.facts[1],
+    question: "A flat 18°C setpoint with no containment, unchanged for a decade. What does this most likely indicate?",
+    choices: [
+      { id: "overcooling", label: "The facility is over-cooling relative to what modern ASHRAE guidance allows." },
+      { id: "efficient", label: "18°C is already at the efficient edge of ASHRAE's envelope — nothing to revisit." },
+      { id: "irrelevant", label: "Cooling setpoint has no meaningful effect on overall facility PUE." },
+    ],
   },
-  stakeholders: {
-    purchasing: "Purchasing is focused on acquisition cost.",
-    it: "IT is focused on standardization and deployment speed.",
-    sustainability: "The sustainability team is pushing for stronger lifecycle and supply-chain consideration.",
+  {
+    id: "power",
+    n: 3,
+    label: "Power Infrastructure",
+    fact: CASE_BRIEF.facts[2],
+    question: "A PUE of 1.9 against a 1.56 global average and ~1.1–1.2 hyperscale benchmark. How should this figure be read?",
+    choices: [
+      { id: "gap", label: "It signals real, quantifiable room for facility-infrastructure efficiency gains, not just IT-side savings." },
+      { id: "itonly", label: "PUE only measures IT equipment efficiency, so this doesn't say anything about the facility." },
+      { id: "normal", label: "Since 1.9 is common industry-wide, no action is warranted." },
+    ],
+  },
+  {
+    id: "monitoring",
+    n: 4,
+    label: "Transparency & Monitoring",
+    fact: CASE_BRIEF.facts[3],
+    question: "The only PUE figure CoreAxis has ever produced came from a single consultant walkthrough, not ongoing measurement. What's the core problem here?",
+    choices: [
+      { id: "cant-verify", label: "Without continuous monitoring, no one can tell whether any future efficiency initiative actually worked." },
+      { id: "same", label: "A one-off reading is just as reliable as continuous monitoring for a facility this size." },
+      { id: "cost-only", label: "Monitoring is a cost center with no direct efficiency benefit of its own." },
+    ],
+  },
+  {
+    id: "redundancy",
+    n: 5,
+    label: "Redundancy",
+    fact: CASE_BRIEF.facts[4],
+    question: "Every circuit runs at Tier IV-equivalent 2N redundancy, including two internal dev racks with no uptime SLA. What does this reveal?",
+    choices: [
+      { id: "mismatch", label: "Redundancy level should match actual workload criticality — applying the highest tier everywhere is a cost/efficiency mismatch, not a safety virtue." },
+      { id: "always-max", label: "Maximum redundancy everywhere is always the correct default for any data center." },
+      { id: "no-link", label: "Redundancy level has no relationship to PUE or energy efficiency." },
+    ],
+  },
+  {
+    id: "operations",
+    n: 6,
+    label: "Operating Model",
+    fact: CASE_BRIEF.facts[5],
+    question: "Decommissioning needs three teams' sign-off and takes 11 weeks on average, so most requests are never filed. What kind of inefficiency is this?",
+    choices: [
+      { id: "process", label: "An organizational/process inefficiency, not a technical one — it causes unused hardware to keep drawing power indefinitely." },
+      { id: "ticketing", label: "This is purely an IT ticketing problem with no energy consequence." },
+      { id: "hardware", label: "This is a technical limitation of the hardware itself." },
+    ],
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Task 1a — Categorization & Prioritization panel
+// ---------------------------------------------------------------------------
+export type ImpactType = "technical" | "governance";
+export type Horizon = "short" | "medium";
+
+export const TASK1A = {
+  kicker: "Task 1a",
+  heading: "Diagnostic Mapping",
+  subtext:
+    "You're CoreAxis's junior infrastructure efficiency consultant. Click every zone on the facility map, reason through what's actually happening, then categorize and prioritize your findings.",
+  step1: {
+    heading: "Step 1 — Facility Map Diagnostic",
+    instructions:
+      "Click every zone on the CoreAxis Facility Map. Each one asks a short diagnostic question — there's no instant right or wrong, just your reasoning, so answer honestly and move on.",
+  },
+  step2: {
+    heading: "Step 2 — Categorization & Prioritization",
+    instructions:
+      "For every zone, classify what kind of fix it needs and how soon. Then pick the one zone you'd prioritize first, and describe the improvement approach you'd actually propose.",
+    impactLabel: "Is this primarily a technical fix, or a governance/architectural one?",
+    horizonLabel: "Could this realistically start short-term, or does it need medium-term planning?",
+    priorityLabel: "If CoreAxis could only fund one fix first, which zone should it be?",
+    approachLabel: "Describe the improvement approach for your top priority",
+    approachCaption: "Name the concrete action and why it should go first — not a restatement of the problem.",
+  },
+  export: {
+    taskLabel: "Diagnostic Mapping",
+    docHeading: "Diagnostic Mapping — Audit Report",
+    filenameSuffix: "audit-mapping",
   },
 } as const;
 
 // ---------------------------------------------------------------------------
-// Step 1 — Lifecycle Stage Explorer
+// Task 1b — Priority Simulator
 // ---------------------------------------------------------------------------
-export type StageId =
-  | "procurement"
-  | "use"
-  | "maintenance"
-  | "upgrade"
-  | "reuse"
-  | "refurbishment"
-  | "return"
-  | "recycling"
-  | "disposal";
+export type SimLevel = "low" | "med" | "high";
+export type SimOptionId = "consolidation" | "cooling" | "monitoring";
 
-export type Stage = { id: StageId; n: number; label: string; fact: string };
+export type RadarAxisId = "savings" | "feasibility" | "risk" | "investment" | "speed" | "leverage";
 
-export const STAGES: Stage[] = [
+export const RADAR_AXES: { id: RadarAxisId; label: string }[] = [
+  { id: "savings", label: "Energy Savings Potential" },
+  { id: "feasibility", label: "Implementation Feasibility" },
+  { id: "risk", label: "Risk" },
+  { id: "investment", label: "Investment Required" },
+  { id: "speed", label: "Speed of Visible Impact" },
+  { id: "leverage", label: "Strategic Leverage" },
+];
+
+export type SimOption = {
+  id: SimOptionId;
+  label: string;
+  headline: string;
+  detail: string;
+  scores: Record<RadarAxisId, number>;
+  color: string;
+  note: string;
+};
+
+export const SIM_OPTIONS: SimOption[] = [
   {
-    id: "procurement",
-    n: 1,
-    label: "Procurement",
-    fact: "Purchasing has historically weighted RFPs about 90% on unit price. Vendor 1's bid is 18% cheaper upfront; Vendor 2 discloses a six-year spare-parts commitment in writing.",
+    id: "consolidation",
+    label: "A) Consolidation & Virtualization",
+    headline: "Fast to justify, moderate ceiling",
+    detail: "Consolidate underused physical servers onto fewer, better-utilized virtualized hosts.",
+    scores: { savings: 4, feasibility: 4, risk: 2, investment: 3, speed: 3, leverage: 3 },
+    color: "#0E7A5A",
+    note:
+      "Consolidation moves fast and is easy to greenlight, but its savings ceiling is lower than a full modernization play — check whether it buys enough runway before the next budget cycle.",
   },
   {
-    id: "use",
-    n: 2,
-    label: "Use",
-    fact: "Both vendors quote similar active-use power draw. Block 2's data showed use-phase is only ~13% of lifetime footprint — the real gap between these two vendors sits elsewhere.",
+    id: "cooling",
+    label: "B) Cooling & Airflow Modernization",
+    headline: "Largest upside, slowest and priciest",
+    detail: "Rework hot/cold aisle containment and thermal setpoints against current ASHRAE guidance.",
+    scores: { savings: 5, feasibility: 2, risk: 4, investment: 5, speed: 2, leverage: 3 },
+    color: "#B87514",
+    note:
+      "Cooling modernization has the single largest efficiency upside here, but it's the slowest and priciest to justify without hard baseline numbers — expect this to need strong executive sponsorship.",
   },
   {
-    id: "maintenance",
-    n: 3,
-    label: "Maintenance",
-    fact: "Vendor 1's contract is silent on spare parts. Vendor 2 guarantees battery, keyboard, and display replacement parts for 6 years post-sale.",
-  },
-  {
-    id: "upgrade",
-    n: 4,
-    label: "Upgrade",
-    fact: "Vendor 2's chassis uses standard screws and a modular RAM/SSD bay. Vendor 1's unit is adhesive-sealed, which typically blocks component-level upgrades.",
-  },
-  {
-    id: "reuse",
-    n: 5,
-    label: "Reuse",
-    fact: "IT standardization favors identical hardware — but Vendor 2's modular design means a retired unit's parts can keep other units running past their own warranty period.",
-  },
-  {
-    id: "refurbishment",
-    n: 6,
-    label: "Refurbishment",
-    fact: "Vendor 2 operates an EU take-back and refurbishment line; refurbished units are commonly redeployed to lower-priority roles. Vendor 1 has no refurbishment programme.",
-  },
-  {
-    id: "return",
-    n: 7,
-    label: "Return",
-    fact: "Vendor 2's contract includes a take-back clause at end-of-lease. Vendor 1's proposal has no return or buy-back terms — disposal cost falls entirely on LogicSphere.",
-  },
-  {
-    id: "recycling",
-    n: 8,
-    label: "Recycling",
-    fact: "Both vendors claim \"recyclable materials,\" but only Vendor 2 names a certified WEEE-compliant recycling partner directly in the contract.",
-  },
-  {
-    id: "disposal",
-    n: 9,
-    label: "Disposal",
-    fact: "Certified data-wiping and disposal for 300 units is a real line item IT has not priced for either vendor — right now it's invisible in the headline price comparison.",
+    id: "monitoring",
+    label: "C) Systematic Monitoring & Transparency",
+    headline: "Lowest direct savings, highest leverage",
+    detail: "Install continuous PUE and sub-metering so every future initiative can actually be verified.",
+    scores: { savings: 2, feasibility: 5, risk: 1, investment: 1, speed: 4, leverage: 5 },
+    color: "#5E6670",
+    note:
+      "Monitoring alone won't cut a single kWh, but it's what makes every future efficiency claim defensible — many real consulting engagements start here precisely because it de-risks whatever comes next.",
   },
 ];
 
-// ---------------------------------------------------------------------------
-// Step 2 — Sustainability factor tagging (drag-to-classify onto stages)
-// ---------------------------------------------------------------------------
-export type Tag = { id: string; label: string; validStages: StageId[]; hint: string };
-
-export const TAGS: Tag[] = [
-  {
-    id: "spare-parts",
-    label: "Spare parts availability",
-    validStages: ["maintenance", "refurbishment"],
-    hint: "Think about when a broken device actually gets fixed — not when it's bought or thrown away.",
-  },
-  {
-    id: "energy-efficiency",
-    label: "Energy efficiency",
-    validStages: ["use"],
-    hint: "This is about ongoing power draw while the device is switched on, not the purchase or the write-off.",
-  },
-  {
-    id: "take-back",
-    label: "Take-back program",
-    validStages: ["return"],
-    hint: "This is about what happens when the device's time with you ends and it has to go back somewhere.",
-  },
-  {
-    id: "supply-chain",
-    label: "Supply chain transparency",
-    validStages: ["procurement"],
-    hint: "This is something you'd check before any money changes hands.",
-  },
-  {
-    id: "repairability",
-    label: "Repairability score",
-    validStages: ["maintenance", "refurbishment", "upgrade"],
-    hint: "This describes how easy a device is to physically service or extend — several stages in its working life depend on it.",
-  },
-  {
-    id: "standardization-speed",
-    label: "Standardization speed",
-    validStages: [],
-    hint: "This is an IT deployment concern, not a sustainability factor — it may not belong on this timeline at all.",
-  },
-  {
-    id: "lowest-bid",
-    label: "Lowest bid pricing",
-    validStages: [],
-    hint: "This is a pure pricing concern, not a lifecycle sustainability factor — it may not belong on this timeline at all.",
-  },
-  {
-    id: "modularity",
-    label: "Modularity",
-    validStages: ["upgrade", "refurbishment", "reuse"],
-    hint: "This is about swapping or reusing components without replacing the whole device.",
-  },
-  {
-    id: "certification",
-    label: "Certification (TCO/EPEAT/Blauer Engel)",
-    validStages: ["procurement"],
-    hint: "This is checked before a purchase decision is made, not afterward.",
-  },
-  {
-    id: "material-recyclability",
-    label: "Material recyclability",
-    validStages: ["recycling", "disposal"],
-    hint: "This only becomes relevant once a device is no longer being used by anyone at all.",
-  },
-];
-
-// ---------------------------------------------------------------------------
-// Step 4 — classification columns (learner's own risk findings)
-// ---------------------------------------------------------------------------
-export type ClassifyColumn = "purchasing" | "governance";
-
-// ---------------------------------------------------------------------------
-// Task copy
-// ---------------------------------------------------------------------------
-export const TASK1 = {
-  kicker: "Task 1",
-  heading: "Lifecycle Impact Mapper",
+export const TASK1B = {
+  kicker: "Task 1b",
+  heading: "Priority Simulator",
   subtext:
-    "Five steps, one procurement call. Work through the lifecycle, quantify it, then defend your recommendation the way a Finance Director actually will.",
+    "CoreAxis can fund only one initiative this cycle. Explore the trade-offs, then commit to one option and defend it.",
+  scenario:
+    "Budget is limited, IT operations is risk-averse, the data you gathered in Task 1a is still incomplete, and management wants a visible cost and sustainability impact.",
   step1: {
-    heading: "Step 1 — Lifecycle Stage Explorer",
-    instructions:
-      "Click every stage on the timeline to see what's actually known about LogicSphere's two vendors at that point in the device lifecycle. This is context, not a quiz — there's nothing to get wrong here.",
+    heading: "Step 1 — Set the constraints",
+    instructions: "Move both sliders to reflect CoreAxis's real constraints, and watch how the radar shifts emphasis.",
+    budgetLabel: "Budget Available",
+    riskLabel: "Risk Tolerance",
+    chartCaption:
+      "Risk and Investment Required are cost-like axes — a bigger spike there means more of that cost, not a better score. The sliders re-weight how much each cost-like axis should count right now.",
   },
   step2: {
-    heading: "Step 2 — Sustainability Factor Tagging",
-    instructions:
-      "Drag each tag onto the lifecycle stage it belongs to. Two tags are distractors — they don't belong anywhere on this timeline. Every real tag needs to land on one of its correct stages before Step 3 unlocks.",
-    tapHint: "Tap a tag, then tap a stage to place it.",
-  },
-  step3: {
-    heading: "Step 3 — Lifecycle Cost Calculator",
-    instructions:
-      "Using the 299 kg CO2e baseline and the manufacturing/use/transport/end-of-life split from Block 2, project the carbon cost of each vendor's replacement schedule across your fleet.",
-  },
-  step4: {
-    heading: "Step 4 — Analysis Panel",
-    riskPrompts: [
-      "Risk 1 if only purchase price is considered",
-      "Risk 2 if only purchase price is considered",
-      "Risk 3 if only purchase price is considered",
-    ],
-    classifyInstructions:
-      "Drag each of your three risks into the column that describes who actually owns fixing it.",
-    recommendationLabel: "Your recommendation",
-  },
-  step5: {
-    heading: "Step 5 — Management Pushback",
-    prompt:
-      "Vendor 2 costs 18% more upfront, and this quarter's budget is under pressure. Justify your recommendation using numbers, not just principles.",
-    justificationLabel: "Cite at least one number from your Lifecycle Cost Calculator (Step 3) to support your position.",
-    choices: [
-      {
-        id: "hold",
-        label: "Hold firm with data",
-        consequence: "Finance requests a follow-up meeting with a full TCO breakdown next week.",
-      },
-      {
-        id: "phased",
-        label: "Propose a phased rollout (pilot 50 units first)",
-        consequence: "Budget approved for the pilot, but the full rollout decision is delayed a quarter — lifecycle savings are realized later.",
-      },
-      {
-        id: "terms",
-        label: "Request extended payment terms",
-        consequence: "Vendor negotiation required; approval depends on the vendor's flexibility, introducing timeline risk.",
-      },
-    ],
+    heading: "Step 2 — Commit and justify",
+    instructions: "Pick the one option CoreAxis should fund, then justify it the way you'd defend it in the room.",
+    whyLabel: "Why this choice, given the constraints above?",
+    whyCaption: "Reference the actual budget/risk settings you chose — not a generic preference.",
+    followOnLabel: "What follow-on decision does this choice create?",
+    followOnCaption: "Name the next decision this forces CoreAxis to make, not just the immediate next step.",
+    risk1Label: "Risk 1 if this turns out to be the wrong first move",
+    risk2Label: "Risk 2 if this turns out to be the wrong first move",
+    riskCaption: "Be concrete about the consequence, not just the topic.",
   },
   export: {
-    taskLabel: "Lifecycle Impact Mapper",
-    docHeading: "Lifecycle Impact Mapper — Analysis Report",
+    taskLabel: "Priority Simulator",
+    docHeading: "Priority Simulator — Decision Report",
+    filenameSuffix: "priority-decision",
   },
 } as const;

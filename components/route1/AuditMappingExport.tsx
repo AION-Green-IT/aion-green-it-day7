@@ -2,51 +2,49 @@
 
 import { useState } from "react";
 import { useProgress } from "@/lib/store";
-import { markRouteExported } from "@/lib/routeGating";
-import { R1, TASK1 } from "@/lib/route1";
+import { R1, TASK1A } from "@/lib/route1";
 import { useRoute1 } from "./useRoute1";
-import { useLifecycleDocData } from "./useLifecycleDocData";
-import { LifecycleReportDoc } from "./LifecycleReportDoc";
+import { useAuditMappingDocData } from "./useAuditMappingDocData";
+import { AuditMappingReportDoc } from "./AuditMappingReportDoc";
 import { exportFilename, printAsFile } from "@/lib/exportFilename";
 import { scrollToAndFlash } from "@/lib/scrollToAndFlash";
 import { MissingList } from "@/components/ui/MissingList";
 import { Lock, Close } from "@/components/icons/LineIcons";
 
-export function LifecycleExport() {
+export function AuditMappingExport() {
   const r1 = useRoute1();
   const setNote = useProgress((s) => s.setNote);
-  const toggleCheck = useProgress((s) => s.toggleCheck);
-  const data = useLifecycleDocData();
+  const setPrintTarget = useProgress((s) => s.setPrintTarget);
+  const data = useAuditMappingDocData();
   const [open, setOpen] = useState(false);
 
-  const canExport = r1.hydrated && r1.exportEnabled;
+  const canExport = r1.hydrated && r1.auditMappingExportEnabled;
 
   const missing = [
-    !r1.step1Complete && { id: "r1-step1", label: "Step 1 — click every lifecycle stage" },
-    !r1.step2Complete && { id: "r1-step2", label: "Step 2 — correctly place every real tag" },
-    !r1.step3Complete && { id: "r1-step3", label: "Step 3 — run the calculator and use the data" },
-    !r1.step4Complete && { id: "r1-step4", label: "Step 4 — risks, classification, and a recommendation" },
-    !r1.step5Complete && { id: "r1-step5", label: "Step 5 — justify your decision and pick a response" },
+    !r1.step1aStep1Complete && { id: "r1a-step1", label: "Step 1 — diagnose every zone on the facility map" },
+    !r1.allZonesClassified && { id: "r1a-step2", label: "Step 2 — classify every zone (impact type and horizon)" },
+    r1.allZonesClassified && !r1.priorityZone && { id: "r1a-step2", label: "Step 2 — pick your top-priority zone" },
+    r1.allZonesClassified && !r1.improvementApproach.trim() && { id: "r1a-step2", label: "Step 2 — describe the improvement approach" },
   ].filter(Boolean) as { id: string; label: string }[];
 
   const download = () => {
-    printAsFile(exportFilename(r1.name, 1));
-    markRouteExported(toggleCheck, 1);
+    setPrintTarget("r1-audit-mapping");
+    printAsFile(exportFilename(r1.name, TASK1A.export.filenameSuffix));
   };
 
   return (
     <div className="border-t border-line pt-6">
       <button
         type="button"
-        onClick={() => (canExport ? setOpen(true) : scrollToAndFlash("r1-export-missing"))}
+        onClick={() => (canExport ? setOpen(true) : scrollToAndFlash("r1a-export-missing"))}
         className="btn-accent flex items-center gap-2"
-        aria-describedby={canExport ? undefined : "r1-export-missing"}
+        aria-describedby={canExport ? undefined : "r1a-export-missing"}
       >
         {!canExport && <Lock className="h-4 w-4" />}
-        Export {TASK1.export.taskLabel}
+        Export {TASK1A.export.taskLabel}
       </button>
       {!canExport && (
-        <div id="r1-export-missing" className="mt-2 p-1">
+        <div id="r1a-export-missing" className="mt-2 p-1">
           <MissingList items={missing} />
         </div>
       )}
@@ -69,7 +67,7 @@ export function LifecycleExport() {
             <div className="flex-1 overflow-y-auto p-5">
               <label className="mb-4 block">
                 <span className="text-caption font-semibold text-ink">Your name</span>
-                <p className="text-micro text-ash">Used to build your export filename — e.g. "5-jane-day5-task1".</p>
+                <p className="text-micro text-ash">Used to build your export filename — e.g. "6-jane-day6-audit-mapping".</p>
                 <input
                   value={r1.name}
                   onChange={(e) => setNote(R1.name, e.target.value)}
@@ -78,7 +76,7 @@ export function LifecycleExport() {
                 />
               </label>
               <div className="rounded-xl border border-line bg-canvas p-5">
-                <LifecycleReportDoc data={data} />
+                <AuditMappingReportDoc data={data} />
               </div>
             </div>
             <div className="flex justify-end gap-2 border-t border-line p-4">
