@@ -4,6 +4,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import { useProgress } from "@/lib/store";
 import { R1, STAGES, type StageId } from "@/lib/route1";
+import { Check, Info, Close } from "@/components/icons/LineIcons";
 
 const GREEN = "#0A5E45";
 const GRAY = "#5E6670";
@@ -90,7 +91,7 @@ function StageGlyph({ id }: { id: StageId }) {
   }
 }
 
-type PlacedTag = { label: string; valid: boolean };
+type PlacedTag = { tagId: string; label: string; valid: boolean };
 
 type Props = {
   compact?: boolean;
@@ -98,6 +99,7 @@ type Props = {
   selectedTagId?: string | null;
   onDropTag?: (tagId: string, stageId: StageId) => void;
   onTapStage?: (stageId: StageId) => void;
+  onRemoveTag?: (tagId: string) => void;
   placedByStage?: Partial<Record<StageId, PlacedTag[]>>;
 };
 
@@ -108,12 +110,15 @@ export function LifecycleStageExplorer({
   selectedTagId = null,
   onDropTag,
   onTapStage,
+  onRemoveTag,
   placedByStage,
 }: Props) {
   const markSeen = useProgress((s) => s.markSeen);
   const seenIds = useProgress((s) => s.seen[R1.stages] ?? []);
   const [openStage, setOpenStage] = useState<StageId | null>(null);
   const [overStage, setOverStage] = useState<StageId | null>(null);
+  const [reviewing, setReviewing] = useState(false);
+  const hasAnyPlacement = Object.values(placedByStage ?? {}).some((list) => (list?.length ?? 0) > 0);
 
   const handleActivate = (id: StageId) => {
     if (taggingEnabled && selectedTagId) {
@@ -143,43 +148,89 @@ export function LifecycleStageExplorer({
   if (compact) {
     return (
       <aside className="card p-3 lg:sticky lg:top-24">
-        <p className="text-micro font-semibold uppercase tracking-wide text-ash">Lifecycle stages</p>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-micro font-semibold uppercase tracking-wide text-ash">Lifecycle stages</p>
+          {hasAnyPlacement && (
+            <button
+              type="button"
+              onClick={() => setReviewing(true)}
+              className="shrink-0 rounded-full border border-line px-2 py-0.5 text-micro font-semibold text-ink transition-colors duration-150 hover:border-ash"
+            >
+              {reviewing ? "Re-check" : "Check placements"}
+            </button>
+          )}
+        </div>
         <ol className="mt-2 space-y-1">
           {STAGES.map((s, i) => {
             const placed = placedByStage?.[s.id] ?? [];
             const isOver = overStage === s.id;
             return (
               <li key={s.id}>
-                <button
-                  type="button"
-                  onClick={() => handleActivate(s.id)}
+                <div
                   onDragOver={dragOver(s.id)}
                   onDragLeave={dragLeave(s.id)}
                   onDrop={drop(s.id)}
                   className={clsx(
-                    "flex w-full items-center gap-2 rounded-lg border px-2 py-1.5 text-left text-caption transition-colors duration-150",
-                    isOver ? "border-accent bg-accentSoft" : "border-transparent hover:bg-mist",
+                    "rounded-lg border transition-colors duration-150",
+                    isOver ? "border-accent bg-accentSoft" : "border-transparent",
                   )}
                 >
-                  <span
-                    className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-paper"
-                    style={{ background: lerpColor(i / (STAGES.length - 1)) }}
+                  <button
+                    type="button"
+                    onClick={() => handleActivate(s.id)}
+                    className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-caption transition-colors duration-150 hover:bg-mist"
                   >
-                    <svg viewBox="0 0 24 24" className="h-4 w-4">
-                      <StageGlyph id={s.id} />
-                    </svg>
-                  </span>
-                  <span className="min-w-0 flex-1 truncate font-semibold text-ink">{s.label}</span>
-                  {placed.length > 0 && (
                     <span
-                      className={clsx("h-2 w-2 shrink-0 rounded-full", placed.some((p) => p.valid) ? "bg-accent" : "bg-warn")}
-                    />
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-paper"
+                      style={{ background: lerpColor(i / (STAGES.length - 1)) }}
+                    >
+                      <svg viewBox="0 0 24 24" className="h-4 w-4">
+                        <StageGlyph id={s.id} />
+                      </svg>
+                    </span>
+                    <span className="min-w-0 flex-1 truncate font-semibold text-ink">{s.label}</span>
+                  </button>
+                  {placed.length > 0 && (
+                    <div className="flex flex-wrap gap-1 px-2 pb-1.5 pl-9">
+                      {placed.map((p) => (
+                        <span
+                          key={p.tagId}
+                          className={clsx(
+                            "inline-flex items-center gap-1 rounded-full py-0.5 pl-1.5 pr-1 text-micro font-medium",
+                            !reviewing
+                              ? "bg-mist text-ink"
+                              : p.valid
+                                ? "bg-accentSoft text-accent"
+                                : "bg-canvas text-warn ring-1 ring-warn/40",
+                          )}
+                        >
+                          {reviewing && (p.valid ? <Check className="h-2.5 w-2.5" /> : <Info className="h-2.5 w-2.5" />)}
+                          {p.label}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onRemoveTag?.(p.tagId);
+                            }}
+                            aria-label={`Remove ${p.label} from ${s.label}`}
+                            className="rounded-full p-0.5 text-ash hover:bg-line hover:text-ink"
+                          >
+                            <Close className="h-2.5 w-2.5" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
                   )}
-                </button>
+                </div>
               </li>
             );
           })}
         </ol>
+        {reviewing && (
+          <p className="reveal-in mt-2 text-micro text-ash">
+            Green = fits this stage. Amber = doesn't fit here — tap the × to remove it, then place it somewhere else.
+          </p>
+        )}
       </aside>
     );
   }
@@ -193,7 +244,6 @@ export function LifecycleStageExplorer({
           const color = lerpColor(i / (STAGES.length - 1));
           const isOver = overStage === s.id;
           const isSeen = seenIds.includes(s.id);
-          const placed = placedByStage?.[s.id] ?? [];
           return (
             <g
               key={s.id}
@@ -237,9 +287,6 @@ export function LifecycleStageExplorer({
               <text x={cx} y={112} textAnchor="middle" fontSize="10" fill="#5E6670">
                 {s.label}
               </text>
-              {placed.length > 0 && (
-                <circle cx={cx + 17} cy={22} r={5} fill={placed.some((p) => p.valid) ? "#0E7A5A" : "#B87514"} />
-              )}
             </g>
           );
         })}

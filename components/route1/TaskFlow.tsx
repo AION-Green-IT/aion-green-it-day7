@@ -25,14 +25,19 @@ export function TaskFlow() {
     setSelectedTagId(null);
   };
 
+  const clearPlacement = (tagId: string) => {
+    choose(R1.tag(tagId), "");
+    setSelectedTagId(tagId);
+  };
+
   const placedByStage = useMemo(() => {
-    const map: Partial<Record<StageId, { label: string; valid: boolean }[]>> = {};
+    const map: Partial<Record<StageId, { tagId: string; label: string; valid: boolean }[]>> = {};
     for (const tag of TAGS) {
       const stageId = r1.tagPlacements[tag.id];
       if (!stageId) continue;
       const valid = (tag.validStages as StageId[]).includes(stageId as StageId);
       const list = map[stageId as StageId] ?? [];
-      list.push({ label: tag.label, valid });
+      list.push({ tagId: tag.id, label: tag.label, valid });
       map[stageId as StageId] = list;
     }
     return map;
@@ -103,6 +108,7 @@ export function TaskFlow() {
           onTapStage={(stageId) => {
             if (selectedTagId) place(selectedTagId, stageId);
           }}
+          onRemoveTag={clearPlacement}
           placedByStage={placedByStage}
         />
       </div>
