@@ -49,13 +49,19 @@ function StrategicRelevance() {
           onSelect={(id) => setNote(R3.strategicLadderPosition, id)}
         />
       </div>
-      <textarea
-        value={r3.strategicRelevance}
-        onChange={(e) => setNote(R3.strategicRelevance, e.target.value)}
-        rows={2}
-        placeholder="2-3 sentences on why this position matters strategically..."
-        className="mt-3 w-full rounded-xl border border-line bg-paper px-3 py-2 text-body text-ink"
-      />
+      <label className="mt-3 block">
+        <span className="text-caption font-semibold text-ink">Your relevance statement</span>
+        <p className="text-micro text-ash">
+          Connect the ladder position you picked to a concrete strategic consequence for Helion, in 2-3 sentences.
+        </p>
+        <textarea
+          value={r3.strategicRelevance}
+          onChange={(e) => setNote(R3.strategicRelevance, e.target.value)}
+          rows={2}
+          placeholder="2-3 sentences on why this position matters strategically..."
+          className="mt-1 w-full rounded-xl border border-line bg-paper px-3 py-2 text-body text-ink"
+        />
+      </label>
     </section>
   );
 }
@@ -67,16 +73,23 @@ function CoreDecisions() {
   return (
     <section>
       <h4 className="text-caption font-semibold text-ink">{S3.coreDecisionsQuestion}</h4>
+      <p className="mt-1 text-caption text-ash">
+        Phrase each one as a decision to be made, not a task to be done — e.g. "Approve binding repairability
+        criteria for the 2026 tender," not "Improve repairability."
+      </p>
       <div className="mt-3 space-y-3">
         {([1, 2, 3] as const).map((n, i) => (
           <div key={n} className="rounded-xl border border-line p-3">
-            <textarea
-              value={r3.coreDecisions[i].text}
-              onChange={(e) => setNote(R3.coreDecision(n), e.target.value)}
-              rows={2}
-              placeholder={`Decision ${n}...`}
-              className="w-full rounded-lg border border-line bg-paper px-3 py-2 text-body text-ink"
-            />
+            <label className="block">
+              <span className="text-caption font-semibold text-ink">Decision {n}</span>
+              <textarea
+                value={r3.coreDecisions[i].text}
+                onChange={(e) => setNote(R3.coreDecision(n), e.target.value)}
+                rows={2}
+                placeholder={`Decision ${n}...`}
+                className="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-body text-ink"
+              />
+            </label>
             <label className="mt-2 flex items-center gap-2 text-caption text-ash">
               Accountable:
               <select
@@ -142,6 +155,9 @@ function IncompleteInfo() {
   return (
     <section>
       <h4 className="text-caption font-semibold text-ink">{S3.incompleteQuestion}</h4>
+      <p className="mt-1 text-caption text-ash">
+        State the decision you'd make right now, and name what data you're missing that you're deciding without.
+      </p>
       <textarea
         value={r3.incompleteInfo}
         onChange={(e) => setNote(R3.incompleteInfo, e.target.value)}

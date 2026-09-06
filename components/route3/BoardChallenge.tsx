@@ -84,6 +84,10 @@ export function BoardChallenge() {
 
               <label className="block">
                 <span className="text-caption font-semibold text-ink">{TASK3.phase2.step4.summaryLabel}</span>
+                <p className="text-micro text-ash">
+                  Write it as the board would read it first — the recommendation and its reason, not a recap of
+                  your process.
+                </p>
                 <textarea
                   value={r3.execSummary}
                   onChange={(e) => setNote(R3.execSummary, e.target.value)}

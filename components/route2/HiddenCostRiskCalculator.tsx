@@ -52,6 +52,7 @@ export function HiddenCostRiskCalculator() {
         </div>
         <label className="mt-3 block">
           <span className="text-caption font-semibold text-ink">{TASK2.step3.dependencyPrompt}</span>
+          <p className="text-micro text-ash">Describe your actual leverage — strong, weak, or dependent on a specific factor — and why.</p>
           <textarea
             value={r2.dependencyReflection}
             onChange={(e) => setNote(R2.dependencyReflection, e.target.value)}

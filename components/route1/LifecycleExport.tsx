@@ -55,10 +55,11 @@ export function LifecycleExport() {
             <div className="flex-1 overflow-y-auto p-5">
               <label className="mb-4 block">
                 <span className="text-caption font-semibold text-ink">Your name</span>
+                <p className="text-micro text-ash">Used to build your export filename — e.g. "5-jane-day5-task1".</p>
                 <input
                   value={r1.name}
                   onChange={(e) => setNote(R1.name, e.target.value)}
-                  placeholder="Full name for the export filename"
+                  placeholder="Full name"
                   className="mt-1 w-full max-w-xs rounded-xl border border-line bg-paper px-3 py-2 text-body text-ink"
                 />
               </label>

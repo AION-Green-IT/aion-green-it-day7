@@ -112,7 +112,10 @@ export function LeverageRanking() {
       {topCandidate && (
         <label className="mt-4 block">
           <span className="text-caption font-semibold text-ink">{TASK3.phase1.step2.justifyLabel}</span>
-          <p className="text-micro text-ash">Your #1: {topCandidate.label}</p>
+          <p className="text-micro text-ash">
+            Your #1: {topCandidate.label} — explain what makes it higher-leverage than the others, not just "it's
+            important."
+          </p>
           <textarea
             value={r3.leverageJustify}
             onChange={(e) => setNote(R3.leverageJustify, e.target.value)}

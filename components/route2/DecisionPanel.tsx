@@ -131,6 +131,7 @@ function JustificationFields() {
       <h3 className="text-h3 text-ink">Justify your decision despite incomplete information</h3>
       <label className="block">
         <span className="text-caption font-semibold text-ink">{TASK2.step4.justifyScoreLabel}</span>
+        <p className="text-micro text-ash">Must include an actual number, e.g. a weighted total like "3.42".</p>
         <textarea
           value={notes[R2.justifyScore] ?? ""}
           onChange={(e) => setNote(R2.justifyScore, e.target.value)}
@@ -140,6 +141,7 @@ function JustificationFields() {
       </label>
       <label className="block">
         <span className="text-caption font-semibold text-ink">{TASK2.step4.justifyRiskLabel}</span>
+        <p className="text-micro text-ash">Must include a number (e.g. a cost figure) or a risk level word — low, medium, or high.</p>
         <textarea
           value={notes[R2.justifyRisk] ?? ""}
           onChange={(e) => setNote(R2.justifyRisk, e.target.value)}
@@ -157,6 +159,9 @@ function StakeholderFields() {
   return (
     <section className="space-y-3">
       <h3 className="text-h3 text-ink">{TASK2.step4.stakeholderLabel}</h3>
+      <p className="text-caption text-ash">
+        Name the next concrete action each stakeholder must take — not a restatement of their role.
+      </p>
       {TASK2.step4.stakeholders.map((s) => (
         <label key={s.id} className="block">
           <span className="text-caption font-semibold text-ink">{s.label}</span>
@@ -179,15 +184,20 @@ function RiskFields() {
   return (
     <section className="space-y-3">
       <h3 className="text-h3 text-ink">{TASK2.step4.riskLabel}</h3>
+      <p className="text-caption text-ash">
+        State one concrete consequence per box — who is affected and how, not just a restatement of the topic.
+      </p>
       {([1, 2] as const).map((n) => (
-        <textarea
-          key={n}
-          value={notes[R2.risk(n)] ?? ""}
-          onChange={(e) => setNote(R2.risk(n), e.target.value)}
-          rows={2}
-          placeholder={`Risk ${n}...`}
-          className="w-full rounded-xl border border-line bg-paper px-3 py-2 text-body text-ink"
-        />
+        <label key={n} className="block">
+          <span className="text-caption font-semibold text-ink">Risk {n}</span>
+          <textarea
+            value={notes[R2.risk(n)] ?? ""}
+            onChange={(e) => setNote(R2.risk(n), e.target.value)}
+            rows={2}
+            placeholder={`Risk ${n}...`}
+            className="mt-1 w-full rounded-xl border border-line bg-paper px-3 py-2 text-body text-ink"
+          />
+        </label>
       ))}
     </section>
   );

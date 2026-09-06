@@ -36,6 +36,10 @@ function RiskFields() {
   return (
     <section className="space-y-3">
       <h3 className="text-h3 text-ink">Risk identification</h3>
+      <p className="text-caption text-ash">
+        Name one concrete risk per box — reference a specific vendor, lifecycle stage, or number from the case, not a
+        generic worry.
+      </p>
       {RISK_FIELDS.map(({ key, label }, i) => (
         <label key={key} className="block">
           <span className="text-caption font-semibold text-ink">{label}</span>
@@ -90,6 +94,9 @@ function CriteriaChecklist() {
       </div>
       <label className="block">
         <span className="text-caption font-semibold text-ink">Additional criterion (optional)</span>
+        <p className="text-micro text-ash">
+          Phrase it as something a tender could actually score — e.g. "Warranty length ≥ 3 years," not just a topic.
+        </p>
         <input
           value={notes[R1.criteriaCustom] ?? ""}
           onChange={(e) => setNote(R1.criteriaCustom, e.target.value)}
