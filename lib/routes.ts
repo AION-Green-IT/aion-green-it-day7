@@ -3,10 +3,6 @@
  * single-case module, there is no shared "CASE" business name here — only
  * the day-level program identity. Route-specific content (e.g. Route 1's
  * GreenStack Hosting case) lives in that route's own lib/routeN.ts.
- *
- * Routes 2 and 3 are still Day 6's case content (DeltaGrid / NovaCore),
- * carried over pending their own Day 7 rebuild — same transitional pattern
- * Day 6 itself used while Route 1 was rebuilt before Routes 2/3.
  */
 
 export const CASE = {
@@ -55,26 +51,26 @@ export const ROUTES: Route[] = [
   },
   {
     n: 2,
-    slug: "route-2-the-tradeoff",
-    href: "/route-2-the-tradeoff",
-    tag: "Route 2 — The Trade-off",
-    title: "Route 2 — The Trade-off",
-    cardTitle: "The Trade-off",
+    slug: "route-2-application",
+    href: "/route-2-application",
+    tag: "Route 2 — Application",
+    title: "Route 2 — Application",
+    cardTitle: "Application",
     cardBlurb:
-      "TCO, the real cost of downtime, and ISO 50001's PDCA loop — then build a prioritized, defensible recommendation under real constraints.",
-    deliverable: "Trade-off Analysis",
+      "Four forces in constant tension, a seven-criteria prioritisation framework, and the EU's real disclosure rules — then run a live decision simulator across three funding options.",
+    deliverable: "Prioritisation Decision Memo",
     available: true,
   },
   {
     n: 3,
-    slug: "route-3-the-boardroom",
-    href: "/route-3-the-boardroom",
-    tag: "Route 3 — The Boardroom",
-    title: "Route 3 — The Boardroom",
-    cardTitle: "The Boardroom",
+    slug: "route-3-decision-architecture",
+    href: "/route-3-decision-architecture",
+    tag: "Route 3 — Decision Architecture",
+    title: "Route 3 — Decision Architecture",
+    cardTitle: "Decision Architecture",
     cardBlurb:
-      "No-regret decisions, RACI accountability, and CSRD's 2026 scope — then build a decision-ready proposal a board can actually act on.",
-    deliverable: "Board Proposal",
+      "A five-element feedback loop, assurance frameworks a senior decision-maker should recognise, and CSRD's narrowed 2027 scope — then diagnose one case and build a board-ready proposal for another.",
+    deliverable: "Board Decision Memo",
     available: true,
   },
 ];

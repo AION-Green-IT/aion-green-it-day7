@@ -4,8 +4,8 @@ import clsx from "clsx";
 import { useProgress } from "@/lib/store";
 import { R1, PUE_CLAIMS, VERDICT_OPTIONS } from "@/lib/route1";
 import { useRoute1 } from "./useRoute1";
-import { ClueToggle } from "./ClueToggle";
-import { ConfidenceHint } from "./ConfidenceHint";
+import { ClueToggle } from "@/components/ui/ClueToggle";
+import { ConfidenceHint } from "@/components/ui/ConfidenceHint";
 
 /** Stage B — for each claim, decide what PUE's own definition actually supports. */
 export function PueValidityCheck() {
