@@ -185,6 +185,8 @@ export type Pathway = {
   control: PathwayLevel;
   scale: PathwayLevel;
   scaleLabel: string;
+  /** A real-world explainer for this pathway — not the case study, an outside reference. */
+  reference: { label: string; url: string };
 };
 
 export const PATHWAYS: Pathway[] = [
@@ -195,6 +197,7 @@ export const PATHWAYS: Pathway[] = [
     control: "high",
     scale: "low",
     scaleLabel: "Rarely covers 100% of hyperscale load",
+    reference: { label: "Blue Pearl Energy — On-site renewable generation", url: "https://www.bluepearlenergy.com/en/on-site-renewable-energy-generation/" },
   },
   {
     id: "ppa",
@@ -203,6 +206,7 @@ export const PATHWAYS: Pathway[] = [
     control: "medium",
     scale: "high",
     scaleLabel: "Scales to gigawatt-level procurement",
+    reference: { label: "Urban Grid — Types of PPAs for offsite renewable projects", url: "https://www.urbangridsolar.com/types-of-power-purchase-agreements-for-offsite-renewable-energy-projects/" },
   },
   {
     id: "goo",
@@ -211,6 +215,7 @@ export const PATHWAYS: Pathway[] = [
     control: "low",
     scale: "high",
     scaleLabel: "Can cover 100% of load on paper",
+    reference: { label: "Greenpower.ch — How Guarantees of Origin work", url: "https://www.greenpower.ch/services-view/guarantees-of-origin-how-it-works/" },
   },
   {
     id: "tariff",
@@ -219,6 +224,7 @@ export const PATHWAYS: Pathway[] = [
     control: "low",
     scale: "medium",
     scaleLabel: "Bounded by the supplier's offering",
+    reference: { label: "World Resources Institute — Utility Green Tariffs", url: "https://www.wri.org/initiatives/utility-green-tariffs" },
   },
   {
     id: "site",
@@ -227,6 +233,7 @@ export const PATHWAYS: Pathway[] = [
     control: "medium",
     scale: "medium",
     scaleLabel: "Depends entirely on where you can build",
+    reference: { label: "Deerns — Data Centre Site Selection", url: "https://www.deerns.com/data-center-site-selection/" },
   },
 ];
 
@@ -246,13 +253,13 @@ export const CASE_BRIEF = {
 // ---------------------------------------------------------------------------
 export type CategoryId = "energy-source" | "operating-model" | "metrics" | "communication" | "cost" | "credibility";
 
-export const CATEGORIES: { id: CategoryId; label: string }[] = [
-  { id: "energy-source", label: "Energy Source" },
-  { id: "operating-model", label: "Operating Model" },
-  { id: "metrics", label: "Metrics" },
-  { id: "communication", label: "Communication" },
-  { id: "cost", label: "Cost" },
-  { id: "credibility", label: "Credibility" },
+export const CATEGORIES: { id: CategoryId; label: string; domain: string }[] = [
+  { id: "energy-source", label: "Energy Source", domain: "where the electricity physically comes from or how it's contractually sourced — grid mix, PPA, GoO, on-site generation" },
+  { id: "operating-model", label: "Operating Model", domain: "how the facility actually runs day to day — workload patterns, internal processes, team structure" },
+  { id: "metrics", label: "Metrics", domain: "a measurement, a number, or an instrumentation gap — not a source of energy or a public statement" },
+  { id: "communication", label: "Communication", domain: "what gets said publicly or internally about the facility, not a fact about the facility itself" },
+  { id: "cost", label: "Cost", domain: "money — spend, pricing, financial commitments, or payback" },
+  { id: "credibility", label: "Credibility", domain: "how trustworthy or verifiable a claim is — independent checks, disclosure completeness, ambiguity" },
 ];
 
 export type EvidenceItem = {
@@ -342,10 +349,10 @@ export const EVIDENCE_ITEMS: EvidenceItem[] = [
 // ---------------------------------------------------------------------------
 export type Verdict = "supported" | "not-supported" | "partial";
 
-export const VERDICT_OPTIONS: { id: Verdict; label: string }[] = [
-  { id: "supported", label: "Supported" },
-  { id: "not-supported", label: "Not Supported" },
-  { id: "partial", label: "Partially Supported" },
+export const VERDICT_OPTIONS: { id: Verdict; label: string; domain: string }[] = [
+  { id: "supported", label: "Supported", domain: "the PUE data directly and fully backs this claim" },
+  { id: "not-supported", label: "Not Supported", domain: "the PUE data says nothing that backs this claim, or actively contradicts it" },
+  { id: "partial", label: "Partially Supported", domain: "the PUE data offers some real evidence, but not enough on its own to fully back the claim" },
 ];
 
 export type PueClaim = {
@@ -447,6 +454,11 @@ export const GAP_REQUIRED_COUNT = 3;
 // Stage D — Technical vs. Governance Split: curated 8-item subset
 // ---------------------------------------------------------------------------
 export type Side = "technical" | "governance";
+
+export const SIDES: { id: Side; label: string; domain: string }[] = [
+  { id: "technical", label: "Technical Topic", domain: "a physical, measurable fact about the systems or the workload" },
+  { id: "governance", label: "Management & Governance Topic", domain: "a decision, a policy, or an oversight/communication choice made by people" },
+];
 
 export type SplitItem = {
   id: string;

@@ -5,6 +5,7 @@ import { RouteGate } from "@/components/chrome/RouteGate";
 import { Material } from "@/components/route3/Material";
 import { TaskFlow } from "@/components/route3/TaskFlow";
 import { MentorTools } from "@/components/route3/MentorTools";
+import { AnswerKeyTool } from "@/components/route3/AnswerKeyTool";
 
 const ROUTE = ROUTES[2];
 
@@ -17,6 +18,7 @@ export default function Route3Page() {
     <RouteGate routeN={3}>
       <div className="space-y-16 py-12">
         <MentorTools />
+        <AnswerKeyTool />
         <div className="max-w-prose">
           <p className="mb-2 flex items-center gap-2 text-micro font-semibold uppercase tracking-wide text-accent">
             <LeafMark className="h-4 w-4" /> {ROUTE.tag} — 3 of 3

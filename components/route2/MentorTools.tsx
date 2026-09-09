@@ -1,19 +1,8 @@
 "use client";
 
 import { useProgress } from "@/lib/store";
-import { R2, LEARNER_NAME_KEY, type CriterionId, type OptionId } from "@/lib/route2";
+import { R2, LEARNER_NAME_KEY, CRITERIA, CRITERION_DATA, OPTION_IDS } from "@/lib/route2";
 import { MentorFillButton } from "@/components/ui/MentorFillButton";
-
-/** Which of the 3 statements (by score) is the model pick for each criterion × option pairing. */
-const DEMO_SCORES: Record<CriterionId, Record<OptionId, 1 | 2 | 3>> = {
-  "strategic-leverage": { A: 1, B: 1, C: 3 },
-  "sustainability-impact": { A: 2, B: 2, C: 1 },
-  "informative-value": { A: 1, B: 2, C: 3 },
-  "economic-viability": { A: 2, B: 1, C: 2 },
-  feasibility: { A: 2, B: 1, C: 3 },
-  risk: { A: 1, B: 1, C: 3 },
-  credibility: { A: 1, B: 2, C: 3 },
-};
 
 const DEMO_FOLLOWUPS = [
   "Which specific metrics beyond PUE the new model will track first, and who owns collecting each one.",
@@ -36,10 +25,11 @@ export function MentorTools() {
   const fillDemoAnswers = () => {
     setNote(LEARNER_NAME_KEY, "Muchson");
 
-    (Object.keys(DEMO_SCORES) as CriterionId[]).forEach((criterionId) => {
-      (Object.keys(DEMO_SCORES[criterionId]) as OptionId[]).forEach((option) => {
-        const score = DEMO_SCORES[criterionId][option];
-        choose(R2.criterion(criterionId, option), `${criterionId}-${option}-${score}`);
+    CRITERIA.forEach((c) => {
+      OPTION_IDS.forEach((option) => {
+        const data = CRITERION_DATA[c.id][option];
+        const statement = data.statements.find((st) => st.score === data.bestFitScore);
+        if (statement) choose(R2.criterion(c.id, option), statement.id);
       });
     });
 

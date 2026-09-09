@@ -214,13 +214,152 @@ export const CRITERIA: Criterion[] = [
 // Criterion statements — 7 criteria × 3 options × 3 statements, hand-written
 // ---------------------------------------------------------------------------
 export type Statement = { id: string; score: 1 | 2 | 3; text: string };
-export type CriterionOptionData = { statements: Statement[]; clue: string };
+export type CriterionOptionData = {
+  statements: Statement[];
+  clue: string;
+  /** Which statement (by score) best fits Meridian's actual situation — used by Mentor Tools and the answer key. */
+  bestFitScore: 1 | 2 | 3;
+  /** One line per statement (keyed by score): why it is, or isn't, the best fit — mentor-facing, not shown to learners during the exercise. */
+  rationale: Record<1 | 2 | 3, string>;
+};
 
 const s = (criterionId: string, option: OptionId, score: 1 | 2 | 3, text: string): Statement => ({
   id: `${criterionId}-${option}-${score}`,
   score,
   text,
 });
+
+const RATIONALE = {
+  "strategic-leverage": {
+    A: {
+      1: "Locking into one supplier for 10-20 years is exactly the kind of narrowed-options outcome \"low strategic leverage\" describes — this is the realistic read given the security-of-supply constraint.",
+      2: "This reads as a safe middle ground, but it understates the real trade-off: a single long-term contract doesn't just fail to add leverage, it actively narrows future choices.",
+      3: "Too optimistic — freeing up budget is a nice side effect, but it doesn't offset the flexibility this option gives up by locking into one contract.",
+    },
+    B: {
+      1: "A retrofit fixed in isolation, with no monitoring or governance change alongside it, really does just solve today's problem and create no lasting capability — the realistic read for a standalone technical fix.",
+      2: "Closer to the mark, but it's still describing B in isolation from the constraints — nothing here builds the transparency capability the case explicitly says is missing.",
+      3: "Overstates it — a retrofit produces a good number, but a good number alone isn't the same as becoming a reference point others can build future decisions on.",
+    },
+    C: {
+      1: "Too pessimistic — it assumes the mandate to act never arrives, but a management model built explicitly for prioritisation decisions like this one is designed to be acted on.",
+      2: "True as far as it goes, but understates the case — C doesn't just help compare options once, it becomes the standing mechanism every future option gets evaluated through.",
+      3: "This is the realistic ceiling: a model that changes how decisions get made compounds in value with every future decision, a structurally different (and higher) kind of leverage than A or B offer.",
+    },
+  },
+  "sustainability-impact": {
+    A: {
+      1: "Too dismissive — assumes the whole contract is a paper-only GoO purchase, but the option as scoped includes physical PPA delivery, which is more than a certificate.",
+      2: "This is the realistic middle: a physical PPA into Meridian's own grid region is a genuine addition to regional renewable supply, without overstating it to hyperscaler-gigawatt levels.",
+      3: "Overstates Meridian's scale — shifting a regional marginal generation mix is a claim credible mainly for the largest hyperscale buyers, not a company of Meridian's size.",
+    },
+    B: {
+      1: "Too pessimistic — assumes the retrofit only touches the most visible units, but a properly sequenced retrofit (containment, controls, UPS) genuinely reduces overhead energy, not just the PUE ratio.",
+      2: "This is the realistic read: a well-sequenced retrofit gives a real, measurable cut in facility overhead — genuine impact, without assuming extra work that hasn't actually been scoped.",
+      3: "Overreaches — folding in utilisation and consolidation work not actually part of this option inflates its impact beyond what B alone delivers.",
+    },
+    C: {
+      1: "The honest read given the case: a transparency system changes what Meridian knows, not what it consumes — right now, on its own, it reduces zero kilowatt-hours.",
+      2: "Describes a real second-order benefit, but it's downstream and conditional on someone acting on what the system reveals — not sustainability impact C delivers by itself.",
+      3: "Overstates the immediate case — the compounding value is real over time, but as an assessment of C's impact today, this overreaches.",
+    },
+  },
+  "informative-value": {
+    A: {
+      1: "Accurate: a supply contract is a procurement record, not a data source about Meridian's own consumption — it genuinely adds nothing on this criterion.",
+      2: "Slightly more generous than warranted — GoO tracking is real but it's about the grid mix, not about how Meridian itself is consuming energy, which is what this criterion actually asks about.",
+      3: "Overstates it — hourly consumption-matching data is a feature of some advanced PPA structures, not something a standard contract renewal reliably brings.",
+    },
+    B: {
+      1: "Too dismissive — modern retrofit equipment typically does add some real sub-metering, so \"facility-level only, nothing more\" undersells it.",
+      2: "This is the realistic middle: retrofit equipment brings real but partial granularity — for the systems it touches, not the whole facility.",
+      3: "Overstates B — closing the full data gap described in the case is explicitly what Option C is built to do; claiming B does the same overreaches.",
+    },
+    C: {
+      1: "Too dismissive — C is specifically designed to bring new source data, not just restate what's already known; this undersells its actual purpose.",
+      2: "Reasonably close, but \"a meaningful share\" undersells an option whose entire point is closing this exact gap.",
+      3: "Accurate: closing the load/consumption data gap is literally what the case asks for, and it's the foundation every other criterion for C depends on.",
+    },
+  },
+  "economic-viability": {
+    A: {
+      1: "Too alarmist — PPA pricing is structured as a hedge precisely to avoid this kind of exposure; treating it as a straightforward budget risk overstates the concern.",
+      2: "This is the realistic middle: a moderate, contract-term-spread premium is a manageable, not alarming, fit for a constrained annual budget.",
+      3: "Too optimistic — treating a PPA as a likely net financial gain isn't the safe assumption to build a budget-constrained recommendation on.",
+    },
+    B: {
+      1: "Accurate given the constraint: a retrofit's upfront capital cost is real competition for a budget explicitly described as limited — the honest read, not an exaggeration.",
+      2: "Understates the tension — \"requires the capital outlay to clear the constraint first\" is exactly the problem, not a footnote to an otherwise-fine payback story.",
+      3: "Too optimistic for the stated constraint — phasing helps, but it doesn't remove the basic mismatch between a capex-heavy option and a limited budget.",
+    },
+    C: {
+      1: "Too pessimistic — treating C as a real cost identical in weight to a physical retrofit ignores that it needs no capital equipment.",
+      2: "This is the realistic middle: a genuine cost, but a data/process one that fits a limited budget far more easily than physical infrastructure.",
+      3: "Slightly optimistic — \"low marginal cost\" undersells the real tooling and data-governance effort C actually requires to stand up.",
+    },
+  },
+  feasibility: {
+    A: {
+      1: "Overstates the friction — Meridian already has renewable contracts in place, so this isn't starting from zero the way this statement implies.",
+      2: "Accurate: extending an existing relationship is a scaling exercise, not a new capability — realistic, not overly optimistic.",
+      3: "Understates the real process — legal negotiation and multi-department sign-off don't disappear just because a relationship already exists.",
+    },
+    B: {
+      1: "Accurate given the case's explicit priority on operational stability: live-facility retrofit work is exactly the kind of change that creates real availability risk.",
+      2: "Understates the tension — \"some unavoidable risk\" undersells how directly this conflicts with the case's stated priority on stability.",
+      3: "Too optimistic — a single-zone pilot reduces risk but doesn't eliminate the core tension between physical retrofit work and the stability priority.",
+    },
+    C: {
+      1: "Overstates the barrier — close to the case's own worst-case framing, but ignores that C can start with data Meridian already has.",
+      2: "Reasonably close, but undersells how fast a small taskforce could move — reads more cautious than the case constraints actually require.",
+      3: "Accurate: C changes process and reporting, not physical infrastructure, so a focused pilot really can move within a quarter.",
+    },
+  },
+  risk: {
+    A: {
+      1: "Accurate given the stated priority on security of supply: a 10-20 year single-supplier commitment is a real concentration risk, not a manageable footnote.",
+      2: "Understates the exposure — \"partly hedged\" undersells how much a single long-term contract concentrates Meridian's risk regardless of hedging structure.",
+      3: "Too optimistic — assuming a favourable hedge outcome isn't the safe assumption for a risk assessment.",
+    },
+    B: {
+      1: "Accurate given the case's explicit stability priority: live-facility retrofit work creating a real availability incident risk is the honest read, not the alarmist one.",
+      2: "Understates it — \"some unavoidable risk\" downplays how directly this conflicts with the case's stated priority on operational stability.",
+      3: "Too optimistic — a pilot reduces exposure but doesn't remove the core tension between physical work and the stability priority.",
+    },
+    C: {
+      1: "Overstates the risk — a communications misstep is a real but manageable second-order risk, not a reason to rate C as high-risk overall.",
+      2: "Reasonably close, but undersells how contained C's risk actually is compared to any option touching physical infrastructure.",
+      3: "Accurate: touching no physical infrastructure genuinely means no availability exposure — the lowest-risk profile of the three options by construction.",
+    },
+  },
+  credibility: {
+    A: {
+      1: "Accurate given the case's explicit note that IT won't support symbolic measures: a claim built mainly on certificates without matched delivery data is exactly the credibility weakness that constraint warns about.",
+      2: "Understates the risk — a named PPA helps, but without matched consumption data it's still vulnerable to the same \"paper renewables\" critique.",
+      3: "Too optimistic for Meridian's scale — the hyperscaler-grade credibility comparison doesn't transfer directly to a company this size.",
+    },
+    B: {
+      1: "Too dismissive — a physically verified PUE change is meaningfully harder to challenge than a purely self-reported number with no underlying change.",
+      2: "This is the realistic middle: more defensible than a contractual claim, but still just one metric among several a sophisticated reviewer would ask about.",
+      3: "Overstates it — \"among the hardest sustainability claims to challenge\" oversells a single-metric claim, however well verified.",
+    },
+    C: {
+      1: "Too dismissive — a new model doesn't need external validation to already be more credible in structure than PUE-only reporting; this undersells that structural improvement.",
+      2: "Reasonably close, but undersells how directly C addresses the specific \"sounds good vs. actually defensible\" test this criterion is built on.",
+      3: "Accurate: C is the only option that changes what Meridian can actually demonstrate under scrutiny, not just what it can say — exactly what credibility is testing for.",
+    },
+  },
+} satisfies Record<CriterionId, Record<OptionId, Record<1 | 2 | 3, string>>>;
+
+const BEST_FIT: Record<CriterionId, Record<OptionId, 1 | 2 | 3>> = {
+  "strategic-leverage": { A: 1, B: 1, C: 3 },
+  "sustainability-impact": { A: 2, B: 2, C: 1 },
+  "informative-value": { A: 1, B: 2, C: 3 },
+  "economic-viability": { A: 2, B: 1, C: 2 },
+  feasibility: { A: 2, B: 1, C: 3 },
+  risk: { A: 1, B: 1, C: 3 },
+  credibility: { A: 1, B: 2, C: 3 },
+};
 
 export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptionData>> = {
   "strategic-leverage": {
@@ -231,6 +370,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("strategic-leverage", "A", 3, "Frees internal budget and attention that a technical programme would have consumed, making it easier to fund a further measure later from the same sustainability mandate."),
       ],
       clue: "Re-read the constraint about security of supply — what happens to Meridian's future options once it's committed to one supplier for 10-20 years?",
+      bestFitScore: BEST_FIT["strategic-leverage"].A,
+      rationale: RATIONALE["strategic-leverage"].A,
     },
     B: {
       statements: [
@@ -239,6 +380,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("strategic-leverage", "B", 3, "A verified PUE improvement becomes a credible reference point that anchors every future efficiency or reporting conversation, including with regulators."),
       ],
       clue: "If this retrofit is a one-off, what happens to the next inefficiency nobody's watching for?",
+      bestFitScore: BEST_FIT["strategic-leverage"].B,
+      rationale: RATIONALE["strategic-leverage"].B,
     },
     C: {
       statements: [
@@ -247,6 +390,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("strategic-leverage", "C", 3, "Becomes the backbone every future energy, efficiency, or reporting decision routes through — the highest-leverage of the three, because it changes how decisions get made, not just what was decided this once."),
       ],
       clue: "Which of the three options changes how future decisions like this one get made, not just what gets decided this time?",
+      bestFitScore: BEST_FIT["strategic-leverage"].C,
+      rationale: RATIONALE["strategic-leverage"].C,
     },
   },
   "sustainability-impact": {
@@ -257,6 +402,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("sustainability-impact", "A", 3, "At the scale Meridian could realistically contract, the measure meaningfully shifts the marginal generation mix in its supply region — an outcome few single data centre operators can credibly claim."),
       ],
       clue: "Does a certificate change the carbon intensity of the electrons Meridian actually draws, or just the paperwork describing them?",
+      bestFitScore: BEST_FIT["sustainability-impact"].A,
+      rationale: RATIONALE["sustainability-impact"].A,
     },
     B: {
       statements: [
@@ -265,6 +412,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("sustainability-impact", "B", 3, "Combined with utilisation and load-consolidation work, the retrofit could cut absolute facility energy substantially, not just the PUE ratio."),
       ],
       clue: "A retrofit changes PUE — does it necessarily change total facility energy if the IT load itself hasn't changed?",
+      bestFitScore: BEST_FIT["sustainability-impact"].B,
+      rationale: RATIONALE["sustainability-impact"].B,
     },
     C: {
       statements: [
@@ -273,6 +422,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("sustainability-impact", "C", 3, "It removes guesswork from every sustainability decision going forward, compounding into the largest cumulative impact of the three options over multiple cycles."),
       ],
       clue: "Can a transparency system reduce a single kilowatt-hour on its own, on day one?",
+      bestFitScore: BEST_FIT["sustainability-impact"].C,
+      rationale: RATIONALE["sustainability-impact"].C,
     },
   },
   "informative-value": {
@@ -283,6 +434,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("informative-value", "A", 3, "Expanded contract reporting requirements bring detailed hourly consumption-matching data that Meridian didn't have to track before."),
       ],
       clue: "Does signing a supply contract tell Meridian anything new about where its own energy actually goes?",
+      bestFitScore: BEST_FIT["informative-value"].A,
+      rationale: RATIONALE["informative-value"].A,
     },
     B: {
       statements: [
@@ -291,6 +444,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("informative-value", "B", 3, "The retrofit is instrumented as a full monitoring upgrade across the facility, closing the exact data gaps the constraints describe."),
       ],
       clue: "Retrofit vendors report facility-level PUE — does that close the load and consumption gaps the case describes?",
+      bestFitScore: BEST_FIT["informative-value"].B,
+      rationale: RATIONALE["informative-value"].B,
     },
     C: {
       statements: [
@@ -299,6 +454,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("informative-value", "C", 3, "Directly closes the load and consumption data gap the case explicitly names, and produces exactly the multi-metric, differentiated view every other decision in this exercise depends on."),
       ],
       clue: "Which option is explicitly designed to close the data gap the constraints call out?",
+      bestFitScore: BEST_FIT["informative-value"].C,
+      rationale: RATIONALE["informative-value"].C,
     },
   },
   "economic-viability": {
@@ -309,6 +466,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("economic-viability", "A", 3, "A well-structured virtual PPA can even net a financial benefit if wholesale prices move favourably, on top of the sustainability credential."),
       ],
       clue: "How does a multi-year fixed commitment interact with a budget the case describes as limited, this year specifically?",
+      bestFitScore: BEST_FIT["economic-viability"].A,
+      rationale: RATIONALE["economic-viability"].A,
     },
     B: {
       statements: [
@@ -317,6 +476,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("economic-viability", "B", 3, "Targeted retrofits — containment, controls tuning — can be phased to fit within a limited budget while still returning most of the technical benefit."),
       ],
       clue: "Cooling and power-delivery retrofits mean capital equipment — how does that interact with a limited budget compared to a data or process investment?",
+      bestFitScore: BEST_FIT["economic-viability"].B,
+      rationale: RATIONALE["economic-viability"].B,
     },
     C: {
       statements: [
@@ -325,6 +486,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("economic-viability", "C", 3, "Can be built incrementally on existing monitoring infrastructure at low marginal cost, freeing budget for whichever technical measure the data later justifies."),
       ],
       clue: "Which of the three options needs the least new hardware to get started?",
+      bestFitScore: BEST_FIT["economic-viability"].C,
+      rationale: RATIONALE["economic-viability"].C,
     },
   },
   feasibility: {
@@ -335,6 +498,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("feasibility", "A", 3, "Can be executed largely through the existing procurement relationship with minimal new internal process."),
       ],
       clue: "Meridian already holds some renewable contracts — is extending an existing relationship the same kind of effort as building a new one?",
+      bestFitScore: BEST_FIT.feasibility.A,
+      rationale: RATIONALE.feasibility.A,
     },
     B: {
       statements: [
@@ -343,6 +508,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("feasibility", "B", 3, "Can be piloted on a single non-critical zone first, keeping the rest of the facility untouched while results are validated."),
       ],
       clue: "Re-read the constraint on operational stability — what does live-facility retrofit work risk during implementation?",
+      bestFitScore: BEST_FIT.feasibility.B,
+      rationale: RATIONALE.feasibility.B,
     },
     C: {
       statements: [
@@ -351,6 +518,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("feasibility", "C", 3, "Can be piloted with existing data and a small cross-functional taskforce within one quarter, since it changes process and reporting, not physical infrastructure."),
       ],
       clue: "Does this option require new physical infrastructure, or mostly agreement on what to measure?",
+      bestFitScore: BEST_FIT.feasibility.C,
+      rationale: RATIONALE.feasibility.C,
     },
   },
   risk: {
@@ -361,6 +530,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("risk", "A", 3, "Financially hedged virtual PPA structures largely insulate Meridian from downstream price risk, leaving mainly reputational exposure if the underlying project underdelivers."),
       ],
       clue: "If the supplier underperforms or the market shifts, what's Meridian's exposure on a 10-20 year single-supplier contract?",
+      bestFitScore: BEST_FIT.risk.A,
+      rationale: RATIONALE.risk.A,
     },
     B: {
       statements: [
@@ -369,6 +540,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("risk", "B", 3, "Piloting on a single non-critical zone before wider rollout keeps any implementation risk contained and reversible."),
       ],
       clue: "Re-read the constraint on operational stability — what's the failure mode of retrofit work inside a live facility?",
+      bestFitScore: BEST_FIT.risk.B,
+      rationale: RATIONALE.risk.B,
     },
     C: {
       statements: [
@@ -377,6 +550,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("risk", "C", 3, "Touches no physical infrastructure and carries no availability exposure, making it the lowest operational-risk option of the three by construction."),
       ],
       clue: "Which option touches zero physical infrastructure, and what does that mean for availability risk?",
+      bestFitScore: BEST_FIT.risk.C,
+      rationale: RATIONALE.risk.C,
     },
   },
   credibility: {
@@ -387,6 +562,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("credibility", "A", 3, "A physical PPA delivering into Meridian's own grid region is about as defensible a renewable claim as a single company can make, matching the mechanism hyperscalers use at scale."),
       ],
       clue: "Re-read the constraint about IT's stance on symbolic measures — how does that affect a claim built mainly on certificates rather than matched delivery data?",
+      bestFitScore: BEST_FIT.credibility.A,
+      rationale: RATIONALE.credibility.A,
     },
     B: {
       statements: [
@@ -395,6 +572,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("credibility", "B", 3, "Independently measured, physically verified efficiency gains are among the hardest sustainability claims to challenge, since the underlying hardware change is directly inspectable."),
       ],
       clue: "Which is harder for an outside reviewer to dismiss: a self-reported ratio, or a physically inspectable hardware change?",
+      bestFitScore: BEST_FIT.credibility.B,
+      rationale: RATIONALE.credibility.B,
     },
     C: {
       statements: [
@@ -403,6 +582,8 @@ export const CRITERION_DATA: Record<CriterionId, Record<OptionId, CriterionOptio
         s("credibility", "C", 3, "Directly answers the \"credibility versus how it merely sounds\" test this criterion is built on — it's the only option that changes what Meridian can actually stand behind under scrutiny, not just what it can say."),
       ],
       clue: "Which option is the only one that changes what Meridian can actually demonstrate under scrutiny, not just what it can say in a press release?",
+      bestFitScore: BEST_FIT.credibility.C,
+      rationale: RATIONALE.credibility.C,
     },
   },
 };

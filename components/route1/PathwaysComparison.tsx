@@ -17,6 +17,15 @@ export function PathwaysComparison() {
             <LevelBar label="Typical scale" level={p.scale} />
           </div>
           <p className="mt-2 text-micro italic text-ash">{p.scaleLabel}</p>
+          <a
+            href={p.reference.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={p.reference.label}
+            className="mt-2.5 inline-flex items-center gap-1 text-micro font-semibold text-accent hover:text-accentHi"
+          >
+            Real-world example ↗
+          </a>
         </div>
       ))}
     </div>

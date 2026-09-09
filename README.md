@@ -37,6 +37,14 @@ download (`.json` — raw structured answers for grading — plus a standalone `
 report) via `downloadTextFile`; there is no PDF library, and no `window.print()` flow,
 in this project by design.
 
+**Mentor answer key** — every route also has a passcode-gated "Mentor: generate answer
+key" button (same `muchson123` gate as the demo auto-fill, `lib/mentorPasscode.ts`)
+next to its Mentor Tools, which downloads a standalone `.html` document listing every
+classification-style question with its correct choice and, for every other option, a
+concrete reason it wasn't the answer — so a mentor can explain a wrong answer without
+re-deriving the reasoning live. Shared rendering lives in `lib/answerKey.ts`; each
+route's own `components/routeN/AnswerKeyTool.tsx` supplies the questions.
+
 ## Route 1 — Foundations (built)
 
 Case: **GreenStack Hosting** (fictional). Materi covers the data-centre energy chain

@@ -135,13 +135,13 @@ export const AEROPULSE_BRIEF = {
 
 export type PerspectiveId = "energy-supply" | "pue" | "overall-impact" | "economic-viability" | "communication" | "governance";
 
-export const PERSPECTIVES: { id: PerspectiveId; label: string }[] = [
-  { id: "energy-supply", label: "Energy Supply" },
-  { id: "pue", label: "PUE" },
-  { id: "overall-impact", label: "Overall Impact" },
-  { id: "economic-viability", label: "Economic Viability" },
-  { id: "communication", label: "Communication" },
-  { id: "governance", label: "Governance" },
+export const PERSPECTIVES: { id: PerspectiveId; label: string; domain: string }[] = [
+  { id: "energy-supply", label: "Energy Supply", domain: "where the electrons actually come from — contracts, PPAs, the sourcing mix" },
+  { id: "pue", label: "PUE", domain: "the facility's efficiency ratio itself — the number, not what's driving it" },
+  { id: "overall-impact", label: "Overall Impact", domain: "the total picture — whether the footprint is actually shrinking, not just one ratio" },
+  { id: "economic-viability", label: "Economic Viability", domain: "whether the money spent is paying back — cost versus benefit" },
+  { id: "communication", label: "Communication", domain: "what gets said externally, and who approves it" },
+  { id: "governance", label: "Governance", domain: "oversight, data ownership, or assurance — who checks and organises what" },
 ];
 
 export type Observation = { id: string; text: string; correctPerspective: PerspectiveId; clue: string };
