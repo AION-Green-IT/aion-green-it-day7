@@ -37,6 +37,27 @@ download (`.json` — raw structured answers for grading — plus a standalone `
 report) via `downloadTextFile`; there is no PDF library, and no `window.print()` flow,
 in this project by design.
 
+**Outside references** — material prose supports inline `[label](url)` markers, rendered
+by `components/ui/RichText.tsx` (one regex, no markdown library) as accent-underlined
+links that open in a new tab. Every named-but-not-fully-defined term — a standard, a
+directive, an initiative, a framework — carries one, so a learner can follow up without
+the material having to define everything from scratch: ISO/IEC 30134-2/-3/-8/-9,
+ISO 50001, EMAS, COSO ERM, the IIA Three Lines Model, the GHG Protocol, CSRD/ESRS,
+the EU EED and its data-centre delegated regulation, Germany's EnEfG, Guarantees of
+Origin, green bonds, and Google's 24/7 Carbon-Free Energy programme. Route 1's five
+renewable-pathway cards each link to a real-world example the same way.
+
+**Material ↔ task traceability** — every material block carries a `reasoning: string[]`
+of decision rules, rendered by `MaterialBlock` as a "How to decide when this comes up in
+the task" panel, and every task step carries a `material: MaterialSectionId[]` rendered
+as `MaterialRefs` chips that scroll to that block and flash it in the accent
+(`anim-flash-ref`, deliberately not the red `anim-flash-warn` used for missing items).
+Anchors come from `lib/materialAnchor.ts`; each route's `materialRefs()` builds the
+chips. Coverage is a shipping rule: every option a task offers — a category, a verdict,
+a lever, a horizon, a sequencing principle, a tension dimension — must be named and
+explained in the material first. Route 1's block 6 and Route 3's blocks 5–6 exist
+specifically to close that gap for their tasks.
+
 **Mentor answer key** — every route also has a passcode-gated "Mentor: generate answer
 key" button (same `muchson123` gate as the demo auto-fill, `lib/mentorPasscode.ts`)
 next to its Mentor Tools, which downloads a standalone `.html` document listing every

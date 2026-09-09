@@ -216,6 +216,14 @@ export function Info({ className }: P) {
   );
 }
 
+export function BookMark({ className }: P) {
+  return (
+    <svg {...base} className={className ?? "h-4 w-4"}>
+      <path d="M6.5 4h11v16l-5.5-4-5.5 4V4Z" />
+    </svg>
+  );
+}
+
 export function ChevronDown({ className }: P) {
   return (
     <svg {...base} className={className ?? "h-4 w-4"}>

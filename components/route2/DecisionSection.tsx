@@ -2,8 +2,9 @@
 
 import clsx from "clsx";
 import { useProgress } from "@/lib/store";
-import { R2, OPTIONS, TASK2, FOLLOWUP_COUNT, RISK_COUNT } from "@/lib/route2";
+import { R2, OPTIONS, TASK2, FOLLOWUP_COUNT, RISK_COUNT, materialRefs } from "@/lib/route2";
 import { useRoute2 } from "./useRoute2";
+import { MaterialRefs } from "@/components/ui/MaterialRefs";
 
 const { decision } = TASK2;
 
@@ -16,7 +17,10 @@ export function DecisionSection() {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-h3 text-ink">{decision.heading}</h3>
+      <div>
+        <h3 className="text-h3 text-ink">{decision.heading}</h3>
+        <MaterialRefs refs={materialRefs(decision.material)} />
+      </div>
 
       <div id="r2-decision-pick">
         <p className="text-caption font-semibold text-ink">{decision.pickLabel}</p>

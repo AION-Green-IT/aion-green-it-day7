@@ -1,11 +1,23 @@
-/** Scrolls an element into view and briefly flashes it — used to point at what's missing without navigating away. */
-export function scrollToAndFlash(id: string) {
+type FlashKind = "warn" | "ref";
+
+const CLASS: Record<FlashKind, string> = {
+  warn: "anim-flash-warn",
+  ref: "anim-flash-ref",
+};
+
+/**
+ * Scrolls an element into view and briefly flashes it. `warn` (red) points at
+ * something still missing; `ref` (accent) points at material a task step draws
+ * on — arriving somewhere you asked to go is not a warning.
+ */
+export function scrollToAndFlash(id: string, kind: FlashKind = "warn") {
   const el = document.getElementById(id);
   if (!el) return;
   el.scrollIntoView({ behavior: "smooth", block: "center" });
-  el.classList.remove("anim-flash-warn");
+  const cls = CLASS[kind];
+  el.classList.remove(cls);
   // Force reflow so the animation restarts if it's already flashing.
   void el.offsetWidth;
-  el.classList.add("anim-flash-warn");
-  window.setTimeout(() => el.classList.remove("anim-flash-warn"), 1200);
+  el.classList.add(cls);
+  window.setTimeout(() => el.classList.remove(cls), 1200);
 }

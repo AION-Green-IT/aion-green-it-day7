@@ -2,9 +2,10 @@
 
 import clsx from "clsx";
 import { useProgress } from "@/lib/store";
-import { R2, OPTIONS, CRITERION_DATA, type Criterion, type OptionId } from "@/lib/route2";
+import { R2, OPTIONS, CRITERION_DATA, materialRefs, type Criterion, type OptionId } from "@/lib/route2";
 import { useRoute2 } from "./useRoute2";
 import { ClueToggle } from "@/components/ui/ClueToggle";
+import { MaterialRefs } from "@/components/ui/MaterialRefs";
 import { Check } from "@/components/icons/LineIcons";
 
 /** One criterion: definition, then A/B/C columns of statements — click the one that best fits. */
@@ -21,6 +22,7 @@ export function CriterionCard({ criterion }: { criterion: Criterion }) {
         <p className="shrink-0 text-micro tabular-nums text-ash">{r2.criterionDoneCount(criterion.id)} / 3</p>
       </div>
       <p className="mt-1 text-micro text-ash">{criterion.definition}</p>
+      <MaterialRefs refs={materialRefs(criterion.material)} />
 
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
         {OPTIONS.map((o) => {

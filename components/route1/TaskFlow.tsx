@@ -1,7 +1,8 @@
 "use client";
 
-import { TASK1 } from "@/lib/route1";
+import { TASK1, materialRefs } from "@/lib/route1";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { MaterialRefs } from "@/components/ui/MaterialRefs";
 import { Info } from "@/components/icons/LineIcons";
 import { CaseBrief } from "./CaseBrief";
 import { EvidenceSorter } from "./EvidenceSorter";
@@ -28,6 +29,7 @@ export function TaskFlow() {
           <div id="r1-stageA">
             <h3 className="text-h3 text-ink">{TASK1.stageA.heading}</h3>
             <p className="mt-1 text-caption text-ash">{TASK1.stageA.instructions}</p>
+            <MaterialRefs refs={materialRefs(TASK1.stageA.material)} />
             <div className="mt-4">
               <EvidenceSorter />
             </div>
@@ -36,6 +38,7 @@ export function TaskFlow() {
           <div id="r1-stageB">
             <h3 className="text-h3 text-ink">{TASK1.stageB.heading}</h3>
             <p className="mt-1 text-caption text-ash">{TASK1.stageB.instructions}</p>
+            <MaterialRefs refs={materialRefs(TASK1.stageB.material)} />
             <div className="mt-4">
               <PueValidityCheck />
             </div>
@@ -44,6 +47,7 @@ export function TaskFlow() {
           <div id="r1-stageC">
             <h3 className="text-h3 text-ink">{TASK1.stageC.heading}</h3>
             <p className="mt-1 text-caption text-ash">{TASK1.stageC.instructions}</p>
+            <MaterialRefs refs={materialRefs(TASK1.stageC.material)} />
             <div className="mt-4">
               <GapFinder />
             </div>
@@ -52,6 +56,7 @@ export function TaskFlow() {
           <div id="r1-stageD">
             <h3 className="text-h3 text-ink">{TASK1.stageD.heading}</h3>
             <p className="mt-1 text-caption text-ash">{TASK1.stageD.instructions}</p>
+            <MaterialRefs refs={materialRefs(TASK1.stageD.material)} />
             <div className="mt-4">
               <TechGovSplit />
             </div>

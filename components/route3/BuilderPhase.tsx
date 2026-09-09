@@ -2,8 +2,9 @@
 
 import clsx from "clsx";
 import { useProgress } from "@/lib/store";
-import { R3, LEVERS3, LOGIC_PRINCIPLES, TASK3 } from "@/lib/route3";
+import { R3, LEVERS3, LOGIC_PRINCIPLES, TASK3, materialRefs } from "@/lib/route3";
 import { useRoute3 } from "./useRoute3";
+import { MaterialRefs } from "@/components/ui/MaterialRefs";
 import { PolarEdgeBrief } from "./CaseBrief";
 import { TradeoffPairs } from "./TradeoffPairs";
 import { ApprovalTable } from "./ApprovalTable";
@@ -25,6 +26,7 @@ export function BuilderPhase() {
 
       <section id="r3-p2-strategic" className="space-y-2">
         <h4 className="text-caption font-semibold text-ink">{phase2.b1.heading}</h4>
+        <MaterialRefs refs={materialRefs(phase2.b1.material)} />
         <label className="block">
           <span className="text-caption font-semibold text-ink">{phase2.b1.label}</span>
           <p className="text-micro text-ash">{phase2.b1.caption}</p>
@@ -39,6 +41,7 @@ export function BuilderPhase() {
 
       <section id="r3-p2-decisions" className="space-y-2">
         <h4 className="text-caption font-semibold text-ink">{phase2.b2.heading}</h4>
+        <MaterialRefs refs={materialRefs(phase2.b2.material)} />
         <p className="text-micro text-ash">{phase2.b2.caption}</p>
         <div className="space-y-2">
           {([1, 2, 3] as const).map((n) => (
@@ -57,6 +60,7 @@ export function BuilderPhase() {
 
       <section id="r3-p2-logic" className="space-y-2">
         <h4 className="text-caption font-semibold text-ink">{phase2.b3.heading}</h4>
+        <MaterialRefs refs={materialRefs(phase2.b3.material)} />
         <p className="text-micro text-ash">{phase2.b3.label}</p>
         <div className="flex flex-wrap gap-1.5">
           {LOGIC_PRINCIPLES.map((p) => {
@@ -91,12 +95,14 @@ export function BuilderPhase() {
 
       <section id="r3-p2-tradeoffs" className="space-y-2">
         <h4 className="text-caption font-semibold text-ink">{phase2.b4.heading}</h4>
+        <MaterialRefs refs={materialRefs(phase2.b4.material)} />
         <p className="text-micro text-ash">{phase2.b4.caption}</p>
         <TradeoffPairs />
       </section>
 
       <section id="r3-p2-recommended" className="space-y-2">
         <h4 className="text-caption font-semibold text-ink">{phase2.b5.heading}</h4>
+        <MaterialRefs refs={materialRefs(phase2.b5.material)} />
         <p className="text-micro text-ash">{phase2.b5.label}</p>
         <p className="text-micro text-ash">{phase2.b5.caption}</p>
         <div className="flex flex-wrap gap-2">
@@ -133,12 +139,14 @@ export function BuilderPhase() {
 
       <section id="r3-p2-approval" className="space-y-2">
         <h4 className="text-caption font-semibold text-ink">{phase2.b6.heading}</h4>
+        <MaterialRefs refs={materialRefs(phase2.b6.material)} />
         <p className="text-micro text-ash">{phase2.b6.caption}</p>
         <ApprovalTable />
       </section>
 
       <section id="r3-p2-decisionnow" className="space-y-2">
         <h4 className="text-caption font-semibold text-ink">{phase2.b7.heading}</h4>
+        <MaterialRefs refs={materialRefs(phase2.b7.material)} />
         <label className="block">
           <span className="text-caption font-semibold text-ink">{phase2.b7.label}</span>
           <p className="text-micro text-ash">{phase2.b7.caption}</p>

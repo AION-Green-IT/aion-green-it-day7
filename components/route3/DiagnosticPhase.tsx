@@ -1,4 +1,5 @@
-import { TASK3 } from "@/lib/route3";
+import { TASK3, materialRefs } from "@/lib/route3";
+import { MaterialRefs } from "@/components/ui/MaterialRefs";
 import { AeroPulseBrief } from "./CaseBrief";
 import { PerspectiveScan } from "./PerspectiveScan";
 import { LeverSelection } from "./LeverSelection";
@@ -14,6 +15,7 @@ export function DiagnosticPhase() {
       <div>
         <h4 className="text-caption font-semibold text-ink">{phase1.scanHeading}</h4>
         <p className="mt-1 text-micro text-ash">{phase1.scanInstructions}</p>
+        <MaterialRefs refs={materialRefs(phase1.scanMaterial)} />
         <div className="mt-3">
           <PerspectiveScan />
         </div>

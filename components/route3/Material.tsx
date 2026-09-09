@@ -1,9 +1,9 @@
-import { MATERIAL } from "@/lib/route3";
+import { MATERIAL, PERSPECTIVES, LEVERS3, HORIZON_OPTIONS, LOGIC_PRINCIPLES, TENSION_DIMENSIONS } from "@/lib/route3";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { MaterialBlock } from "@/components/ui/MaterialBlock";
 import { FeedbackLoopSvg } from "./FeedbackLoopSvg";
 
-const [architecture, assurance, disclosure, enefg] = MATERIAL;
+const [architecture, assurance, disclosure, enefg, perspectives, commitment] = MATERIAL;
 
 const INK = "#16191D";
 const ASH = "#5E6670";
@@ -16,8 +16,8 @@ export function Material() {
     <div className="space-y-14">
       <SectionHeading
         kicker="Material"
-        title="Four ideas before the board-level builder"
-        intro="From seeing separate initiatives to owning one integrated decision architecture. About 60 minutes."
+        title="Six ideas before the board-level builder"
+        intro="From seeing separate initiatives to owning one integrated decision architecture. About 60 minutes — the last two blocks are the working vocabulary Task 3 asks you to apply."
       />
 
       <MaterialBlock block={architecture}>
@@ -35,6 +35,90 @@ export function Material() {
       <MaterialBlock block={enefg}>
         <EnefgChecklist />
       </MaterialBlock>
+
+      <MaterialBlock block={perspectives}>
+        <PerspectiveLeverGuide />
+      </MaterialBlock>
+
+      <MaterialBlock block={commitment}>
+        <CommitmentGuide />
+      </MaterialBlock>
+    </div>
+  );
+}
+
+function PerspectiveLeverGuide() {
+  return (
+    <div className="space-y-5">
+      <div>
+        <p className="text-caption font-semibold text-ink">The six perspectives (Phase 1 scan)</p>
+        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+          {PERSPECTIVES.map((p) => (
+            <div key={p.id} className="rounded-xl border border-line p-3">
+              <p className="text-caption font-semibold text-accent">{p.label}</p>
+              <p className="mt-0.5 text-micro text-ash">{p.domain}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="border-t border-line pt-4">
+        <p className="text-caption font-semibold text-ink">The lever set (Phase 1 selection, Phase 2 block 5)</p>
+        <ul className="mt-2 grid gap-1.5 sm:grid-cols-2">
+          {LEVERS3.map((l) => (
+            <li key={l.id} className="flex gap-2 text-micro text-ink">
+              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
+              <span>{l.label}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function CommitmentGuide() {
+  return (
+    <div className="space-y-5">
+      <div>
+        <p className="text-caption font-semibold text-ink">The three horizons (Phase 1 tagging)</p>
+        <div className="mt-2 grid gap-2 sm:grid-cols-3">
+          {HORIZON_OPTIONS.map((h) => (
+            <div key={h.id} className="rounded-xl border border-line p-3">
+              <p className="text-caption font-semibold text-accent">{h.label}</p>
+              <p className="mt-0.5 text-micro text-ash">{h.domain}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="border-t border-line pt-4">
+        <p className="text-caption font-semibold text-ink">The four sequencing principles (Phase 2 block 3)</p>
+        <ul className="mt-2 space-y-1.5">
+          {LOGIC_PRINCIPLES.map((p) => (
+            <li key={p.id} className="flex gap-2 text-micro text-ink">
+              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
+              <span>
+                <span className="font-semibold">{p.label}</span> — {p.domain}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="border-t border-line pt-4">
+        <p className="text-caption font-semibold text-ink">The five tension dimensions (Phase 2 block 4)</p>
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {TENSION_DIMENSIONS.map((d) => (
+            <span key={d.id} className="rounded-full border border-accent/30 bg-accentSoft px-2.5 py-1 text-micro font-semibold text-accent">
+              {d.label}
+            </span>
+          ))}
+        </div>
+        <p className="mt-2 text-micro italic text-ash">
+          A trade-off pair is two of these pulling against each other in this specific case — carried over from Route 2 deliberately.
+        </p>
+      </div>
     </div>
   );
 }

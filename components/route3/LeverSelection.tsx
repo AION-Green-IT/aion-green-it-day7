@@ -2,9 +2,10 @@
 
 import clsx from "clsx";
 import { useProgress } from "@/lib/store";
-import { R3, LEVERS3, REQUIRED_LEVER_COUNT, HORIZON_OPTIONS, TASK3 } from "@/lib/route3";
+import { R3, LEVERS3, REQUIRED_LEVER_COUNT, HORIZON_OPTIONS, TASK3, materialRefs } from "@/lib/route3";
 import { useRoute3 } from "./useRoute3";
 import { Check } from "@/components/icons/LineIcons";
+import { MaterialRefs } from "@/components/ui/MaterialRefs";
 
 const { phase1 } = TASK3;
 
@@ -19,12 +20,14 @@ export function LeverSelection() {
         <>
           <div id="r3-p1-firstmeasure" className="space-y-2">
             <h4 className="text-caption font-semibold text-ink">{phase1.firstMeasureHeading}</h4>
+            <MaterialRefs refs={materialRefs(phase1.firstMeasureMaterial)} />
             <FirstMeasureDecision />
           </div>
 
           <div id="r3-p1-horizon" className="space-y-2">
             <h4 className="text-caption font-semibold text-ink">{phase1.horizonHeading}</h4>
             <p className="text-micro text-ash">{phase1.horizonInstructions}</p>
+            <MaterialRefs refs={materialRefs(phase1.horizonMaterial)} />
             <HorizonTagging />
           </div>
         </>
@@ -52,6 +55,7 @@ function LeverChecklist() {
           <span className="font-semibold text-ink">{r3.selectedLeverIds.length}</span> / {REQUIRED_LEVER_COUNT} selected
         </p>
       </div>
+      <MaterialRefs refs={materialRefs(phase1.leverMaterial)} />
 
       <div className="space-y-2">
         {LEVERS3.map((l) => {

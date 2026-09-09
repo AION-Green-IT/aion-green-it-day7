@@ -5,6 +5,7 @@
  */
 
 import type { IconKey } from "@/lib/routes";
+import { materialAnchorId, type MaterialRef } from "@/lib/materialAnchor";
 
 export const LEARNER_NAME_KEY = "learner:name";
 
@@ -77,6 +78,8 @@ export type MaterialSection = {
   definition: string;
   insight: string;
   takeaway: string;
+  /** Decision rules phrased the way Task 2 needs them — including the rule that rules out the plausible wrong answer. */
+  reasoning: string[];
   callout: { label: string; text: string };
 };
 
@@ -93,6 +96,12 @@ export const MATERIAL: MaterialSection[] = [
       "These forces trade against each other constantly. A long-term PPA can improve cost predictability and sustainability credentials, but reduces flexibility and can worsen security-of-supply diversification if it locks the company to a single generator or region. An efficiency retrofit lowers PUE and cost over time, but the implementation window itself is an availability risk if not carefully sequenced. A broad governance and transparency programme improves long-term credibility and decision quality, but delivers the least visible short-term progress for board communication — this is the exact tension the case in Task 2 is built on.",
     takeaway:
       "Professionals learn to see all four forces simultaneously, not to optimise one in isolation. Every option in Task 2 does well on some of these and badly on others — there is no option that wins on all four at once.",
+    reasoning: [
+      "No option wins on all four forces. If one option comes out ahead on every axis in your scoring, you have almost certainly scored it at its best-case interpretation rather than as the case actually scopes it.",
+      "Option A's standard shape: a long-term PPA improves cost predictability and sustainability credentials while reducing flexibility and concentrating security-of-supply exposure on one supplier.",
+      "Option B's standard shape: a physical retrofit carries an availability risk during the implementation window however good the end state — which is why a stated operational-stability priority counts against it on Feasibility and Risk.",
+      "Option C's standard shape: a governance or transparency programme scores well on decision quality and credibility but delivers the least visible short-term progress — the exact tension a board asking for visible progress creates.",
+    ],
     callout: {
       label: "This is the exact tension Task 2 is built on",
       text: "Meridian's board wants visible progress. Its data has gaps. Its supply and stability priorities are high. No single measure satisfies all of that — which is precisely what makes this a prioritisation decision rather than an obvious choice.",
@@ -105,11 +114,18 @@ export const MATERIAL: MaterialSection[] = [
     kicker: "2 · The evaluation framework",
     title: "A Seven-Criteria Prioritisation Framework for Infrastructure Decisions",
     definition:
-      "This framework is a synthesis of two established management tools, adapted for sustainability infrastructure decisions. The Impact–Effort Matrix — a standard portfolio-prioritisation tool used broadly in operations and product management — contributes the logic of comparing expected benefit against implementation cost and complexity. McKinsey's Three Horizons model (from The Alchemy of Growth, McKinsey & Company, 1999) contributes the discipline of separating short-term visible wins (Horizon 1) from structural, longer-horizon capability building (Horizon 3).",
+      "This framework is a synthesis of two established management tools, adapted for sustainability infrastructure decisions. The [Impact–Effort Matrix](https://untools.co/impact-effort-matrix/) — a standard portfolio-prioritisation tool used broadly in operations and product management — contributes the logic of comparing expected benefit against implementation cost and complexity. McKinsey's [Three Horizons model](https://strategicmanagementinsight.com/tools/three-horizons-growth-model/) (from The Alchemy of Growth, McKinsey & Company, 1999) contributes the discipline of separating short-term visible wins (Horizon 1) from structural, longer-horizon capability building (Horizon 3).",
     insight:
       "That Horizon 1 / Horizon 3 split is directly relevant here: a board wanting \"visible progress\" is asking for Horizon 1, while the structurally correct measure may take longer to show results and reads as Horizon 3. A credible recommendation names which horizon each option actually belongs to, instead of quietly presenting a Horizon 3 measure as if it were a quick win, or dismissing a Horizon 3 measure for not looking impressive fast enough.",
     takeaway:
       "Seven criteria, applied consistently across every option, turn a gut-feeling ranking into a defensible one. Click through the wheel below — you'll use these exact seven definitions in Task 2.",
+    reasoning: [
+      "Score each criterion against its own definition, not against your overall preference. An option can be the right recommendation and still score badly on Economic Viability or Feasibility — saying so out loud is what makes the recommendation credible.",
+      "Score the option as the case actually scopes it, not at its most flattering reading. If a statement assumes work the option doesn't include — extra consolidation, a full monitoring upgrade — it overstates and isn't the best fit.",
+      "Risk is scored as favourability, not as drama: the statement describing the least exposure is the strongest position on that axis, not the most alarming one.",
+      "Horizon 1 (visible short-term wins) and Horizon 3 (structural capability) are both legitimate. Name which horizon an option belongs to rather than quietly presenting a Horizon 3 measure as a quick win — or dismissing it for not looking impressive fast enough.",
+      "The seven don't collapse into each other: strategic leverage asks what a measure unlocks later, informative value what it lets you know, credibility what survives outside scrutiny. Strong on one and weak on another is the normal result.",
+    ],
     callout: {
       label: "Why exactly these seven",
       text: "Each criterion answers a question the other six can't: strategic leverage asks what this unlocks later; credibility asks whether it survives being questioned. A measure can score well on one and poorly on another — that's the point.",
@@ -122,11 +138,17 @@ export const MATERIAL: MaterialSection[] = [
     kicker: "3 · Real-world grounding",
     title: "Real-World Financing & Reporting Context",
     definition:
-      "This isn't abstract theory. Large hyperscale operators such as Google and Microsoft have scaled corporate renewable Power Purchase Agreements into multi-gigawatt global portfolios since roughly the early 2010s, making PPAs the dominant mechanism for large-scale renewable procurement in the sector. Data centre and colocation operators such as Equinix have also used green bonds — debt instruments earmarked for environmentally beneficial projects — to fund efficiency retrofits and renewable infrastructure. In the real world, \"Option A\" and \"Option B\" style choices are often blended rather than picked in isolation.",
+      "This isn't abstract theory. Large hyperscale operators such as Google and Microsoft have scaled corporate renewable Power Purchase Agreements into multi-gigawatt global portfolios since roughly the early 2010s, making PPAs the dominant mechanism for large-scale renewable procurement in the sector. Data centre and colocation operators such as Equinix have also used [green bonds](https://www.icmagroup.org/sustainable-finance/the-principles-guidelines-and-handbooks/green-bond-principles-gbp/) — debt instruments earmarked for environmentally beneficial projects — to fund efficiency retrofits and renewable infrastructure. In the real world, \"Option A\" and \"Option B\" style choices are often blended rather than picked in isolation.",
     insight:
-      "There's also a formal reporting obligation now. Under Article 12 and Annex VII of the recast EU Energy Efficiency Directive (EU) 2023/1791, and its implementing Delegated Regulation (EU) 2024/1364 (adopted 14 March 2024), any EU data centre with an installed IT power demand of at least 500 kW must report a defined set of sustainability and energy KPIs annually to the European Database on Data Centres. The first report covered calendar year 2023 and was due 15 September 2024; from 2025 onward, the deadline is 15 May each year, covering the previous calendar year. Data is published in aggregated form at EU and country level — individual company data isn't made public where it constitutes a trade secret.",
+      "There's also a formal reporting obligation now. Under Article 12 and Annex VII of the recast [EU Energy Efficiency Directive (EU) 2023/1791](https://eur-lex.europa.eu/eli/dir/2023/1791/oj/eng), and its implementing [Delegated Regulation (EU) 2024/1364](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02024R1364-20240517) (adopted 14 March 2024), any EU data centre with an installed IT power demand of at least 500 kW must report a defined set of sustainability and energy KPIs annually to the European Database on Data Centres. The first report covered calendar year 2023 and was due 15 September 2024; from 2025 onward, the deadline is 15 May each year, covering the previous calendar year. Data is published in aggregated form at EU and country level — individual company data isn't made public where it constitutes a trade secret.",
     takeaway:
-      "A widely-held misconception is worth correcting here: the EU Energy Efficiency Directive itself does not mandate a specific PUE threshold across the EU — it mandates reporting and transparency. It's national law, such as Germany's EnEfG (covered in Route 1), that sets binding PUE thresholds. Conflating \"the EU forces a PUE of X\" with \"the EU forces you to disclose your PUE\" is exactly the kind of imprecision a credible sustainability professional must avoid.",
+      "A widely-held misconception is worth correcting here: the EU Energy Efficiency Directive itself does not mandate a specific PUE threshold across the EU — it mandates reporting and transparency. It's national law, such as Germany's [EnEfG](https://www.gesetze-im-internet.de/enefg/) (covered in Route 1), that sets binding PUE thresholds. Conflating \"the EU forces a PUE of X\" with \"the EU forces you to disclose your PUE\" is exactly the kind of imprecision a credible sustainability professional must avoid.",
+    reasoning: [
+      "Credibility is judged against outside scrutiny, not internal comfort. A claim resting on certificates alone, with no matched consumption data behind it, is the textbook \"paper renewables\" target — score it as the exposure it is.",
+      "The EU Energy Efficiency Directive mandates disclosure, not a PUE threshold; national law such as Germany's EnEfG sets thresholds. Getting that backwards in front of a board or an auditor is itself a credibility failure.",
+      "Real programmes blend instruments — PPAs alongside green bonds alongside retrofits. Treating an option as something that must be pursued alone, forever, overstates what choosing it costs you.",
+      "Reporting obligations are a reason informative value has real strategic weight: data you can't produce is data you can't disclose when disclosure becomes mandatory.",
+    ],
     callout: {
       label: "Directly relevant to Credibility",
       text: "Disclosure ≠ performance mandate. Getting this distinction wrong in front of a board, an auditor, or a journalist is a credibility failure — which is exactly what the seventh criterion in this route is built to catch.",
@@ -144,6 +166,12 @@ export const MATERIAL: MaterialSection[] = [
       "The quality of a recommendation is judged not only on its content but on whether it anticipates each stakeholder's objection before they raise it: has Finance's viability question already been answered? Has IT Operations' availability concern already been addressed? A recommendation that survives this chain on the first pass is a stronger recommendation than one that merely sounds good in isolation.",
     takeaway:
       "Keep this chain in mind while you build your Task 2 recommendation — your justification should read as something that has already thought about what Finance and IT Operations would push back on.",
+    reasoning: [
+      "A recommendation is judged on whether it anticipates each stakeholder's objection: Finance on economic viability, IT Operations on availability, the Board on strategic risk and the budget ceiling.",
+      "The constraints predict the objections. A limited budget predicts Finance's question; a stated stability priority predicts IT Operations'. Your justification should already answer both before either is asked.",
+      "Follow-up decisions are what must be decided once the measure is approved — who owns what, in what sequence, and how results get reported. Restating the measure itself is not a follow-up decision.",
+      "Naming the risks of the easy-but-shallow alternative is not hedging: a proposal that never says what it is deliberately not doing reads as if it hasn't considered the alternative at all.",
+    ],
     callout: {
       label: "Anticipate the objection before it's raised",
       text: "\"We haven't checked with IT Operations yet\" is not a defensible position to bring to a board. The strongest recommendations are pre-negotiated in the analysis itself.",
@@ -163,7 +191,22 @@ export type CriterionId =
   | "risk"
   | "credibility";
 
-export type Criterion = { id: CriterionId; n: number; label: string; definition: string };
+/** Chips for a task step: which material sections it draws on. */
+export function materialRefs(ids: MaterialSectionId[]): MaterialRef[] {
+  return ids.map((id) => {
+    const section = MATERIAL.find((m) => m.id === id);
+    return { id: materialAnchorId(id), label: section?.kicker ?? id };
+  });
+}
+
+export type Criterion = {
+  id: CriterionId;
+  n: number;
+  label: string;
+  definition: string;
+  /** Which material sections carry the basis for scoring this criterion. */
+  material: MaterialSectionId[];
+};
 
 export const CRITERIA: Criterion[] = [
   {
@@ -171,42 +214,49 @@ export const CRITERIA: Criterion[] = [
     n: 1,
     label: "Strategic Leverage",
     definition: "How much this measure unlocks or enables future decisions and options, rather than closing them down.",
+    material: ["criteria", "forces"],
   },
   {
     id: "sustainability-impact",
     n: 2,
     label: "Sustainability Impact",
     definition: "The realistic, evidence-based magnitude of environmental benefit — not the magnitude that's easiest to communicate.",
+    material: ["forces", "financing"],
   },
   {
     id: "informative-value",
     n: 3,
     label: "Informative Value",
     definition: "How much the measure improves the organisation's ability to actually know its own performance — its contribution to data and transparency.",
+    material: ["criteria", "financing"],
   },
   {
     id: "economic-viability",
     n: 4,
     label: "Economic Viability",
     definition: "Cost relative to benefit, evaluated under the stated budget constraint.",
+    material: ["criteria", "forces"],
   },
   {
     id: "feasibility",
     n: 5,
     label: "Feasibility",
     definition: "Realistic implementability given current organisational, technical, and data maturity.",
+    material: ["criteria", "forces"],
   },
   {
     id: "risk",
     n: 6,
     label: "Risk",
     definition: "The probability and severity of the measure failing, backfiring, or being reversed.",
+    material: ["forces", "governance"],
   },
   {
     id: "credibility",
     n: 7,
     label: "Credibility",
     definition: "How well the measure would hold up under external scrutiny — auditors, journalists, regulators — versus how it merely sounds in a press release.",
+    material: ["financing", "criteria"],
   },
 ];
 
@@ -606,6 +656,7 @@ export const TASK2 = {
   radarHeading: "Live comparison",
   radarIntro: "Builds as you answer each criterion below. Distinguish the three options by line style, not colour alone.",
   decision: {
+    material: ["forces", "criteria", "governance"] as MaterialSectionId[],
     heading: "Decision",
     pickLabel: "Final recommendation",
     pickCaption: "Select the option you'd actually recommend to Meridian's board.",
