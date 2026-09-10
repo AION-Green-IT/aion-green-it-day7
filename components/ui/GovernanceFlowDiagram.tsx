@@ -1,3 +1,6 @@
+"use client";
+
+import { t } from "@/lib/i18n/core";
 /** Board → CIO/CTO → IT Ops → Finance approval chain — shared across Route 2 and Route 3. */
 export function GovernanceFlowDiagram() {
   const roles = [
@@ -12,8 +15,8 @@ export function GovernanceFlowDiagram() {
         {roles.map((r, i) => (
           <div key={r.id}>
             <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line p-3">
-              <span className="text-caption font-semibold text-ink">{r.label}</span>
-              <span className="text-micro text-ash">{r.concern}</span>
+              <span className="text-caption font-semibold text-ink">{t(r.label)}</span>
+              <span className="text-micro text-ash">{t(r.concern)}</span>
             </div>
             {i < roles.length - 1 && (
               <div className="flex justify-center gap-6 py-1 text-micro text-ash">

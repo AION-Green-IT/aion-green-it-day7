@@ -1,4 +1,7 @@
+"use client";
+
 import { CATEGORIES, SIDES, VERDICT_OPTIONS } from "@/lib/route1";
+import { t } from "@/lib/i18n/core";
 
 /**
  * The in-context glossary for Task 1: the exact six lenses Stage A sorts into,
@@ -14,8 +17,8 @@ export function AuditLensGuide() {
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           {CATEGORIES.map((c) => (
             <div key={c.id} className="rounded-xl border border-line p-3">
-              <p className="text-caption font-semibold text-accent">{c.label}</p>
-              <p className="mt-0.5 text-micro text-ash">{c.domain}</p>
+              <p className="text-caption font-semibold text-accent">{t(c.label)}</p>
+              <p className="mt-0.5 text-micro text-ash">{t(c.domain)}</p>
             </div>
           ))}
         </div>
@@ -26,8 +29,8 @@ export function AuditLensGuide() {
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           {SIDES.map((s) => (
             <div key={s.id} className="rounded-xl border border-line p-3">
-              <p className="text-caption font-semibold text-accent">{s.label}</p>
-              <p className="mt-0.5 text-micro text-ash">{s.domain}</p>
+              <p className="text-caption font-semibold text-accent">{t(s.label)}</p>
+              <p className="mt-0.5 text-micro text-ash">{t(s.domain)}</p>
             </div>
           ))}
         </div>
@@ -41,8 +44,8 @@ export function AuditLensGuide() {
         <div className="mt-2 space-y-2">
           {VERDICT_OPTIONS.map((v) => (
             <div key={v.id} className="flex flex-wrap items-baseline gap-x-2 rounded-xl border border-line p-3">
-              <span className="text-caption font-semibold text-accent">{v.label}</span>
-              <span className="text-micro text-ash">{v.domain}</span>
+              <span className="text-caption font-semibold text-accent">{t(v.label)}</span>
+              <span className="text-micro text-ash">{t(v.domain)}</span>
             </div>
           ))}
         </div>

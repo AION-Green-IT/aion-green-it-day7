@@ -6,6 +6,7 @@ import { R1, PUE_CLAIMS, VERDICT_OPTIONS } from "@/lib/route1";
 import { useRoute1 } from "./useRoute1";
 import { ClueToggle } from "@/components/ui/ClueToggle";
 import { ConfidenceHint } from "@/components/ui/ConfidenceHint";
+import { t } from "@/lib/i18n/core";
 
 /** Stage B — for each claim, decide what PUE's own definition actually supports. */
 export function PueValidityCheck() {
@@ -27,7 +28,7 @@ export function PueValidityCheck() {
           const matched = picked ? picked === c.correctVerdict : null;
           return (
             <div key={c.id} className="rounded-xl border border-line p-3.5">
-              <p className="text-caption font-semibold text-ink">{c.claim}</p>
+              <p className="text-caption font-semibold text-ink">{t(c.claim)}</p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {VERDICT_OPTIONS.map((v) => (
                   <button
@@ -40,12 +41,12 @@ export function PueValidityCheck() {
                       picked === v.id ? "border-accent bg-accentSoft text-accent" : "border-line text-ink hover:border-ash",
                     )}
                   >
-                    {v.label}
+                    {t(v.label)}
                   </button>
                 ))}
               </div>
               <ConfidenceHint matched={matched} />
-              <ClueToggle clue={c.clue} />
+              <ClueToggle clue={t(c.clue)} />
             </div>
           );
         })}

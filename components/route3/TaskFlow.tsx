@@ -8,15 +8,16 @@ import { DiagnosticPhase } from "./DiagnosticPhase";
 import { BuilderPhase } from "./BuilderPhase";
 import { BoardMemoPanel } from "./BoardMemoPanel";
 import { ExportBar } from "./ExportBar";
+import { t } from "@/lib/i18n/core";
 
 export function TaskFlow() {
   return (
     <section id="task" className="space-y-8">
-      <SectionHeading kicker={TASK3.kicker} title={TASK3.heading} intro={TASK3.subtext} />
+      <SectionHeading kicker={t(TASK3.kicker)} title={t(TASK3.heading)} intro={t(TASK3.subtext)} />
 
       <div className="flex items-start gap-3 rounded-xl border border-line bg-canvas p-4">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-ash" />
-        <p className="text-caption text-ash">{TASK3.orderBanner}</p>
+        <p className="text-caption text-ash">{t(TASK3.orderBanner)}</p>
       </div>
 
       <div className="lg:grid lg:grid-cols-[1fr_360px] lg:items-start lg:gap-8">

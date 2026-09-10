@@ -37,6 +37,17 @@ download (`.json` — raw structured answers for grading — plus a standalone `
 report) via `downloadTextFile`; there is no PDF library, and no `window.print()` flow,
 in this project by design.
 
+**Languages (EN / DE)** — a switcher sits top-right in the `TopBar`; English is the
+default and the choice persists. `lib/i18n/core.ts` holds the translator (`t()`, keyed by
+the English source string, falling back to English when a key is missing) and
+`lib/i18n/de.ts` holds the German. `LocaleBoundary` in the layout owns the active locale:
+it sets it during render and keys the subtree on it, so switching re-renders everything
+below without each component needing its own subscription. The core is deliberately not a
+`"use client"` module — a client-only module's exports become client references when a
+server component imports them, which breaks `t()` during the static export; anything that
+calls `t()` is a client component so a switch actually re-renders it. Run
+`npm run i18n:coverage` (add `--missing` to list them) for what is still untranslated.
+
 **Outside references** — material prose supports inline `[label](url)` markers, rendered
 by `components/ui/RichText.tsx` (one regex, no markdown library) as accent-underlined
 links that open in a new tab. Every named-but-not-fully-defined term — a standard, a

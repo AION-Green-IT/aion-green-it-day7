@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CRITERIA } from "@/lib/route2";
+import { t } from "@/lib/i18n/core";
 
 const INK = "#16191D";
 const ASH = "#5E6670";
@@ -76,7 +77,7 @@ export function CriteriaWheel() {
                 fontWeight={600}
                 fill={isActive ? ACCENT : INK}
               >
-                {c.label}
+                {t(c.label)}
               </text>
             </g>
           );
@@ -85,9 +86,9 @@ export function CriteriaWheel() {
 
       <div className="rounded-xl border border-accent/25 bg-accentSoft p-4">
         <p className="text-micro font-semibold uppercase tracking-wide text-accent">
-          {active.n}. {active.label}
+          {active.n}. {t(active.label)}
         </p>
-        <p className="mt-1 text-caption text-ink">{active.definition}</p>
+        <p className="mt-1 text-caption text-ink">{t(active.definition)}</p>
       </div>
     </div>
   );

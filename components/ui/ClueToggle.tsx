@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { Help } from "@/components/icons/LineIcons";
+import { useT } from "@/lib/i18n";
 
 /** A guiding question, never the answer — hidden behind a click so it stays a clue, not a giveaway. */
 export function ClueToggle({ clue }: { clue: string }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   return (
     <div className="mt-1.5">
@@ -14,9 +16,9 @@ export function ClueToggle({ clue }: { clue: string }) {
         className="inline-flex items-center gap-1 text-micro font-semibold text-accent hover:text-accentHi"
       >
         <Help className="h-3.5 w-3.5" />
-        {open ? "Hide clue" : "Show clue"}
+        {open ? t("Hide clue") : t("Show clue")}
       </button>
-      {open && <p className="reveal-in mt-1 rounded-lg border border-accent/25 bg-accentSoft px-2.5 py-1.5 text-micro text-ink">{clue}</p>}
+      {open && <p className="reveal-in mt-1 rounded-lg border border-accent/25 bg-accentSoft px-2.5 py-1.5 text-micro text-ink">{t(clue)}</p>}
     </div>
   );
 }

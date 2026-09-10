@@ -7,6 +7,7 @@ import { useRoute2 } from "./useRoute2";
 import { ClueToggle } from "@/components/ui/ClueToggle";
 import { MaterialRefs } from "@/components/ui/MaterialRefs";
 import { Check } from "@/components/icons/LineIcons";
+import { t } from "@/lib/i18n/core";
 
 /** One criterion: definition, then A/B/C columns of statements — click the one that best fits. */
 export function CriterionCard({ criterion }: { criterion: Criterion }) {
@@ -17,11 +18,11 @@ export function CriterionCard({ criterion }: { criterion: Criterion }) {
     <div id={`r2-crit-${criterion.id}`} className="rounded-2xl border border-line p-4">
       <div className="flex items-baseline justify-between gap-3">
         <p className="text-caption font-semibold text-ink">
-          {criterion.n}. {criterion.label}
+          {criterion.n}. {t(criterion.label)}
         </p>
         <p className="shrink-0 text-micro tabular-nums text-ash">{r2.criterionDoneCount(criterion.id)} / 3</p>
       </div>
-      <p className="mt-1 text-micro text-ash">{criterion.definition}</p>
+      <p className="mt-1 text-micro text-ash">{t(criterion.definition)}</p>
       <MaterialRefs refs={materialRefs(criterion.material)} />
 
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
@@ -31,6 +32,7 @@ export function CriterionCard({ criterion }: { criterion: Criterion }) {
           return (
             <div key={o.id} className="rounded-xl border border-line bg-canvas p-3">
               <p className="text-micro font-semibold uppercase tracking-wide text-accent">Option {o.id}</p>
+              <p className="mt-0.5 text-micro italic text-ash">{t(o.scopeLine)}</p>
               <div className="mt-1.5 space-y-1.5">
                 {data.statements.map((st) => {
                   const active = picked === st.id;
@@ -53,12 +55,12 @@ export function CriterionCard({ criterion }: { criterion: Criterion }) {
                       >
                         {active && <Check className="h-2 w-2" />}
                       </span>
-                      <span>{st.text}</span>
+                      <span>{t(st.text)}</span>
                     </button>
                   );
                 })}
               </div>
-              <ClueToggle clue={data.clue} />
+              <ClueToggle clue={t(data.clue)} />
             </div>
           );
         })}

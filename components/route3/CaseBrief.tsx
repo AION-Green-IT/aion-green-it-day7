@@ -2,13 +2,14 @@
 
 import { useProgress } from "@/lib/store";
 import { R3, AEROPULSE_BRIEF, POLAREDGE_BRIEF } from "@/lib/route3";
+import { t } from "@/lib/i18n/core";
 
 export function AeroPulseBrief() {
   return (
     <div className="card p-5">
       <p className="text-micro font-semibold uppercase tracking-wide text-ash">Case brief — Diagnostic</p>
-      <h3 className="mt-1 text-h3 text-ink">{AEROPULSE_BRIEF.company}</h3>
-      <p className="mt-2 text-body text-ash">{AEROPULSE_BRIEF.setup}</p>
+      <h3 className="mt-1 text-h3 text-ink">{t(AEROPULSE_BRIEF.company)}</h3>
+      <p className="mt-2 text-body text-ash">{t(AEROPULSE_BRIEF.setup)}</p>
     </div>
   );
 }
@@ -17,8 +18,8 @@ export function PolarEdgeBrief() {
   return (
     <div className="card p-5">
       <p className="text-micro font-semibold uppercase tracking-wide text-ash">Case brief — Builder</p>
-      <h3 className="mt-1 text-h3 text-ink">{POLAREDGE_BRIEF.company}</h3>
-      <p className="mt-2 text-body text-ash">{POLAREDGE_BRIEF.role}</p>
+      <h3 className="mt-1 text-h3 text-ink">{t(POLAREDGE_BRIEF.company)}</h3>
+      <p className="mt-2 text-body text-ash">{t(POLAREDGE_BRIEF.role)}</p>
       <ul className="mt-3 space-y-1 text-caption text-ash">
         {POLAREDGE_BRIEF.constraints.map((c, i) => (
           <li key={i} className="flex gap-2">

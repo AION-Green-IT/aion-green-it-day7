@@ -11,15 +11,16 @@ import { GapFinder } from "./GapFinder";
 import { TechGovSplit } from "./TechGovSplit";
 import { AuditReportPanel } from "./AuditReportPanel";
 import { ExportBar } from "./ExportBar";
+import { t } from "@/lib/i18n/core";
 
 export function TaskFlow() {
   return (
     <section id="task" className="space-y-8">
-      <SectionHeading kicker={TASK1.kicker} title={TASK1.heading} intro={TASK1.subtext} />
+      <SectionHeading kicker={t(TASK1.kicker)} title={t(TASK1.heading)} intro={t(TASK1.subtext)} />
 
       <div className="flex items-start gap-3 rounded-xl border border-line bg-canvas p-4">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-ash" />
-        <p className="text-caption text-ash">{TASK1.orderBanner}</p>
+        <p className="text-caption text-ash">{t(TASK1.orderBanner)}</p>
       </div>
 
       <div className="lg:grid lg:grid-cols-[1fr_360px] lg:items-start lg:gap-8">
@@ -27,8 +28,8 @@ export function TaskFlow() {
           <CaseBrief />
 
           <div id="r1-stageA">
-            <h3 className="text-h3 text-ink">{TASK1.stageA.heading}</h3>
-            <p className="mt-1 text-caption text-ash">{TASK1.stageA.instructions}</p>
+            <h3 className="text-h3 text-ink">{t(TASK1.stageA.heading)}</h3>
+            <p className="mt-1 text-caption text-ash">{t(TASK1.stageA.instructions)}</p>
             <MaterialRefs refs={materialRefs(TASK1.stageA.material)} />
             <div className="mt-4">
               <EvidenceSorter />
@@ -36,8 +37,8 @@ export function TaskFlow() {
           </div>
 
           <div id="r1-stageB">
-            <h3 className="text-h3 text-ink">{TASK1.stageB.heading}</h3>
-            <p className="mt-1 text-caption text-ash">{TASK1.stageB.instructions}</p>
+            <h3 className="text-h3 text-ink">{t(TASK1.stageB.heading)}</h3>
+            <p className="mt-1 text-caption text-ash">{t(TASK1.stageB.instructions)}</p>
             <MaterialRefs refs={materialRefs(TASK1.stageB.material)} />
             <div className="mt-4">
               <PueValidityCheck />
@@ -45,8 +46,8 @@ export function TaskFlow() {
           </div>
 
           <div id="r1-stageC">
-            <h3 className="text-h3 text-ink">{TASK1.stageC.heading}</h3>
-            <p className="mt-1 text-caption text-ash">{TASK1.stageC.instructions}</p>
+            <h3 className="text-h3 text-ink">{t(TASK1.stageC.heading)}</h3>
+            <p className="mt-1 text-caption text-ash">{t(TASK1.stageC.instructions)}</p>
             <MaterialRefs refs={materialRefs(TASK1.stageC.material)} />
             <div className="mt-4">
               <GapFinder />
@@ -54,8 +55,8 @@ export function TaskFlow() {
           </div>
 
           <div id="r1-stageD">
-            <h3 className="text-h3 text-ink">{TASK1.stageD.heading}</h3>
-            <p className="mt-1 text-caption text-ash">{TASK1.stageD.instructions}</p>
+            <h3 className="text-h3 text-ink">{t(TASK1.stageD.heading)}</h3>
+            <p className="mt-1 text-caption text-ash">{t(TASK1.stageD.instructions)}</p>
             <MaterialRefs refs={materialRefs(TASK1.stageD.material)} />
             <div className="mt-4">
               <TechGovSplit />

@@ -1,5 +1,8 @@
+"use client";
+
 import { TASK2, OPTIONS } from "@/lib/route2";
 import type { DecisionMemoData } from "./useDecisionMemoData";
+import { t } from "@/lib/i18n/core";
 
 /** Pure presentational memo — reads like a short board memo, assembling as the learner scores and decides. */
 export function DecisionMemoDoc({ data, live = false }: { data: DecisionMemoData; live?: boolean }) {
@@ -11,7 +14,7 @@ export function DecisionMemoDoc({ data, live = false }: { data: DecisionMemoData
     <div className="space-y-5 text-ink">
       <div className="border-b border-line pb-3">
         <p className="text-micro uppercase tracking-wide text-ash">AION Green IT · Day 7 · Route 2</p>
-        <h2 className="text-h3">{TASK2.export.docHeading}</h2>
+        <h2 className="text-h3">{t(TASK2.export.docHeading)}</h2>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-caption text-ash">
           <span>Author: <span className="font-semibold text-ink">{data.name}</span></span>
           <span>Date: <span className="font-semibold text-ink">{data.date}</span></span>

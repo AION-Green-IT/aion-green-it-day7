@@ -7,6 +7,7 @@ import { R1, SPLIT_ITEMS, type Side, type SplitItem } from "@/lib/route1";
 import { useRoute1 } from "./useRoute1";
 import { useStageDStore, type Placements } from "./useStageDStore";
 import { ClueToggle } from "@/components/ui/ClueToggle";
+import { t } from "@/lib/i18n/core";
 
 const DRAG_THRESHOLD = 6;
 
@@ -189,7 +190,7 @@ export function TechGovSplit() {
         {selectedItem && <span className="text-micro text-ash">Selected — tap a zone below to place it.</span>}
       </div>
 
-      {selectedItem && <ClueToggle clue={selectedItem.clue} />}
+      {selectedItem && <ClueToggle clue={t(selectedItem.clue)} />}
 
       <div data-dropzone="pool" className="mt-3 flex min-h-[64px] flex-wrap gap-2 rounded-xl border border-dashed border-line bg-canvas p-3">
         {pool.length === 0 && <p className="text-micro text-ash">All items placed.</p>}
@@ -208,7 +209,7 @@ export function TechGovSplit() {
           className="pointer-events-none fixed z-50 max-w-[220px] -translate-x-1/2 -translate-y-1/2 rounded-lg border border-accent bg-paper px-2.5 py-1.5 text-micro font-semibold text-ink shadow-lg"
           style={{ left: dragPos.x, top: dragPos.y }}
         >
-          {draggingItem.text}
+          {t(draggingItem.text)}
         </div>
       )}
     </div>
@@ -234,7 +235,7 @@ function Chip({ item, placed, handlers }: { item: SplitItem; placed: boolean; ha
         placed && "pr-1.5",
       )}
     >
-      {item.text}
+      {t(item.text)}
       {placed && <span className="ml-1.5 text-ash">· tap to remove</span>}
     </button>
   );

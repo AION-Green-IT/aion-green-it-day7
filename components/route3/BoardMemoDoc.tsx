@@ -1,5 +1,8 @@
+"use client";
+
 import { TASK3 } from "@/lib/route3";
 import type { BoardMemoData } from "./useBoardMemoData";
+import { t } from "@/lib/i18n/core";
 
 /** Pure presentational memo — reads like a real board paper, assembling as both phases are worked. */
 export function BoardMemoDoc({ data, live = false }: { data: BoardMemoData; live?: boolean }) {
@@ -12,7 +15,7 @@ export function BoardMemoDoc({ data, live = false }: { data: BoardMemoData; live
     <div className="space-y-5 text-ink">
       <div className="border-b border-line pb-3">
         <p className="text-micro uppercase tracking-wide text-ash">AION Green IT · Day 7 · Route 3</p>
-        <h2 className="text-h3">{TASK3.export.docHeading}</h2>
+        <h2 className="text-h3">{t(TASK3.export.docHeading)}</h2>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-caption text-ash">
           <span>Author: <span className="font-semibold text-ink">{data.name}</span></span>
           <span>Date: <span className="font-semibold text-ink">{data.date}</span></span>
@@ -60,8 +63,8 @@ export function BoardMemoDoc({ data, live = false }: { data: BoardMemoData; live
           )}
           {data.tradeoffs.length > 0 && (
             <ul className="mt-1.5 list-disc space-y-0.5 pl-5 text-micro text-ash">
-              {data.tradeoffs.map((t, i) => (
-                <li key={i}><span className="font-semibold text-ink">{t.label}.</span> {t.note}</li>
+              {data.tradeoffs.map((line, i) => (
+                <li key={i}><span className="font-semibold text-ink">{t(line.label)}.</span> {line.note}</li>
               ))}
             </ul>
           )}
@@ -101,7 +104,7 @@ export function BoardMemoDoc({ data, live = false }: { data: BoardMemoData; live
             <div key={g.perspective} className="mt-1.5">
               <p className="text-micro font-semibold text-ink">{g.perspective} ({g.items.length})</p>
               <ul className="mt-0.5 list-disc space-y-0.5 pl-5 text-micro text-ash">
-                {g.items.map((t, i) => <li key={i}>{t}</li>)}
+                {g.items.map((line, i) => <li key={i}>{line}</li>)}
               </ul>
             </div>
           ))}
@@ -111,7 +114,7 @@ export function BoardMemoDoc({ data, live = false }: { data: BoardMemoData; live
               <ul className="mt-0.5 space-y-1 text-micro text-ash">
                 {data.appendix.leverPlan.map((l, i) => (
                   <li key={i}>
-                    <span className="font-semibold text-ink">{l.label}</span> ({l.horizon}) — {l.justification || "(justification pending)"}
+                    <span className="font-semibold text-ink">{t(l.label)}</span> ({l.horizon}) — {l.justification || "(justification pending)"}
                   </li>
                 ))}
               </ul>

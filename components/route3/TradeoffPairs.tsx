@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { useProgress } from "@/lib/store";
 import { R3, TENSION_PAIRS } from "@/lib/route3";
 import { useRoute3 } from "./useRoute3";
+import { t } from "@/lib/i18n/core";
 
 export function TradeoffPairs() {
   const r3 = useRoute3();
@@ -24,7 +25,7 @@ export function TradeoffPairs() {
                 onChange={(e) => toggleCheck(R3.p2.tradeoffSelected(pair.id), e.target.checked)}
                 className="mt-0.5 h-4 w-4 accent-accent"
               />
-              <span className="text-caption font-semibold text-ink">{pair.label}</span>
+              <span className="text-caption font-semibold text-ink">{t(pair.label)}</span>
             </label>
             {selected && (
               <label className="mt-2 block pl-6">

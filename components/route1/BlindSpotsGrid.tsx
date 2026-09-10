@@ -1,3 +1,6 @@
+"use client";
+
+import { t } from "@/lib/i18n/core";
 const ASH = "#5E6670";
 const INK = "#16191D";
 const DANGER = "#B23B3B";
@@ -39,8 +42,8 @@ export function BlindSpotsGrid() {
               ✕ not captured by PUE
             </span>
           </div>
-          <p className="text-caption font-semibold text-ink">{b.label}</p>
-          <p className="text-micro text-ash">{b.text}</p>
+          <p className="text-caption font-semibold text-ink">{t(b.label)}</p>
+          <p className="text-micro text-ash">{t(b.text)}</p>
         </div>
       ))}
 

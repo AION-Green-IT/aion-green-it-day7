@@ -8,6 +8,7 @@ import { useRoute1 } from "./useRoute1";
 import { ClueToggle } from "@/components/ui/ClueToggle";
 import { ConfidenceHint } from "@/components/ui/ConfidenceHint";
 import { Check, ChevronDown } from "@/components/icons/LineIcons";
+import { t } from "@/lib/i18n/core";
 
 /** Stage A — click a statement, sort it into one of 6 categories. Feedback is a confidence nudge, never a verdict. */
 export function EvidenceSorter() {
@@ -47,7 +48,7 @@ export function EvidenceSorter() {
                 >
                   {picked && <Check className="h-3 w-3" />}
                 </span>
-                <span className="flex-1 text-caption text-ink">{item.text}</span>
+                <span className="flex-1 text-caption text-ink">{t(item.text)}</span>
                 {pickedLabel && (
                   <span className="shrink-0 rounded-full bg-accentSoft px-2 py-0.5 text-micro font-semibold text-accent">{pickedLabel}</span>
                 )}
@@ -69,12 +70,12 @@ export function EvidenceSorter() {
                           picked === cat.id ? "border-accent bg-accentSoft text-accent" : "border-line text-ink hover:border-ash",
                         )}
                       >
-                        {cat.label}
+                        {t(cat.label)}
                       </button>
                     ))}
                   </div>
                   <ConfidenceHint matched={matched} />
-                  <ClueToggle clue={item.clue} />
+                  <ClueToggle clue={t(item.clue)} />
                 </div>
               )}
             </div>

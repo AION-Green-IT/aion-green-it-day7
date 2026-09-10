@@ -1,15 +1,18 @@
+"use client";
+
 import { TASK3, materialRefs } from "@/lib/route3";
 import { MaterialRefs } from "@/components/ui/MaterialRefs";
 import { AeroPulseBrief } from "./CaseBrief";
 import { PerspectiveScan } from "./PerspectiveScan";
 import { LeverSelection } from "./LeverSelection";
+import { t } from "@/lib/i18n/core";
 
 const { phase1 } = TASK3;
 
 export function DiagnosticPhase() {
   return (
     <div className="space-y-6">
-      <h3 className="text-h3 text-ink">{phase1.heading}</h3>
+      <h3 className="text-h3 text-ink">{t(phase1.heading)}</h3>
       <AeroPulseBrief />
 
       <div>

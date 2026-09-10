@@ -8,6 +8,7 @@ import { MaterialRefs } from "@/components/ui/MaterialRefs";
 import { PolarEdgeBrief } from "./CaseBrief";
 import { TradeoffPairs } from "./TradeoffPairs";
 import { ApprovalTable } from "./ApprovalTable";
+import { t } from "@/lib/i18n/core";
 
 const { phase2 } = TASK3;
 
@@ -21,15 +22,15 @@ export function BuilderPhase() {
 
   return (
     <div className="space-y-8">
-      <h3 className="text-h3 text-ink">{phase2.heading}</h3>
+      <h3 className="text-h3 text-ink">{t(phase2.heading)}</h3>
       <PolarEdgeBrief />
 
       <section id="r3-p2-strategic" className="space-y-2">
-        <h4 className="text-caption font-semibold text-ink">{phase2.b1.heading}</h4>
+        <h4 className="text-caption font-semibold text-ink">{t(phase2.b1.heading)}</h4>
         <MaterialRefs refs={materialRefs(phase2.b1.material)} />
         <label className="block">
-          <span className="text-caption font-semibold text-ink">{phase2.b1.label}</span>
-          <p className="text-micro text-ash">{phase2.b1.caption}</p>
+          <span className="text-caption font-semibold text-ink">{t(phase2.b1.label)}</span>
+          <p className="text-micro text-ash">{t(phase2.b1.caption)}</p>
           <textarea
             value={r3.strategicRelevance}
             onChange={(e) => setNote(R3.p2.strategicRelevance, e.target.value)}
@@ -40,9 +41,9 @@ export function BuilderPhase() {
       </section>
 
       <section id="r3-p2-decisions" className="space-y-2">
-        <h4 className="text-caption font-semibold text-ink">{phase2.b2.heading}</h4>
+        <h4 className="text-caption font-semibold text-ink">{t(phase2.b2.heading)}</h4>
         <MaterialRefs refs={materialRefs(phase2.b2.material)} />
-        <p className="text-micro text-ash">{phase2.b2.caption}</p>
+        <p className="text-micro text-ash">{t(phase2.b2.caption)}</p>
         <div className="space-y-2">
           {([1, 2, 3] as const).map((n) => (
             <label key={n} className="block">
@@ -59,9 +60,9 @@ export function BuilderPhase() {
       </section>
 
       <section id="r3-p2-logic" className="space-y-2">
-        <h4 className="text-caption font-semibold text-ink">{phase2.b3.heading}</h4>
+        <h4 className="text-caption font-semibold text-ink">{t(phase2.b3.heading)}</h4>
         <MaterialRefs refs={materialRefs(phase2.b3.material)} />
-        <p className="text-micro text-ash">{phase2.b3.label}</p>
+        <p className="text-micro text-ash">{t(phase2.b3.label)}</p>
         <div className="flex flex-wrap gap-1.5">
           {LOGIC_PRINCIPLES.map((p) => {
             const selected = r3.selectedPrinciples.includes(p.id);
@@ -76,14 +77,14 @@ export function BuilderPhase() {
                   selected ? "border-accent bg-accentSoft text-accent" : "border-line text-ink hover:border-ash",
                 )}
               >
-                {p.label}
+                {t(p.label)}
               </button>
             );
           })}
         </div>
         <label className="block">
-          <span className="text-caption font-semibold text-ink">{phase2.b3.caption}</span>
-          <p className="text-micro text-ash">{phase2.b3.explainCaption}</p>
+          <span className="text-caption font-semibold text-ink">{t(phase2.b3.caption)}</span>
+          <p className="text-micro text-ash">{t(phase2.b3.explainCaption)}</p>
           <textarea
             value={r3.logicExplain}
             onChange={(e) => setNote(R3.p2.logicExplain, e.target.value)}
@@ -94,17 +95,17 @@ export function BuilderPhase() {
       </section>
 
       <section id="r3-p2-tradeoffs" className="space-y-2">
-        <h4 className="text-caption font-semibold text-ink">{phase2.b4.heading}</h4>
+        <h4 className="text-caption font-semibold text-ink">{t(phase2.b4.heading)}</h4>
         <MaterialRefs refs={materialRefs(phase2.b4.material)} />
-        <p className="text-micro text-ash">{phase2.b4.caption}</p>
+        <p className="text-micro text-ash">{t(phase2.b4.caption)}</p>
         <TradeoffPairs />
       </section>
 
       <section id="r3-p2-recommended" className="space-y-2">
-        <h4 className="text-caption font-semibold text-ink">{phase2.b5.heading}</h4>
+        <h4 className="text-caption font-semibold text-ink">{t(phase2.b5.heading)}</h4>
         <MaterialRefs refs={materialRefs(phase2.b5.material)} />
-        <p className="text-micro text-ash">{phase2.b5.label}</p>
-        <p className="text-micro text-ash">{phase2.b5.caption}</p>
+        <p className="text-micro text-ash">{t(phase2.b5.label)}</p>
+        <p className="text-micro text-ash">{t(phase2.b5.caption)}</p>
         <div className="flex flex-wrap gap-2">
           {recommendedOptions.map((l) => {
             const active = r3.recommendedMeasure === l.id;
@@ -119,14 +120,14 @@ export function BuilderPhase() {
                   active ? "border-accent bg-accent text-paper" : "border-line text-ink hover:border-ash",
                 )}
               >
-                {l.label}
+                {t(l.label)}
               </button>
             );
           })}
         </div>
         {r3.recommendedMeasure && (
           <label className="block">
-            <span className="text-caption font-semibold text-ink">{phase2.b5.justifyLabel}</span>
+            <span className="text-caption font-semibold text-ink">{t(phase2.b5.justifyLabel)}</span>
             <textarea
               value={r3.recommendedJustify}
               onChange={(e) => setNote(R3.p2.recommendedJustify, e.target.value)}
@@ -138,18 +139,18 @@ export function BuilderPhase() {
       </section>
 
       <section id="r3-p2-approval" className="space-y-2">
-        <h4 className="text-caption font-semibold text-ink">{phase2.b6.heading}</h4>
+        <h4 className="text-caption font-semibold text-ink">{t(phase2.b6.heading)}</h4>
         <MaterialRefs refs={materialRefs(phase2.b6.material)} />
-        <p className="text-micro text-ash">{phase2.b6.caption}</p>
+        <p className="text-micro text-ash">{t(phase2.b6.caption)}</p>
         <ApprovalTable />
       </section>
 
       <section id="r3-p2-decisionnow" className="space-y-2">
-        <h4 className="text-caption font-semibold text-ink">{phase2.b7.heading}</h4>
+        <h4 className="text-caption font-semibold text-ink">{t(phase2.b7.heading)}</h4>
         <MaterialRefs refs={materialRefs(phase2.b7.material)} />
         <label className="block">
-          <span className="text-caption font-semibold text-ink">{phase2.b7.label}</span>
-          <p className="text-micro text-ash">{phase2.b7.caption}</p>
+          <span className="text-caption font-semibold text-ink">{t(phase2.b7.label)}</span>
+          <p className="text-micro text-ash">{t(phase2.b7.caption)}</p>
           <textarea
             value={r3.decisionNow}
             onChange={(e) => setNote(R3.p2.decisionNow, e.target.value)}

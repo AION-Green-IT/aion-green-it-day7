@@ -1,5 +1,8 @@
+"use client";
+
 import { TASK1 } from "@/lib/route1";
 import type { AuditReportData } from "./useAuditReportData";
+import { t } from "@/lib/i18n/core";
 
 /** Pure presentational report — reads like a short analyst memo, assembling as the learner completes each stage. */
 export function AuditReportDoc({ data, live = false }: { data: AuditReportData; live?: boolean }) {
@@ -12,7 +15,7 @@ export function AuditReportDoc({ data, live = false }: { data: AuditReportData; 
     <div className="space-y-5 text-ink">
       <div className="border-b border-line pb-3">
         <p className="text-micro uppercase tracking-wide text-ash">AION Green IT · Day 7 · Route 1</p>
-        <h2 className="text-h3">{TASK1.export.docHeading}</h2>
+        <h2 className="text-h3">{t(TASK1.export.docHeading)}</h2>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-caption text-ash">
           <span>Analyst: <span className="font-semibold text-ink">{data.name}</span></span>
           <span>Date: <span className="font-semibold text-ink">{data.date}</span></span>
@@ -30,8 +33,8 @@ export function AuditReportDoc({ data, live = false }: { data: AuditReportData; 
               <div key={g.category}>
                 <p className="text-caption font-semibold text-ink">{g.category} ({g.items.length})</p>
                 <ul className="mt-0.5 list-disc space-y-0.5 pl-5 text-micro text-ash">
-                  {g.items.map((t, i) => (
-                    <li key={i}>{t}</li>
+                  {g.items.map((line, i) => (
+                    <li key={i}>{line}</li>
                   ))}
                 </ul>
               </div>
@@ -46,7 +49,7 @@ export function AuditReportDoc({ data, live = false }: { data: AuditReportData; 
           <ul className="mt-1.5 space-y-1.5 text-micro text-ash">
             {data.pueFindings.map((f, i) => (
               <li key={i}>
-                <span className="text-ink">{f.claim}</span> — <span className="font-semibold text-accent">{f.verdict}</span>
+                <span className="text-ink">{t(f.claim)}</span> — <span className="font-semibold text-accent">{f.verdict}</span>
               </li>
             ))}
           </ul>
@@ -59,7 +62,7 @@ export function AuditReportDoc({ data, live = false }: { data: AuditReportData; 
           <ul className="mt-1.5 space-y-2">
             {data.gaps.map((g, i) => (
               <li key={i} className="text-micro">
-                <span className="font-semibold text-ink">{g.label}.</span>{" "}
+                <span className="font-semibold text-ink">{t(g.label)}.</span>{" "}
                 <span className="text-ash">{g.justification || "(justification pending)"}</span>
               </li>
             ))}
@@ -74,13 +77,13 @@ export function AuditReportDoc({ data, live = false }: { data: AuditReportData; 
             <div>
               <p className="text-micro font-semibold text-ink">Technical ({data.splitSummary.technical.length})</p>
               <ul className="mt-0.5 list-disc space-y-0.5 pl-5 text-micro text-ash">
-                {data.splitSummary.technical.map((t, i) => <li key={i}>{t}</li>)}
+                {data.splitSummary.technical.map((line, i) => <li key={i}>{line}</li>)}
               </ul>
             </div>
             <div>
               <p className="text-micro font-semibold text-ink">Governance ({data.splitSummary.governance.length})</p>
               <ul className="mt-0.5 list-disc space-y-0.5 pl-5 text-micro text-ash">
-                {data.splitSummary.governance.map((t, i) => <li key={i}>{t}</li>)}
+                {data.splitSummary.governance.map((line, i) => <li key={i}>{line}</li>)}
               </ul>
             </div>
           </div>

@@ -1,4 +1,7 @@
+"use client";
+
 import clsx from "clsx";
+import { useT } from "@/lib/i18n";
 
 /** Consistent block header: an accent kicker, a title, and an intro line. */
 export function SectionHeading({
@@ -12,13 +15,14 @@ export function SectionHeading({
   intro?: string;
   className?: string;
 }) {
+  const t = useT();
   return (
     <div className={clsx("max-w-prose", className)}>
       <p className="mb-2 text-micro font-semibold uppercase tracking-wide text-accent">
-        {kicker}
+        {t(kicker)}
       </p>
-      <h2 className="text-h2 text-ink">{title}</h2>
-      {intro ? <p className="mt-3 text-body text-ash">{intro}</p> : null}
+      <h2 className="text-h2 text-ink">{t(title)}</h2>
+      {intro ? <p className="mt-3 text-body text-ash">{t(intro)}</p> : null}
     </div>
   );
 }

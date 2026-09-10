@@ -15,6 +15,8 @@ export const STORAGE_KEY = "aion-greenit-day7";
  * The store knows nothing about what a section means; lib/progress.ts joins it
  * to the content to decide what "done" is.
  */
+export type Locale = "en" | "de";
+
 export type ProgressState = {
   seen: Record<string, string[]>;
   choices: Record<string, string>;
@@ -47,6 +49,7 @@ type Session = {
 };
 
 type Actions = {
+  setLocale: (locale: Locale) => void;
   markSeen: (sectionId: string, itemId: string) => void;
   choose: (sectionId: string, optionId: string) => void;
   toggleCheck: (key: string, value: boolean) => void;
@@ -66,13 +69,16 @@ const emptyProgress: ProgressState = {
 const addUnique = (list: string[] | undefined, id: string) =>
   list?.includes(id) ? list : [...(list ?? []), id];
 
-export const useProgress = create<ProgressState & Session & Actions>()(
+export const useProgress = create<ProgressState & Session & Actions & { locale: Locale }>()(
   persist(
     (set) => ({
       ...emptyProgress,
+      locale: "en" as Locale,
       resetCount: 0,
       sectionResets: {},
       printTarget: null,
+
+      setLocale: (locale) => set({ locale }),
 
       markSeen: (sectionId, itemId) =>
         set((s) => ({
@@ -126,6 +132,7 @@ export const useProgress = create<ProgressState & Session & Actions>()(
       name: STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
       partialize: (s) => ({
+        locale: s.locale,
         seen: s.seen,
         choices: s.choices,
         checks: s.checks,

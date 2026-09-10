@@ -2,6 +2,7 @@
 
 import { useProgress } from "@/lib/store";
 import { R1, CASE_BRIEF } from "@/lib/route1";
+import { t } from "@/lib/i18n/core";
 
 export function CaseBrief() {
   const name = useProgress((s) => s.notes[R1.name] ?? "");
@@ -10,9 +11,9 @@ export function CaseBrief() {
   return (
     <div className="card p-5">
       <p className="text-micro font-semibold uppercase tracking-wide text-ash">Case brief</p>
-      <h3 className="mt-1 text-h3 text-ink">{CASE_BRIEF.company}</h3>
-      <p className="mt-2 text-body text-ash">{CASE_BRIEF.setup}</p>
-      <p className="mt-3 text-caption font-semibold text-ink">{CASE_BRIEF.role}</p>
+      <h3 className="mt-1 text-h3 text-ink">{t(CASE_BRIEF.company)}</h3>
+      <p className="mt-2 text-body text-ash">{t(CASE_BRIEF.setup)}</p>
+      <p className="mt-3 text-caption font-semibold text-ink">{t(CASE_BRIEF.role)}</p>
 
       <div id="r1-name" className="mt-4 border-t border-line pt-4">
         <label className="block max-w-xs">

@@ -6,6 +6,7 @@ import { R3, APPROVAL_ROWS } from "@/lib/route3";
 import { GovernanceFlowDiagram } from "@/components/ui/GovernanceFlowDiagram";
 import { ChevronDown } from "@/components/icons/LineIcons";
 import clsx from "clsx";
+import { t } from "@/lib/i18n/core";
 
 export function ApprovalTable() {
   const notes = useProgress((s) => s.notes);
@@ -25,7 +26,7 @@ export function ApprovalTable() {
           <tbody>
             {APPROVAL_ROWS.map((row) => (
               <tr key={row.id} className="border-b border-line last:border-0">
-                <td className="p-3 text-ink">{row.label}</td>
+                <td className="p-3 text-ink">{t(row.label)}</td>
                 <td className="p-3">
                   <input
                     value={notes[R3.p2.approvalOwner(row.id)] ?? ""}

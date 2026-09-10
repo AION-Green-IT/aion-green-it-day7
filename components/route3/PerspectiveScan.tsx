@@ -8,6 +8,7 @@ import { useRoute3 } from "./useRoute3";
 import { ClueToggle } from "@/components/ui/ClueToggle";
 import { ConfidenceHint } from "@/components/ui/ConfidenceHint";
 import { Check, ChevronDown } from "@/components/icons/LineIcons";
+import { t } from "@/lib/i18n/core";
 
 /** Rapid Multi-Perspective Scan — same click-to-sort mechanic as Route 1's Evidence Sorter, faster pace, 6 buckets. */
 export function PerspectiveScan() {
@@ -47,7 +48,7 @@ export function PerspectiveScan() {
                 >
                   {picked && <Check className="h-3 w-3" />}
                 </span>
-                <span className="flex-1 text-caption text-ink">{obs.text}</span>
+                <span className="flex-1 text-caption text-ink">{t(obs.text)}</span>
                 {pickedLabel && (
                   <span className="shrink-0 rounded-full bg-accentSoft px-2 py-0.5 text-micro font-semibold text-accent">{pickedLabel}</span>
                 )}
@@ -69,12 +70,12 @@ export function PerspectiveScan() {
                           picked === p.id ? "border-accent bg-accentSoft text-accent" : "border-line text-ink hover:border-ash",
                         )}
                       >
-                        {p.label}
+                        {t(p.label)}
                       </button>
                     ))}
                   </div>
                   <ConfidenceHint matched={matched} />
-                  <ClueToggle clue={obs.clue} />
+                  <ClueToggle clue={t(obs.clue)} />
                 </div>
               )}
             </div>

@@ -6,6 +6,8 @@ import clsx from "clsx";
 import { AionLogo } from "./Icons";
 import { CASE, ROUTES } from "@/lib/routes";
 import { Lock } from "@/components/icons/LineIcons";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useT } from "@/lib/i18n";
 
 /**
  * Persistent top bar across every page. Shows the day and a compact rail of
@@ -17,6 +19,7 @@ import { Lock } from "@/components/icons/LineIcons";
  */
 export function TopBar() {
   const pathname = usePathname() ?? "";
+  const t = useT();
 
   return (
     <header className="sticky top-0 z-30 bg-slate text-paper print:hidden">
@@ -25,11 +28,11 @@ export function TopBar() {
           <Link href="/" className="flex min-w-0 items-center gap-3">
             <AionLogo className="h-6 w-20 shrink-0 text-paper" />
             <span className="hidden min-w-0 truncate text-caption text-paper/70 sm:inline md:text-body">
-              {CASE.module} — {CASE.moduleTitle}
+              {t(CASE.module)} — {t(CASE.moduleTitle)}
             </span>
           </Link>
 
-          <nav aria-label="Day 6 routes" className="ml-auto">
+          <nav aria-label="Routes" className="ml-auto">
             <ol className="flex items-center gap-1.5">
               {ROUTES.map((rt) => {
                 const active = pathname.includes(`/${rt.slug}`);
@@ -46,7 +49,7 @@ export function TopBar() {
                   <>
                     <span className="tabular-nums">{rt.n}</span>
                     <span className="hidden md:inline">
-                      {rt.tag.replace(/^Route \d+ — /, "")}
+                      {t(rt.tag).replace(/^Route \d+ — /, "")}
                     </span>
                     {!reachable && <Lock className="h-3.5 w-3.5" />}
                   </>
@@ -58,7 +61,7 @@ export function TopBar() {
                         {inner}
                       </Link>
                     ) : (
-                      <span className={cls} aria-disabled="true" title="Not available yet">
+                      <span className={cls} aria-disabled="true" title={t("Not available yet")}>
                         {inner}
                       </span>
                     )}
@@ -67,6 +70,8 @@ export function TopBar() {
               })}
             </ol>
           </nav>
+
+          <LanguageSwitcher />
         </div>
       </div>
     </header>

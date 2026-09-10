@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { t } from "@/lib/i18n/core";
 
 const INK = "#16191D";
 const ASH = "#5E6670";
@@ -97,7 +98,7 @@ export function FeedbackLoopSvg() {
                 {i + 1}
               </text>
               <text x={x} y={y + (y > CY ? 54 : -46)} textAnchor="middle" fontSize="10" fontWeight={600} fill={isActive ? ACCENT : INK}>
-                {node.label}
+                {t(node.label)}
               </text>
             </g>
           );

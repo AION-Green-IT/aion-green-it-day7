@@ -12,6 +12,7 @@ import { MissingList } from "@/components/ui/MissingList";
 import { TASK3 } from "@/lib/route3";
 import { ChevronDown } from "@/components/icons/LineIcons";
 import clsx from "clsx";
+import { t } from "@/lib/i18n/core";
 
 /** Sticky bottom export bar. Never disabled — incomplete clicks jump to what's missing (labelled by phase) instead of doing nothing. */
 export function ExportBar() {
@@ -52,7 +53,7 @@ export function ExportBar() {
           {r3.missing.length > 0 && <ChevronDown className={clsx("h-3.5 w-3.5 transition-transform duration-150", showMissing && "rotate-180")} />}
         </button>
         <button type="button" onClick={handleExport} className="btn-accent">
-          Export {TASK3.export.taskLabel}
+          Export {t(TASK3.export.taskLabel)}
         </button>
       </div>
     </div>

@@ -40,13 +40,43 @@ export const CASE_BRIEF = {
   ],
 } as const;
 
-export const OPTIONS: { id: OptionId; label: string; short: string; detail: string }[] = [
+/**
+ * Each option carries its scope boundary, not just its headline. `includes` and
+ * `excludes` are what the case actually funds and deliberately doesn't; the
+ * scoring in Task 2 is only defensible if a learner can see both — otherwise a
+ * statement that describes the option at its most flattering (a retrofit that
+ * "anchors every future regulator conversation") looks reasonable rather than
+ * out of scope. `scopeLine` is the compressed version, repeated next to every
+ * scoring column so the boundary is never off-screen.
+ */
+export type CaseOption = {
+  id: OptionId;
+  label: string;
+  short: string;
+  detail: string;
+  scopeLine: string;
+  includes: string[];
+  excludes: string[];
+};
+
+export const OPTIONS: CaseOption[] = [
   {
     id: "A",
     label: "Extended Green Electricity Supply Contract",
     short: "PPA / GoO expansion",
     detail:
       "Expand long-term Power Purchase Agreements and Guarantee-of-Origin certificate volume, so a larger share of purchased electricity carries a verified renewable designation.",
+    scopeLine: "Contract only — nothing physical changes, and no new data is produced.",
+    includes: [
+      "More PPA volume and additional Guarantee-of-Origin certificates.",
+      "Legal, procurement and finance work for a multi-year commitment.",
+      "An announceable milestone — signing is a communicable event.",
+    ],
+    excludes: [
+      "Nothing physical changes: cooling, power delivery and IT stay as they are.",
+      "No new measurement — still nothing on Meridian's own load or zones.",
+      "No hour-by-hour matching; the claim rests on annual contracted volume.",
+    ],
   },
   {
     id: "B",
@@ -54,6 +84,17 @@ export const OPTIONS: { id: OptionId; label: string; short: string; detail: stri
     short: "Cooling & power-delivery retrofit",
     detail:
       "Capital investment in cooling and power-delivery upgrades — aisle containment, control tuning, a higher-efficiency UPS — to physically lower the facility's PUE.",
+    scopeLine: "Technical only — committed before any mapping, and verified by nothing but PUE.",
+    includes: [
+      "Capital works: aisle containment, control tuning, a higher-efficiency UPS.",
+      "A physically real cut in facility overhead energy.",
+      "Vendor before/after PUE reporting, at facility level only.",
+    ],
+    excludes: [
+      "No load mapping or zone analysis first — scoped from what is already visible.",
+      "No transparency system: still no breakdown by zone or workload afterwards.",
+      "No independent verification, and no metric beyond PUE.",
+    ],
   },
   {
     id: "C",
@@ -61,6 +102,17 @@ export const OPTIONS: { id: OptionId; label: string; short: string; detail: stri
     short: "Multi-metric transparency & governance",
     detail:
       "Build an internal system of multiple metrics, granular load transparency, and differentiated sustainability assessment across zones and services.",
+    scopeLine: "Capability only — nothing is reduced, and nothing is announceable, this year.",
+    includes: [
+      "Zone- and load-level measurement, plus carbon, water and renewable-share metrics.",
+      "IT and facilities agreeing what gets measured and who owns each number.",
+      "A view that can finally say which zones are actually inefficient.",
+    ],
+    excludes: [
+      "Nothing physical or contractual moves on day one.",
+      "No announceable milestone short-term; the output is internal reporting.",
+      "No external assurance yet — better knowledge, not yet audited fact.",
+    ],
   },
 ];
 
@@ -121,7 +173,7 @@ export const MATERIAL: MaterialSection[] = [
       "Seven criteria, applied consistently across every option, turn a gut-feeling ranking into a defensible one. Click through the wheel below — you'll use these exact seven definitions in Task 2.",
     reasoning: [
       "Score each criterion against its own definition, not against your overall preference. An option can be the right recommendation and still score badly on Economic Viability or Feasibility — saying so out loud is what makes the recommendation credible.",
-      "Score the option as the case actually scopes it, not at its most flattering reading. If a statement assumes work the option doesn't include — extra consolidation, a full monitoring upgrade — it overstates and isn't the best fit.",
+      "Score the option as the case actually scopes it, not at its most flattering reading. Each option's brief lists what it does not include — if a statement assumes work on that list (a load mapping B never did, an independent verification nobody commissioned, a monitoring upgrade C alone would have to build), it describes a different option and isn't the best fit.",
       "Risk is scored as favourability, not as drama: the statement describing the least exposure is the strongest position on that axis, not the most alarming one.",
       "Horizon 1 (visible short-term wins) and Horizon 3 (structural capability) are both legitimate. Name which horizon an option belongs to rather than quietly presenting a Horizon 3 measure as a quick win — or dismissing it for not looking impressive fast enough.",
       "The seven don't collapse into each other: strategic leverage asks what a measure unlocks later, informative value what it lets you know, credibility what survives outside scrutiny. Strong on one and weak on another is the normal result.",

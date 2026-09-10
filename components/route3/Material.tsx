@@ -1,7 +1,10 @@
+"use client";
+
 import { MATERIAL, PERSPECTIVES, LEVERS3, HORIZON_OPTIONS, LOGIC_PRINCIPLES, TENSION_DIMENSIONS } from "@/lib/route3";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { MaterialBlock } from "@/components/ui/MaterialBlock";
 import { FeedbackLoopSvg } from "./FeedbackLoopSvg";
+import { t } from "@/lib/i18n/core";
 
 const [architecture, assurance, disclosure, enefg, perspectives, commitment] = MATERIAL;
 
@@ -55,8 +58,8 @@ function PerspectiveLeverGuide() {
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           {PERSPECTIVES.map((p) => (
             <div key={p.id} className="rounded-xl border border-line p-3">
-              <p className="text-caption font-semibold text-accent">{p.label}</p>
-              <p className="mt-0.5 text-micro text-ash">{p.domain}</p>
+              <p className="text-caption font-semibold text-accent">{t(p.label)}</p>
+              <p className="mt-0.5 text-micro text-ash">{t(p.domain)}</p>
             </div>
           ))}
         </div>
@@ -68,7 +71,7 @@ function PerspectiveLeverGuide() {
           {LEVERS3.map((l) => (
             <li key={l.id} className="flex gap-2 text-micro text-ink">
               <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
-              <span>{l.label}</span>
+              <span>{t(l.label)}</span>
             </li>
           ))}
         </ul>
@@ -85,8 +88,8 @@ function CommitmentGuide() {
         <div className="mt-2 grid gap-2 sm:grid-cols-3">
           {HORIZON_OPTIONS.map((h) => (
             <div key={h.id} className="rounded-xl border border-line p-3">
-              <p className="text-caption font-semibold text-accent">{h.label}</p>
-              <p className="mt-0.5 text-micro text-ash">{h.domain}</p>
+              <p className="text-caption font-semibold text-accent">{t(h.label)}</p>
+              <p className="mt-0.5 text-micro text-ash">{t(h.domain)}</p>
             </div>
           ))}
         </div>
@@ -99,7 +102,7 @@ function CommitmentGuide() {
             <li key={p.id} className="flex gap-2 text-micro text-ink">
               <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
               <span>
-                <span className="font-semibold">{p.label}</span> — {p.domain}
+                <span className="font-semibold">{t(p.label)}</span> — {t(p.domain)}
               </span>
             </li>
           ))}
@@ -111,7 +114,7 @@ function CommitmentGuide() {
         <div className="mt-2 flex flex-wrap gap-1.5">
           {TENSION_DIMENSIONS.map((d) => (
             <span key={d.id} className="rounded-full border border-accent/30 bg-accentSoft px-2.5 py-1 text-micro font-semibold text-accent">
-              {d.label}
+              {t(d.label)}
             </span>
           ))}
         </div>
@@ -145,7 +148,7 @@ function MetricsFamilyTree() {
               <text x={x + 65} y={152} textAnchor="middle" fontSize="11" fontWeight={700} fill={INK}>{s.code}</text>
               <text x={x + 65} y={166} textAnchor="middle" fontSize="8.5" fill={ASH}>ISO/IEC {s.std}</text>
               <foreignObject x={x + 4} y={170} width={122} height={28}>
-                <p style={{ fontSize: 8, lineHeight: "10px", color: ASH, textAlign: "center" }}>{s.tag}</p>
+                <p style={{ fontSize: 8, lineHeight: "10px", color: ASH, textAlign: "center" }}>{t(s.tag)}</p>
               </foreignObject>
             </g>
           );
@@ -178,7 +181,7 @@ function CsrdTimeline() {
               <circle cx={x} cy={70} r={7} fill={s.callout ? ACCENT : PAPER} stroke={s.callout ? ACCENT : INK} strokeWidth={1.8} />
               <text x={x} y={54} textAnchor="middle" fontSize="10" fontWeight={700} fill={INK}>{s.year}</text>
               <foreignObject x={x - 62} y={84} width={124} height={44}>
-                <p style={{ fontSize: 9, lineHeight: "12px", color: ASH, textAlign: "center" }}>{s.label}</p>
+                <p style={{ fontSize: 9, lineHeight: "12px", color: ASH, textAlign: "center" }}>{t(s.label)}</p>
               </foreignObject>
               {s.callout && (
                 <foreignObject x={x - 70} y={132} width={200} height={54} style={{ overflow: "visible" }}>

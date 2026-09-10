@@ -5,6 +5,7 @@ import { useProgress } from "@/lib/store";
 import { R1, GAP_ASPECTS, GAP_REQUIRED_COUNT, GAP_JUSTIFICATION_MIN_WORDS } from "@/lib/route1";
 import { useRoute1 } from "./useRoute1";
 import { Check } from "@/components/icons/LineIcons";
+import { t } from "@/lib/i18n/core";
 
 function wordCount(text: string): number {
   return text.trim().length === 0 ? 0 : text.trim().split(/\s+/).length;
@@ -50,8 +51,8 @@ export function GapFinder() {
                 {selected && <Check className="h-3 w-3" />}
               </span>
               <span>
-                <span className="block text-caption font-semibold text-ink">{a.label}</span>
-                <span className="block text-micro text-ash">{a.description}</span>
+                <span className="block text-caption font-semibold text-ink">{t(a.label)}</span>
+                <span className="block text-micro text-ash">{t(a.description)}</span>
               </span>
             </button>
           );
@@ -67,7 +68,7 @@ export function GapFinder() {
             return (
               <div key={aspectId} id={`r1-stageC-${aspectId}`}>
                 <label className="block">
-                  <span className="text-caption font-semibold text-ink">Why does "{aspect.label}" matter here?</span>
+                  <span className="text-caption font-semibold text-ink">Why does "{t(aspect.label)}" matter here?</span>
                   <p className="text-micro text-ash">A sentence or two — aim for at least {GAP_JUSTIFICATION_MIN_WORDS} words, but this won't block your export.</p>
                   <textarea
                     value={text}

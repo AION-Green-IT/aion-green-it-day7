@@ -3,6 +3,7 @@
 import { CRITERIA, OPTIONS } from "@/lib/route2";
 import { RadarChart, type RadarSeries } from "@/components/ui/RadarChart";
 import { useRoute2 } from "./useRoute2";
+import { t } from "@/lib/i18n/core";
 
 const SERIES_STYLE: Record<string, { color: string; dash?: string }> = {
   A: { color: "#0E7A5A" },
@@ -32,7 +33,7 @@ export function PrioritizationRadar() {
             <svg width="18" height="8" aria-hidden>
               <line x1="0" y1="4" x2="18" y2="4" stroke={SERIES_STYLE[o.id].color} strokeWidth={2.25} strokeDasharray={SERIES_STYLE[o.id].dash} />
             </svg>
-            Option {o.id} — {o.short}
+            Option {o.id} — {t(o.short)}
           </span>
         ))}
       </div>

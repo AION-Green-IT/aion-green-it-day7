@@ -6,6 +6,7 @@ import { R3, LEVERS3, REQUIRED_LEVER_COUNT, HORIZON_OPTIONS, TASK3, materialRefs
 import { useRoute3 } from "./useRoute3";
 import { Check } from "@/components/icons/LineIcons";
 import { MaterialRefs } from "@/components/ui/MaterialRefs";
+import { t } from "@/lib/i18n/core";
 
 const { phase1 } = TASK3;
 
@@ -73,7 +74,7 @@ function LeverChecklist() {
                   onChange={(e) => toggleCheck(R3.p1.leverSelected(l.id), e.target.checked)}
                   className="mt-0.5 h-4 w-4 accent-accent"
                 />
-                <span className="text-caption font-semibold text-ink">{l.label}</span>
+                <span className="text-caption font-semibold text-ink">{t(l.label)}</span>
               </label>
               {selected && (
                 <label className="mt-2 block pl-6">
@@ -104,7 +105,7 @@ function FirstMeasureDecision() {
 
   return (
     <div className="space-y-3">
-      <p className="text-micro text-ash">{phase1.firstMeasurePrompt}</p>
+      <p className="text-micro text-ash">{t(phase1.firstMeasurePrompt)}</p>
       <div className="flex flex-wrap gap-2">
         {r3.selectedLeverIds.map((id) => {
           const lever = LEVERS3.find((l) => l.id === id)!;
@@ -120,7 +121,7 @@ function FirstMeasureDecision() {
                 active ? "border-accent bg-accent text-paper" : "border-line text-ink hover:border-ash",
               )}
             >
-              {lever.label}
+              {t(lever.label)}
             </button>
           );
         })}
@@ -150,7 +151,7 @@ function HorizonTagging() {
         const lever = LEVERS3.find((l) => l.id === id)!;
         return (
           <div key={id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-line p-3">
-            <span className="text-caption text-ink">{lever.label}</span>
+            <span className="text-caption text-ink">{t(lever.label)}</span>
             <div className="flex gap-1.5">
               {HORIZON_OPTIONS.map((opt) => (
                 <button
@@ -164,7 +165,7 @@ function HorizonTagging() {
                   )}
                 >
                   {r3.leverHorizon[id] === opt.id && <Check className="mr-1 inline h-2.5 w-2.5" />}
-                  {opt.label}
+                  {t(opt.label)}
                 </button>
               ))}
             </div>

@@ -5,6 +5,7 @@ import { useProgress } from "@/lib/store";
 import { R2, OPTIONS, TASK2, FOLLOWUP_COUNT, RISK_COUNT, materialRefs } from "@/lib/route2";
 import { useRoute2 } from "./useRoute2";
 import { MaterialRefs } from "@/components/ui/MaterialRefs";
+import { t } from "@/lib/i18n/core";
 
 const { decision } = TASK2;
 
@@ -18,7 +19,7 @@ export function DecisionSection() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-h3 text-ink">{decision.heading}</h3>
+        <h3 className="text-h3 text-ink">{t(decision.heading)}</h3>
         <MaterialRefs refs={materialRefs(decision.material)} />
       </div>
 
@@ -39,7 +40,7 @@ export function DecisionSection() {
                   active ? "border-accent bg-accent text-paper" : "border-line text-ink hover:border-ash",
                 )}
               >
-                Option {o.id} — {o.short}
+                Option {o.id} — {t(o.short)}
               </button>
             );
           })}
@@ -47,7 +48,7 @@ export function DecisionSection() {
       </div>
 
       <label id="r2-decision-justify" className="block">
-        <span className="text-caption font-semibold text-ink">{decision.justifyLabel}</span>
+        <span className="text-caption font-semibold text-ink">{t(decision.justifyLabel)}</span>
         <p className="text-micro text-ash">{decision.justifyCaption}</p>
         <textarea
           value={r2.decisionJustify}
